@@ -33,7 +33,7 @@ https://www.guardmypi.com/
 <br />
 <p align="center">
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="logo.png" alt="Logo" width="297" height="210">
+    <img src="images/logo.png" alt="Logo" width="297" height="210">
   </a>
 
   <h3 align="center">Best-README-Template</h3>
