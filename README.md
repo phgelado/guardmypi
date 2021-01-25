@@ -1,5 +1,5 @@
 # GuardMyPi
-The ultimate security tool to protect your berries from unauthorised tampering. 
+The ultimate security tool to protect your berries from unauthorised. 
 
 https://www.guardmypi.com/
 
