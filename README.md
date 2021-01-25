@@ -31,7 +31,7 @@ The ultimate security tool to protect your berries from unauthorised tampering.
 <br />
 <p align="center">
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="logo.png" alt="Logo" width="297" height="210">
+    <img src="logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Best-README-Template</h3>
@@ -103,7 +103,10 @@ This section should list any major frameworks that you built your project using.
 * [JQuery](https://jquery.com)
 * [Laravel](https://laravel.com)
 
+### Hardware used
 
+* Raspberry Pi 3
+* Pi NoIR Camera V2
 
 <!-- GETTING STARTED -->
 ## Getting Started
