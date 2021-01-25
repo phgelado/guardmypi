@@ -60,7 +60,6 @@ The ultimate security tool to protect your berries from unauthorised tampering.
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
-        <li><a href="#hardware-used">Hardware Used</a></li>
       </ul>
     </li>
     <li>
@@ -83,6 +82,8 @@ The ultimate security tool to protect your berries from unauthorised tampering.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
 
@@ -111,20 +112,59 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Downloading pre-built OpenCV4
+```sh
+wget https://github.com/sol-prog/raspberry-pi-opencv/releases/download/opencv4rpi2.1/opencv-4.1.0-armhf.tar.bz2
+```
+2. Extract the archive
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   tar xvf opencv-4.1.0-armhf.tar.bz2
    ```
-3. Install NPM packages
+3. Move the extracted archive to the /opt folder 
    ```sh
-   npm install
+   sudo mv opencv-4.1.0 /opt
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+4. Remove the archive (optional) 
+   ```sh
+   rm opencv-4.1.0-armhf.tar.bz2
    ```
+5. Install video and image support packages
+ ```sh 
+sudo apt install libjpeg-dev libtiff-dev libjasper-dev libpng-dev libwebp-dev libopenexr-dev
+sudo apt install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libdc1394-22-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+```
+6. Install packages needed for OpenCV's interface
+```sh
+sudo apt install libgtk-3-dev libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
+```
+7. Install packages for OpenCV to run at a good speed
+```sh
+sudo apt install libatlas-base-dev liblapacke-dev gfortran
+```
+8. Add OpenCV to the system path 
+```sh
+cd ~
+echo 'export LD_LIBRARY_PATH=/opt/opencv-4.1.0/lib:$LD_LIBRARY_PATH' >> .bashrc
+. .bashrc
+```
+9. Restart the terminal or log back in to the RPi if connected via SSH
 
+10. Install git if necessary
+```sh
+sudo apt-get install git
+```
+11. Clone a config file to use OpenCV for C++
+```sh 
+git clone https://gist.github.com/sol-prog/ed383474872958081985de733eaf352d opencv_cpp_compile_settings
+ cd opencv_cpp_compile_settings/
+ sudo cp opencv.pc /usr/lib/arm-linux-gnueabihf/pkgconfig
+ cd ~
+ rm -rf opencv_cpp_compile_settings/
+```
+12. Check OpenCV has installed correctly on the RPi 
+```sh
+pkg-config --modversion opencv
+```
 
 
 <!-- USAGE EXAMPLES -->
@@ -166,14 +206,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Magnus Bell Cochran - 2258776B@student.gla.ac.uk
+Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
 
-Pedro Hernandez Gelado - 2262004H@student.gla.ac.uk
-
-Aidan Porteous - 2245628P@student.gla.ac.uk
-
-
-Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelado/guardmypi)
+Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
 
 
 
@@ -199,14 +234,14 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/phgelado/guardmypi.svg?style=for-the-badge
 [contributors-url]: https://github.com/phgelado/guardmypi/contributors
-[forks-shield]: https://img.shields.io/github/forks/phgelado/guardmypi.svg?style=for-the-badge
-[forks-url]: https://github.com/phgelado/guardmypi/network/members
-[stars-shield]: https://img.shields.io/github/stars/phgelado/guardmypi.svg?style=for-the-badge
-[stars-url]: https://github.com/phgelado/guardmypi/stargazers
-[issues-shield]: https://img.shields.io/github/issues/phgelado/guardmypi.svg?style=for-the-badge
-[issues-url]: https://github.com/phgelado/guardmypi/issues
-[license-shield]: https://img.shields.io/github/license/phgelado/guardmypi.svg?style=for-the-badge
-[license-url]: https://github.com/phgelado/guardmypi/blob/master/LICENSE.txt
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
