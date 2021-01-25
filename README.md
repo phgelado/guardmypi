@@ -30,8 +30,8 @@ The ultimate security tool to protect your berries from unauthorised tampering.
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="main/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/phgelado/guardmypi/">
+    <img src="logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Best-README-Template</h3>
