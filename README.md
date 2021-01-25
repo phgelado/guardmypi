@@ -167,7 +167,10 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Magnus Bell Cochran - 2258776B@student.gla.ac.uk
+Pedro Hernandez Gelado - 2262004H@student.gla.ac.uk
+Aidan Porteous - 2245628P@student.gla.ac.uk
+
 
 Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
 
