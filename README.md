@@ -60,6 +60,7 @@ The ultimate security tool to protect your berries from unauthorised tampering.
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#hardware-used">Hardware Used</a></li>
       </ul>
     </li>
     <li>
@@ -82,8 +83,6 @@ The ultimate security tool to protect your berries from unauthorised tampering.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
 
