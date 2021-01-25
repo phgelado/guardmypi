@@ -199,7 +199,7 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/phgelado/guardmypi.svg?style=for-the-badge
 [contributors-url]: https://github.com/phgelado/guardmypi/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/phgelado/guardmypi.svg?style=for-the-badge
 [forks-url]: https://github.com/phgelado/guardmypi/network/members
 [stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
