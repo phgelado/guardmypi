@@ -114,7 +114,7 @@ This is an example of how to list things you need to use the software and how to
   npm install npm@latest -g
   ```
 
-### Installation
+### Installation of OpenCV4 on Raspberry Pi
 
 1. Downloading pre-built OpenCV4
 ```sh
