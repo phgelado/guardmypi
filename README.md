@@ -214,7 +214,7 @@ Pedro Hernandez Gelado - 2262004h@student.gla.ac.uk
 
 Aidan Porteous - 2262004h@student.gla.ac.uk
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelado/guardmypi)
 
 
 
