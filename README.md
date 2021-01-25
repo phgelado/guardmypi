@@ -1,5 +1,7 @@
 # GuardMyPi
-The ultimate security tool to protect your berries from unauthorised tampering. 
+The ultimate security tool to protect your berries from unauthorised. 
+
+https://www.guardmypi.com/
 
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
@@ -86,6 +88,8 @@ The ultimate security tool to protect your berries from unauthorised tampering.
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
+
+HI THERE DELETE THIS ++++++
 
 ### Built With
 
@@ -206,9 +210,13 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Magnus Bell Cochran - 2258776B@student.gla.ac.uk
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Pedro Hernandez Gelado - 2262004h@student.gla.ac.uk
+
+Aidan Porteous - 2262004h@student.gla.ac.uk
+
+Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelado/guardmypi)
 
 
 
