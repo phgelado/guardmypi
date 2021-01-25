@@ -89,6 +89,8 @@ https://www.guardmypi.com/
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
 
+HI THERE DELETE THIS
+
 ### Built With
 
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
