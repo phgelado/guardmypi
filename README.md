@@ -168,7 +168,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 Magnus Bell Cochran - 2258776B@student.gla.ac.uk
+
 Pedro Hernandez Gelado - 2262004H@student.gla.ac.uk
+
 Aidan Porteous - 2245628P@student.gla.ac.uk
 
 
