@@ -38,7 +38,7 @@
   <p align="center">
     The ultimate security tool to protect your berries from unauthorised tampering. 
     <br />
-    <a href="https://www.guardmypi.com/"><strong>guardmypi »</strong></a>
+    <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
     <br />
   </p>
 </p>
