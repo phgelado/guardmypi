@@ -1,7 +1,5 @@
 # GuardMyPi
 
-https://www.guardmypi.com/
-
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -35,19 +33,13 @@ https://www.guardmypi.com/
     <img src="images/logo.png" alt="Logo" width="297" height="210">
   </a>
 
-  <h3 align="center">GuardMyPIo</h3>
+  <h3 align="center">GuardMyPi</h3>
 
   <p align="center">
-    The ultimate security tool to protect your berries from unauthorised. 
+    The ultimate security tool to protect your berries from unauthorised tampering. 
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://www.guardmypi.com/"><strong>guardmypi »</strong></a>
     <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
   </p>
 </p>
 
