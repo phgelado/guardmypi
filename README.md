@@ -80,8 +80,6 @@
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
 
-HI THERE DELETE THIS ++++++
-
 ### Built With
 
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
@@ -94,16 +92,16 @@ HI THERE DELETE THIS ++++++
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Instructions on setting up your project locally are coming soon...
+
+<!-- To get a local copy up and running follow these simple example steps. -->
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+To be able to run this project locally you will need to install the following dependencies: 
+
+*Open CV
+
 
 ### Installation of OpenCV4 on Raspberry Pi
 
@@ -174,7 +172,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+See the [open issues](//https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
 
 
 
@@ -190,12 +188,10 @@ Contributions are what make the open source community such an amazing place to b
 5. Open a Pull Request
 
 
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
 
 
 <!-- CONTACT -->
@@ -205,7 +201,7 @@ Magnus Bell Cochran - 2258776B@student.gla.ac.uk
 
 Pedro Hernandez Gelado - 2262004h@student.gla.ac.uk
 
-Aidan Porteous - 2262004h@student.gla.ac.uk
+Aidan Porteous - 2245628p@student.gla.ac.uk
 
 Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelado/guardmypi)
 
@@ -213,6 +209,7 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
+* [README Template]()
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
