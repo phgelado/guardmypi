@@ -71,11 +71,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
-
-HI THERE DELETE THIS ++++++
 
 ### Built With
 
@@ -89,16 +87,16 @@ HI THERE DELETE THIS ++++++
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Instructions on setting up your project locally are coming soon...
+
+<!-- To get a local copy up and running follow these simple example steps. -->
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+To be able to run this project locally you will need to install the following dependencies: 
+
+* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+
 
 ### Installation of OpenCV4 on Raspberry Pi
 
@@ -160,16 +158,14 @@ pkg-config --modversion opencv
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+This space will show useful examples of how GuardMyPi can be used. <!-- Additional screenshots, code examples and demos work well in this space. You may also link to more resources. _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+See the [open issues](//https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
 
 
 
@@ -185,12 +181,10 @@ Contributions are what make the open source community such an amazing place to b
 5. Open a Pull Request
 
 
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
 
 
 <!-- CONTACT -->
@@ -200,7 +194,7 @@ Magnus Bell Cochran - 2258776B@student.gla.ac.uk
 
 Pedro Hernandez Gelado - 2262004h@student.gla.ac.uk
 
-Aidan Porteous - 2262004h@student.gla.ac.uk
+Aidan Porteous - 2245628p@student.gla.ac.uk
 
 Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelado/guardmypi)
 
@@ -208,6 +202,7 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
+* [README Template](https://github.com/othneildrew/Best-README-Template)
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
@@ -228,14 +223,14 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/phgelado/guardmypi.svg?style=for-the-badge
 [contributors-url]: https://github.com/phgelado/guardmypi/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[forks-shield]: https://img.shields.io/github/forks/phgelado/guardmypi.svg?style=for-the-badge
+[forks-url]: https://github.com/phgelado/guardmypi/network/members
+[stars-shield]: https://img.shields.io/github/stars/phgelado/guardmypi.svg?style=for-the-badge
+[stars-url]: https://github.com/phgelado/guardmypi/stargazers
+[issues-shield]: https://img.shields.io/github/issues/phgelado/guardmypi.svg?style=for-the-badge
+[issues-url]: https://github.com/phgelado/guardmypi/issues
+[license-shield]: https://img.shields.io/github/license/phgelado/guardmypi.svg?style=for-the-badge
+[license-url]: https://github.com/phgelado/guardmypi/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://www.linkedin.com/company/guardmypi/
 [product-screenshot]: images/screenshot.png
