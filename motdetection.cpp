@@ -11,6 +11,7 @@
 #include <opencv2/highgui.hpp>
 #include <iostream>
 #include <cstring>
+#define min_area 500 //pixels
 
 using namespace std;
 using namespace cv;
@@ -40,19 +41,25 @@ int MotionDetect::opencam()  {
 	    	*/
             VideoCapture video(0);
 
-			/// For saving the frame
+		/// First frame in the video stream
 	    	///
 	    	/// @param frame is a matrix to save the frame
-            Mat frame;  
+            Mat frame;
+	    Mat grayscale; 
+              
 
             /// Check that video is opened
 	        if (!video.isOpened()) return -1;
 
 		/// Loop through available frames
-		while (video.read(frame)) {
-
+		while (1) {
+			
+		///Grab the current frame
+		video.read(frame);
+		
+		cvtColor(frame, grayscale, COLOR_RGB2GRAY);
 		/// Display the frame
-		imshow("Video feed", frame);
+		imshow("Video feed", grayscale);
 
 		/// For breaking the loop
 		if (waitKey(25) >= 0) break;
@@ -60,7 +67,7 @@ int MotionDetect::opencam()  {
 		} /// end while (video.read(frame))
         
 	/// Release video capture and write
-	video.release();
+	video.release(); 
 
 	/// Destroy all windows
 	destroyAllWindows();
