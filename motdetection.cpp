@@ -94,8 +94,8 @@ int MotionDetect::opencam()  {
            		 if(contourArea(cnts[i]) < cnts[i].size()) {
                			 continue;
             			}
-	
-           		 putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+			/*
+           	 putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
 			 rect = boundingRect(cnts[i]);
 			 pt1.x =rect.x;
 			 pt1.y = rect.y;
@@ -103,7 +103,8 @@ int MotionDetect::opencam()  {
 			 pt2.y = rect.y + rect.height;
 			 rectangle(frame, pt1, pt2, CV_RGB(255,0,0), 1);
 			}	
-    
+			*/
+			cout << "Motion Detected";	
        		 imshow("Camera", frame);
 
 		/// For breaking the loop
