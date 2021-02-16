@@ -16,7 +16,6 @@
 using namespace std;
 using namespace cv;
 
-
 /**
 * @class MotionDetector
 * @brief Analyses video feed from PiCamera to detect motion changes 
