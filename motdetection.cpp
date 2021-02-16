@@ -135,6 +135,7 @@ int MotionDetect::opencam()  {
 	destroyAllWindows();
     return 0;
   }
+}
 
 int main() {
 	MotionDetect detector;
