@@ -25,15 +25,23 @@ using namespace cv;
 
 class MotionDetect {
 	public:
-        	Mat first_frame;
+        Mat first_frame;
  		Mat frame;
 	    Mat frame_diff;
 	    Mat grayscale;
 	    Mat gray_first;
 	    Mat frame_thresh;
+		Mat avg;
+		Mat scaled_avg;
 	    vector<vector<Point> > cnts;
 	    Rect rect;
 	    Point pt1, pt2;
+		/** Create video capturing object
+	    	0 opens default camera, otherwise filename as argument 
+	    	@param video Video Capturing object
+	    	*/
+        VideoCapture video;
+		int codec = VideoWriter::fourcc('M','J','P','G');
         int opencam();
 };
 
@@ -45,11 +53,11 @@ class MotionDetect {
 
 int MotionDetect::opencam()  {
 
-			 /** Create video capturing object
-	    	0 opens default camera, otherwise filename as argument 
-	    	@param video Video Capturing object
-	    	*/
-            VideoCapture video(0);
+		video.open(0);
+		video.set(CAP_PROP_FRAME_WIDTH, 320);
+  		video.set(CAP_PROP_FRAME_HEIGHT, 240);
+  		//video.set(CAP_PROP_FPS, 2);
+  		//video.set(CAP_PROP_FOURCC, codec);
 
 		/// First frame in the video stream
 	    	///
@@ -59,23 +67,24 @@ int MotionDetect::opencam()  {
 
 
 		///Read the initial frame (background frame)
-		sleep(3);	
+		
 		video.read(first_frame);
 	
+	/*
 		///Convert first frame to grey scale and blur it 
-
+		resize(first_frame, first_frame, Size(21,21));
 		cvtColor(first_frame, first_frame, COLOR_RGB2GRAY);
 
 		///Add gaussian smoother to frame
 		GaussianBlur(first_frame, first_frame, Size(21,21), 0);
 		
-
+	*/
 		/// Loop through available frames
 		while (1) {
 			
 		///Grab the current frame
 		video.read(frame);
-		
+
 		/// Convert frame to grayscale 
 		cvtColor(frame, grayscale, COLOR_RGB2GRAY);
 
@@ -84,11 +93,18 @@ int MotionDetect::opencam()  {
 
 
 		///Calculate the absolute difference between the first image (background) and current image
-		absdiff(first_frame, grayscale, frame_diff);
-		threshold(frame_diff, frame_thresh, 50, 255, THRESH_BINARY);
-		
+
+		if(avg.empty()==1) {
+				grayscale.convertTo(avg, CV_32FC(grayscale.channels()));
+		}
+
+		accumulateWeighted(grayscale, avg, 0.5);
+		convertScaleAbs(avg, scaled_avg);
+		absdiff(grayscale, scaled_avg, frame_diff);
+		threshold(frame_diff, frame_thresh, 25, 255, THRESH_BINARY);
+				
 		dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
-        	findContours(frame_thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+        findContours(frame_thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
 		for(int i = 0; i< cnts.size(); i++) {
            		 if(contourArea(cnts[i]) < cnts[i].size()) {
