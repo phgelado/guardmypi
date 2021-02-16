@@ -145,11 +145,10 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 			//Draws rectangle using start and stop coorinates
 			rectangle(camerafeed, pt1, pt2, CV_RGB(255,0,0), 2);			
 		}
+		
 	return camerafeed;
-
 }
-
-
+ 
 int main() {
 	Camera feed;
 	feed.opencam();
