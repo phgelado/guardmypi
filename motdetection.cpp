@@ -1,4 +1,3 @@
-
 /**
 * @file         motdetection.cpp
 * @brief        Motion Detection
@@ -19,124 +18,140 @@ using namespace cv;
 
 
 /**
-* @class MotionDetect
-* @brief Initialise camera and hold motion detection 
+* @class MotionDetector
+* @brief Analyses video feed from PiCamera to detect motion changes 
 */
 
-class MotionDetect {
+class MotionDetector {
+	protected:
+		Mat frame_diff;	//!< Difference output between frames
+	    Mat grayscale;	//!< Grayscaled version of the camera frame
+	    Mat frame_thresh;	//!< Threshold frame
+		Mat avg;		//!< Background frame
+		Mat scaled_avg;	//!< 8-bit Absolute value frame
+	    vector<vector<Point> > cnts;	//!< Vector of points of detected contours
+	    Rect rect;	//!<Up-right rectangle to highlight detected contours
+	    Point pt1;	//!<Start point/coordinate for the contour rectangle
+		Point pt2;	//!<End point/coordinate for the contour rectangle
+	
 	public:
-        Mat first_frame;
- 		Mat frame;
-	    Mat frame_diff;
-	    Mat grayscale;
-	    Mat gray_first;
-	    Mat frame_thresh;
-		Mat avg;
-		Mat scaled_avg;
-	    vector<vector<Point> > cnts;
-	    Rect rect;
-	    Point pt1, pt2;
-		/** Create video capturing object
-	    	0 opens default camera, otherwise filename as argument 
-	    	@param video Video Capturing object
-	    	*/
-        VideoCapture video;
-		int codec = VideoWriter::fourcc('M','J','P','G');
-        int opencam();
+		Mat ProcessContours(Mat camerafeed);
 };
 
 /**
-* @class MotionDetect
+* @class Camera
+* @brief Interface with the webcam or videofeed
+*/
+class Camera {
+	protected:
+	MotionDetector detector; //!< Instance of the Motion Detection
+	VideoCapture video;	//!< Video Input
+	Mat frame;		//!< Incoming camera feed	
+
+	public:
+		int opencam();
+};
+
+/**
+* @class Camera
 * @fn opencam
-* @brief Opens Camera and video feed
+* @brief Opens Camera and transmits video feed
 */
 
-int MotionDetect::opencam()  {
+int Camera::opencam()  {
 
+		//Open the video feed for the webcam/camera
 		video.open(0);
+
+		//Set width and height of the video feed
 		video.set(CAP_PROP_FRAME_WIDTH, 320);
   		video.set(CAP_PROP_FRAME_HEIGHT, 240);
-  		//video.set(CAP_PROP_FPS, 2);
-  		//video.set(CAP_PROP_FOURCC, codec);
 
-		/// First frame in the video stream
-	    	///
-	    	/// @param frame is a matrix to save the frame
-            	/// Check that video is opened
-	        if (!video.isOpened()) return -1;
+        // Check that video is opened
+	    if (!video.isOpened()) return -1;
 
-
-		///Read the initial frame (background frame)
-		
-		video.read(first_frame);
-	
-	/*
-		///Convert first frame to grey scale and blur it 
-		resize(first_frame, first_frame, Size(21,21));
-		cvtColor(first_frame, first_frame, COLOR_RGB2GRAY);
-
-		///Add gaussian smoother to frame
-		GaussianBlur(first_frame, first_frame, Size(21,21), 0);
-		
-	*/
-		/// Loop through available frames
+		// Loop through available frames
 		while (1) {
 			
-		///Grab the current frame
+		//Grab the current frame
 		video.read(frame);
 
-		/// Convert frame to grayscale 
-		cvtColor(frame, grayscale, COLOR_RGB2GRAY);
+		detector.ProcessContours(frame);
+       	
+		//Show the Video Feed
+		imshow("Camera", frame);
 
-		///Add gaussian smoother to frame
-		GaussianBlur(grayscale, grayscale, Size(21,21), 0);
-
-
-		///Calculate the absolute difference between the first image (background) and current image
-
-		if(avg.empty()==1) {
-				grayscale.convertTo(avg, CV_32FC(grayscale.channels()));
-		}
-
-		accumulateWeighted(grayscale, avg, 0.5);
-		convertScaleAbs(avg, scaled_avg);
-		absdiff(grayscale, scaled_avg, frame_diff);
-		threshold(frame_diff, frame_thresh, 10, 255, THRESH_BINARY);
-				
-		dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
-        findContours(frame_thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-
-		for(int i = 0; i< cnts.size(); i++) {
-           		 if(contourArea(cnts[i]) < cnts[i].size()) {
-               			 continue;
-            			}
-	
-             putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-			 rect = boundingRect(cnts[i]);
-			 pt1.x =rect.x;
-			 pt1.y = rect.y;
-			 pt2.x = rect.x + rect.width;
-			 pt2.y = rect.y + rect.height;
-			 rectangle(frame, pt1, pt2, CV_RGB(255,0,0), 1);
-		}
-       		 imshow("Camera", frame);
-
-		/// For breaking the loop
+		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
-		} /// end while (video.read(frame))
+		} // end while (video.read(frame))
         
-	/// Release video capture and write
+	//Release video capture and write
 	video.release(); 
 
-	/// Destroy all windows
+	// Destroy all windows
 	destroyAllWindows();
     return 0;
   }
-}
 
+
+Mat MotionDetector::ProcessContours(Mat camerafeed) {
+	
+	cvtColor(camerafeed, grayscale, COLOR_RGB2GRAY);
+
+	GaussianBlur(grayscale, grayscale, Size(21,21), 0);
+
+
+	/*	Checks if the avg frame is initialised
+	*	If not, set the current frame to avg in the same format as the grayscale image
+	*	If the background frame is empty convert the current grayscale image to 32 bit float and store in the avg frame
+	*/
+	if(avg.empty()==1) {
+			grayscale.convertTo(avg, CV_32FC(grayscale.channels()));
+		}
+
+	//Find weighted average between the current frame and background.
+	accumulateWeighted(grayscale, avg, 0.5);
+
+	//Convert from Float to 8-bit absolute value
+	//wont allow convertScaleAbs(avg, avg)
+	convertScaleAbs(avg, scaled_avg);
+
+	//	Calculate the absolute difference between the current image and the background image
+	absdiff(grayscale, scaled_avg, frame_diff);
+
+	//Threshold image for differences between the two frames.
+	threshold(frame_diff, frame_thresh, 5, 255, THRESH_BINARY);
+				
+	//Dilate the threshold image
+	dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
+
+	//Contour detection will check the threshold for contours
+	//Each contour is stored as a vector of points @param cnts 
+    findContours(frame_thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+ 
+
+	for(int i = 0; i< cnts.size(); i++) {
+		//Check to see if the contour is too small
+        if(contourArea(cnts[i]) < 5000) 
+            continue;
+            		
+			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+			rect = boundingRect(cnts[i]);	// Contains coordinates of bounding rectangle for detected contours 
+			pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
+			pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
+			pt2.x = rect.x + rect.width;	// Final point along x-axis 
+			pt2.y = rect.y + rect.height;	//Final point along y-axis 
+
+			//Draws rectangle using start and stop coorinates
+			rectangle(camerafeed, pt1, pt2, CV_RGB(255,0,0), 2);			
+		}
+		
+	return camerafeed;
+}
+ 
 int main() {
-	MotionDetect detector;
-	detector.opencam();
+	Camera feed;
+	feed.opencam();
 	return 0;
 }
