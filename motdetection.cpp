@@ -120,7 +120,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	absdiff(grayscale, scaled_avg, frame_diff);
 
 	//Threshold image for differences between the two frames.
-	threshold(frame_diff, frame_thresh, 5, 255, THRESH_BINARY);
+	threshold(frame_diff, frame_thresh, 1, 255, THRESH_BINARY);
 				
 	//Dilate the threshold image
 	dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
