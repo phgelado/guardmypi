@@ -11,6 +11,7 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <thread>
 #define min_area 500 //pixels
 
 using namespace std;
@@ -23,18 +24,18 @@ using namespace cv;
 
 class MotionDetector {
 	protected:
-		Mat frame_diff;	//!< Difference output between frames
-	    Mat grayscale;	//!< Grayscaled version of the camera frame
-	    Mat frame_thresh;	//!< Threshold frame
-		Mat avg;		//!< Background frame
-		Mat scaled_avg;	//!< 8-bit Absolute value frame
-	    vector<vector<Point> > cnts;	//!< Vector of points of detected contours
-	    Rect rect;	//!<Up-right rectangle to highlight detected contours
-	    Point pt1;	//!<Start point/coordinate for the contour rectangle
-		Point pt2;	//!<End point/coordinate for the contour rectangle
+	static Mat frame_diff;	//!< Difference output between frames
+	static Mat grayscale;	//!< Grayscaled version of the camera frame
+	static Mat frame_thresh;	//!< Threshold frame
+	static Mat avg;		//!< Background frame
+	static Mat scaled_avg;	//!< 8-bit Absolute value frame
+	static vector<vector<Point> > cnts;	//!< Vector of points of detected contours
+	static Rect rect;	//!<Up-right rectangle to highlight detected contours
+	static Point pt1;	//!<Start point/coordinate for the contour rectangle
+	static Point pt2;	//!<End point/coordinate for the contour rectangle
 	
 	public:
-		Mat ProcessContours(Mat camerafeed);
+	static Mat ProcessContours(Mat camerafeed);
 };
 
 /**
@@ -43,12 +44,12 @@ class MotionDetector {
 */
 class Camera {
 	protected:
-	MotionDetector detector; //!< Instance of the Motion Detection
-	VideoCapture video;	//!< Video Input
-	Mat frame;		//!< Incoming camera feed	
+	static MotionDetector detector; //!< Instance of the Motion Detection
+	static VideoCapture video;	//!< Video Input
+	static Mat frame;		//!< Incoming camera feed	
 
 	public:
-		int opencam();
+		static int opencam();
 };
 
 /**
@@ -57,7 +58,7 @@ class Camera {
 * @brief Opens Camera and transmits video feed
 */
 
-int Camera::opencam()  {
+ int Camera::opencam()  {
 
 		//Open the video feed for the webcam/camera
 		video.open(0);
@@ -94,7 +95,7 @@ int Camera::opencam()  {
   }
 
 
-Mat MotionDetector::ProcessContours(Mat camerafeed) {
+ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
 	cvtColor(camerafeed, grayscale, COLOR_RGB2GRAY);
 
