@@ -63,8 +63,8 @@ int Camera::opencam()  {
 		video.open(0);
 
 		//Set width and height of the video feed
-		video.set(CAP_PROP_FRAME_WIDTH,480);
-  		video.set(CAP_PROP_FRAME_HEIGHT, 480);
+		//video.set(CAP_PROP_FRAME_WIDTH,480);
+  		//video.set(CAP_PROP_FRAME_HEIGHT, 480);
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -135,7 +135,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
         if(contourArea(cnts[i]) < 5000) 
             continue;
             		
-			cout<<"Motion Detected";			
+			cout<<"Motion Detected"			
 		}
 		
 	return camerafeed;
