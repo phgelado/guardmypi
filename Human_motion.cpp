@@ -135,7 +135,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
         if(contourArea(cnts[i]) < 5000) 
             continue;
             		
-			cout << "Motion Detected - Initiate next thread";			
+			cout<<"Motion Detected";			
 		}
 		
 	return camerafeed;
