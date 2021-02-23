@@ -63,8 +63,7 @@ int Camera::opencam()  {
 		video.open(0);
 
 		//Set width and height of the video feed
-		video.set(CAP_PROP_FRAME_WIDTH,480);
-  		video.set(CAP_PROP_FRAME_HEIGHT, 480);
+		
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -76,6 +75,9 @@ int Camera::opencam()  {
 		video.read(frame);
 
 		detector.ProcessContours(frame);
+
+		//video.set(CAP_PROP_FRAME_WIDTH,480);
+  		//video.set(CAP_PROP_FRAME_HEIGHT, 480);
        	
 		//Show the Video Feed
 		imshow("Camera", frame);
