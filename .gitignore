@@ -1,3 +1,15 @@
+latex/
+html/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+*.m
+Doxyfile
+*.bak
+motion
+motdetection
+Makefile
+
 # Prerequisites
 *.d
 
