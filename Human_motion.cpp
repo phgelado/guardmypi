@@ -24,18 +24,19 @@ using namespace cv;
 
 class MotionDetector {
 	protected:
-	static Mat frame_diff;	//!< Difference output between frames
-	static Mat grayscale;	//!< Grayscaled version of the camera frame
-	static Mat frame_thresh;	//!< Threshold frame
-	static Mat avg;		//!< Background frame
-	static Mat scaled_avg;	//!< 8-bit Absolute value frame
-	static vector<vector<Point> > cnts;	//!< Vector of points of detected contours
-	static Rect rect;	//!<Up-right rectangle to highlight detected contours
-	static Point pt1;	//!<Start point/coordinate for the contour rectangle
-	static Point pt2;	//!<End point/coordinate for the contour rectangle
+	 Mat frame_diff;	//!< Difference output between frames
+	 Mat grayscale;	//!< Grayscaled version of the camera frame
+	 Mat frame_thresh;	//!< Threshold frame
+	 Mat avg;		//!< Background frame
+	 Mat scaled_avg;	//!< 8-bit Absolute value frame
+	 vector<vector<Point> > cnts;	//!< Vector of points of detected contours
+	 Rect rect;	//!<Up-right rectangle to highlight detected contours
+	 Point pt1;	//!<Start point/coordinate for the contour rectangle
+	 Point pt2;	//!<End point/coordinate for the contour rectangle
 	
 	public:
-	static Mat ProcessContours(Mat camerafeed);
+	 Mat ProcessContours(Mat camerafeed);
+	 int flag = 0;
 };
 
 /**
@@ -44,12 +45,12 @@ class MotionDetector {
 */
 class Camera {
 	protected:
-	static MotionDetector detector; //!< Instance of the Motion Detection
-	static VideoCapture video;	//!< Video Input
-	static Mat frame;		//!< Incoming camera feed	
+	 MotionDetector detector; //!< Instance of the Motion Detection
+	 VideoCapture video;	//!< Video Input
+	 Mat frame;		//!< Incoming camera feed	
 
 	public:
-		static int opencam();
+		 int opencam();
 };
 
 /**
@@ -133,8 +134,10 @@ class Camera {
 
 	for(int i = 0; i< cnts.size(); i++) {
 		//Check to see if the contour is too small
-        if(contourArea(cnts[i]) < 5000) 
+        if(contourArea(cnts[i]) < 5000) {
+			flag = 0;
             continue;
+		}
             		
 			cout<<"Motion Detected";		
 		}
@@ -143,7 +146,9 @@ class Camera {
 }
  
 int main() {
-	Camera feed;
-	feed.opencam();
+	Camera * cameraptr = new Camera();
+	thread t1(&Camera::opencam, cameraptr);
+	t1.join();
+	delete cameraptr;
 	return 0;
 }
