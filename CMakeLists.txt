@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 2.8)
-project( human_detection )
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
-add_executable( human_detection human_detection.cpp )
-target_link_libraries( human_detection ${OpenCV_LIBS} )
