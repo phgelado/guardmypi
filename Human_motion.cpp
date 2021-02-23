@@ -136,10 +136,12 @@ class Camera {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
 			flag = 0;
+			//cout <<"No Motion\n" << flag;
             continue;
 		}
-            		
-			cout<<"Motion Detected";		
+            flag = 1;		
+			//cout<<"Motion Detected\n" << flag;
+					
 		}
 		
 	return camerafeed;
