@@ -96,7 +96,8 @@ int MotionDetector::closecase() {
 		imshow("Camera", frame);
 
 		if(detector.flag ==1) {
-			break;
+			thread t2(&MotionDetector::closecase, &detector);
+			t2.join();
 		}
 
 		// For breaking the loop
@@ -104,8 +105,7 @@ int MotionDetector::closecase() {
 
 		} // end while (video.read(frame))
     
-	thread t2(&MotionDetector::closecase, &detector);
-	t2.join();
+	
 	//Release video capture and write
 	video.release(); 
 
