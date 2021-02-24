@@ -47,10 +47,10 @@ class Camera {
 	protected:
 	 MotionDetector detector; //!< Instance of the Motion Detection
 	 VideoCapture video;	//!< Video Input
-	 Mat frame;		//!< Incoming camera feed	
+	 //Mat frame;		//!< Incoming camera feed	
 
 	public:
-		 int opencam();
+		 int opencam(Mat frame);
 };
 
 /**
@@ -59,7 +59,7 @@ class Camera {
 * @brief Opens Camera and transmits video feed
 */
 
- int Camera::opencam()  {
+ int Camera::opencam(Mat frame)  {
 
 		//Open the video feed for the webcam/camera
 		video.open(0);
@@ -135,7 +135,6 @@ class Camera {
 	for(int i = 0; i< cnts.size(); i++) {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
-			flag = 0;
 			//cout <<"No Motion\n" << flag;
             continue;
 		}
@@ -148,8 +147,9 @@ class Camera {
 }
  
 int main() {
+	Mat cameraframe;
 	Camera * cameraptr = new Camera();
-	thread t1(&Camera::opencam, cameraptr);
+	thread t1(&Camera::opencam, cameraptr, cameraframe);
 	t1.join();
 	delete cameraptr;
 	return 0;
