@@ -33,9 +33,12 @@ class MotionDetector {
 	 Rect rect;	//!<Up-right rectangle to highlight detected contours
 	 Point pt1;	//!<Start point/coordinate for the contour rectangle
 	 Point pt2;	//!<End point/coordinate for the contour rectangle
+
 	
 	public:
 	 Mat ProcessContours(Mat camerafeed);
+	 int closecase();
+		 
 	 int flag = 0;
 };
 
@@ -50,7 +53,7 @@ class Camera {
 	 //Mat frame;		//!< Incoming camera feed	
 
 	public:
-		 int opencam(Mat frame);
+		 int opencam(Mat frame);		
 };
 
 /**
@@ -59,10 +62,21 @@ class Camera {
 * @brief Opens Camera and transmits video feed
 */
 
+int MotionDetector::closecase() {
+	
+	while (flag) {
+		cout << "Do human/pet detection\n";
+		flag = 0;
+	}
+	return 0;
+}
+
  int Camera::opencam(Mat frame)  {
 
 		//Open the video feed for the webcam/camera
 		video.open(0);
+		sleep(3);
+
 
 		//Set width and height of the video feed
 		//video.set(CAP_PROP_FRAME_WIDTH,480);
@@ -76,17 +90,22 @@ class Camera {
 			
 		//Grab the current frame
 		video.read(frame);
-
 		detector.ProcessContours(frame);
        	
 		//Show the Video Feed
 		imshow("Camera", frame);
 
+		if(detector.flag ==1) {
+			break;
+		}
+
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
 		} // end while (video.read(frame))
-        
+    
+	thread t2(&MotionDetector::closecase, &detector);
+	t2.join();
 	//Release video capture and write
 	video.release(); 
 
@@ -136,9 +155,12 @@ class Camera {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
 			//cout <<"No Motion\n" << flag;
+			flag = 0;
             continue;
 		}
-            flag = 1;		
+            flag = 1;
+			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+		
 			//cout<<"Motion Detected\n" << flag;
 					
 		}
@@ -148,9 +170,10 @@ class Camera {
  
 int main() {
 	Mat cameraframe;
-	Camera * cameraptr = new Camera();
-	thread t1(&Camera::opencam, cameraptr, cameraframe);
+	Camera camptr;
+	MotionDetector detector;
+	thread t1(&Camera::opencam, &camptr, cameraframe);
 	t1.join();
-	delete cameraptr;
+	//delete camptr;
 	return 0;
 }
