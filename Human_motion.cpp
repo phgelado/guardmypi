@@ -38,6 +38,7 @@ class MotionDetector {
 	public:
 	 Mat ProcessContours(Mat camerafeed);
 	 int closecase();
+	 int i = 0;
 		 
 	 int flag = 0;
 };
@@ -65,7 +66,8 @@ class Camera {
 int MotionDetector::closecase() {
 	
 	while (flag) {
-		cout << "Do human/pet detection\n";
+		cout << "Do human/pet detection\t" <<"Iteration :\t "<< i << "\n";
+		i++;
 		flag = 0;
 	}
 	return 0;
@@ -95,7 +97,7 @@ int MotionDetector::closecase() {
 		//Show the Video Feed
 		imshow("Camera", frame);
 
-		if(detector.flag ==1) {
+		if(detector.flag == 1) {
 			thread t2(&MotionDetector::closecase, &detector);
 			t2.join();
 		}
@@ -141,7 +143,7 @@ int MotionDetector::closecase() {
 	absdiff(grayscale, scaled_avg, frame_diff);
 
 	//Threshold image for differences between the two frames.
-	threshold(frame_diff, frame_thresh, 1, 255, THRESH_BINARY);
+	threshold(frame_diff, frame_thresh, 5, 255, THRESH_BINARY);
 				
 	//Dilate the threshold image
 	dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
