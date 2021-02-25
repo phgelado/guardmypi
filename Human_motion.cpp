@@ -155,17 +155,19 @@ int MotionDetector::closecase() {
 		//Grab the current frame
 		video.read(frame);
 		detector.ProcessContours(frame);
+		humanframe = frame;
 
 		if(detector.flag == 1) {
-			thread t2(&MotionDetector::closecase, &detector);
+			thread t2(&HumanDetector::detect, &Hdetector, humanframe);
+			
 			t2.join();
+			//flag = 0;
 		}
-       	
+
 		//Show the Video Feed
-		imshow("Camera", frame);
+		imshow("Camera", humanframe);
 
-		
-
+    
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
