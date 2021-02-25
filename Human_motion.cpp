@@ -125,15 +125,7 @@ class Camera {
 * @brief Opens Camera and transmits video feed
 */
 
-int MotionDetector::closecase() {
-	
-	while (flag) {
-		cout << "Do human/pet detection\t" <<"Iteration :\t "<< i << "\n";
-		i++;
-		flag = 0;
-	}
-	return 0;
-}
+
 
  int Camera::opencam(Mat frame)  {
 
