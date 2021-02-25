@@ -159,9 +159,8 @@ int MotionDetector::closecase() {
 
 		if(detector.flag == 1) {
 			thread t2(&HumanDetector::detect, &Hdetector, humanframe);
-			
 			t2.join();
-			//flag = 0;
+			//detector.flag = 0;
 		}
 
 		//Show the Video Feed
@@ -223,7 +222,6 @@ int MotionDetector::closecase() {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
 			//cout <<"No Motion\n" << flag;
-			flag = 0;
             continue;
 		}
             flag = 1;
