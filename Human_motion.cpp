@@ -44,18 +44,21 @@ class MotionDetector {
 	 int flag = 0;
 };
 
-class HumanDetector {
+class HumanDetector{
     public:
         // prepare model files and set up network
         std::string model = "yolov2-tiny.weights";
         std::string config = "yolov2-tiny.cfg";        
         Net network = readNet(model, config,"Darknet"); 
+        int human_flag;
+        int pet_flag;
+
         void configure_network(){
             network.setPreferableBackend(DNN_BACKEND_DEFAULT);
             network.setPreferableTarget(DNN_TARGET_OPENCL);
         }
 
-        Mat detect(Mat img){
+        void detect(Mat img){
             static Mat blobFromImg;
             bool swapRB = true;
             // function which facilitates classification
@@ -83,22 +86,33 @@ class HumanDetector {
                 if (confidence > 0.0001)
                 {
                     // locate object
-                    int centerX = (int)(outMat.at<float>(j, 0) * img.cols); 
-                    int centerY = (int)(outMat.at<float>(j, 1) * img.rows); 
-                    int width =   (int)(outMat.at<float>(j, 2) * img.cols+20); 
-                    int height =   (int)(outMat.at<float>(j, 3) * img.rows+100); 
-                    int left = centerX - width / 2;
-                    int top = centerY - height / 2;
-
                     stringstream ss;
                     ss << PositionOfMax.x;
                     string clas = ss.str();
-                    putText(img, "Human Detected", Point(left, top), 1, 2, Scalar(0, 0, 255), 2, false);
-                    // draw rectangle around object
-                    rectangle(img, Rect(left, top, width, height), Scalar(0,0,255), 2, 8, 0);
+                    if ((clas =="0") || (clas=="16")){
+                        int centerX = (int)(outMat.at<float>(j, 0) * img.cols); 
+                        int centerY = (int)(outMat.at<float>(j, 1) * img.rows); 
+                        int width =   (int)(outMat.at<float>(j, 2) * img.cols+20); 
+                        int height =   (int)(outMat.at<float>(j, 3) * img.rows+100); 
+                        int left = centerX - width / 2;
+                        int top = centerY - height / 2;
+                        
+                        if (clas =="0"){
+                            putText(img, "Human Detected", Point(left, top), 1, 2, Scalar(0, 255, 255), 2, false);
+                            human_flag = 1;
+                        }
+                        else if (clas =="16"){
+                            putText(img, "Dog Detected", Point(left, top), 1, 2, Scalar(0, 255, 255), 2, false);
+                            pet_flag = 1;
+                        }
+                        stringstream ss2;
+                        ss << confidence;
+                        string conf = ss.str();
+                        // draw rectangle around object
+                        rectangle(img, Rect(left, top, width, height), Scalar(0,0,255), 2, 8, 0);
+                    }
                 }
-            } 
-			return img;    
+            }     
         }
 };
 
