@@ -16,6 +16,8 @@ class HumanDetector{
         std::string model = "yolov2-tiny.weights";
         std::string config = "yolov2-tiny.cfg";        
         Net network = readNet(model, config,"Darknet"); 
+        int human_flag;
+        int pet_flag;
 
         void configure_network(){
             network.setPreferableBackend(DNN_BACKEND_DEFAULT);
@@ -53,7 +55,7 @@ class HumanDetector{
                     stringstream ss;
                     ss << PositionOfMax.x;
                     string clas = ss.str();
-                    if ((clas =="0") || (clas=="17")){
+                    if ((clas =="0") || (clas=="16")){
                         int centerX = (int)(outMat.at<float>(j, 0) * img.cols); 
                         int centerY = (int)(outMat.at<float>(j, 1) * img.rows); 
                         int width =   (int)(outMat.at<float>(j, 2) * img.cols+20); 
@@ -63,9 +65,11 @@ class HumanDetector{
                         
                         if (clas =="0"){
                             putText(img, "Human Detected", Point(left, top), 1, 2, Scalar(0, 255, 255), 2, false);
+                            human_flag = 1;
                         }
                         else if (clas =="16"){
                             putText(img, "Dog Detected", Point(left, top), 1, 2, Scalar(0, 255, 255), 2, false);
+                            pet_flag = 1;
                         }
                         stringstream ss2;
                         ss << confidence;
