@@ -12,10 +12,12 @@
 #include <cstring>
 #include <unistd.h>
 #include <thread>
+#include <opencv2/dnn.hpp>
 #define min_area 500 //pixels
 
 using namespace std;
 using namespace cv;
+using namespace dnn;
 
 /**
 * @class MotionDetector
@@ -37,11 +39,69 @@ class MotionDetector {
 	
 	public:
 	 Mat ProcessContours(Mat camerafeed);
-	 int closecase();
 	 int i = 0;
-		 
+	 int closecase();
 	 int flag = 0;
 };
+
+class HumanDetector {
+    public:
+        // prepare model files and set up network
+        std::string model = "yolov2-tiny.weights";
+        std::string config = "yolov2-tiny.cfg";        
+        Net network = readNet(model, config,"Darknet"); 
+        void configure_network(){
+            network.setPreferableBackend(DNN_BACKEND_DEFAULT);
+            network.setPreferableTarget(DNN_TARGET_OPENCL);
+        }
+
+        Mat detect(Mat img){
+            static Mat blobFromImg;
+            bool swapRB = true;
+            // function which facilitates classification
+            blobFromImage(img, blobFromImg, 1, Size(416, 416), Scalar(), swapRB, false);
+            //cout << blobFromImg.size() << endl; 
+            
+            float scale = 1.0 / 255.0;
+            Scalar mean = 0;
+            network.setInput(blobFromImg, "", scale, mean);
+
+            Mat outMat;
+            network.forward(outMat);
+            // number of detected objects
+            int rowsNoOfDetection = outMat.rows;
+            int colsCoordinatesPlusClassScore = outMat.cols;
+            // Loop over number of detected objects
+            for (int j = 0; j < rowsNoOfDetection; ++j)
+            {
+                // get classifier scores
+                Mat scores = outMat.row(j).colRange(5, colsCoordinatesPlusClassScore);
+                Point PositionOfMax;
+                double confidence;
+
+                minMaxLoc(scores, 0, &confidence, 0, &PositionOfMax);
+                if (confidence > 0.0001)
+                {
+                    // locate object
+                    int centerX = (int)(outMat.at<float>(j, 0) * img.cols); 
+                    int centerY = (int)(outMat.at<float>(j, 1) * img.rows); 
+                    int width =   (int)(outMat.at<float>(j, 2) * img.cols+20); 
+                    int height =   (int)(outMat.at<float>(j, 3) * img.rows+100); 
+                    int left = centerX - width / 2;
+                    int top = centerY - height / 2;
+
+                    stringstream ss;
+                    ss << PositionOfMax.x;
+                    string clas = ss.str();
+                    putText(img, "Human Detected", Point(left, top), 1, 2, Scalar(0, 0, 255), 2, false);
+                    // draw rectangle around object
+                    rectangle(img, Rect(left, top, width, height), Scalar(0,0,255), 2, 8, 0);
+                }
+            } 
+			return img;    
+        }
+};
+
 
 /**
 * @class Camera
@@ -50,6 +110,8 @@ class MotionDetector {
 class Camera {
 	protected:
 	 MotionDetector detector; //!< Instance of the Motion Detection
+	 HumanDetector Hdetector;
+	 Mat humanframe;
 	 VideoCapture video;	//!< Video Input
 	 //Mat frame;		//!< Incoming camera feed	
 
@@ -93,14 +155,16 @@ int MotionDetector::closecase() {
 		//Grab the current frame
 		video.read(frame);
 		detector.ProcessContours(frame);
-       	
-		//Show the Video Feed
-		imshow("Camera", frame);
 
 		if(detector.flag == 1) {
 			thread t2(&MotionDetector::closecase, &detector);
 			t2.join();
 		}
+       	
+		//Show the Video Feed
+		imshow("Camera", frame);
+
+		
 
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
