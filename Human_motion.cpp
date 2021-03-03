@@ -19,11 +19,13 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
+
+
 /**
 * @class MotionDetector
-* @brief Analyses video feed from PiCamera to detect motion changes 
+* @brief Analyses video feed from PiCamera to detect motion changes using background substraction
+*
 */
-
 class MotionDetector {
 	protected:
 	 Mat frame_diff;	//!< Difference output between frames
@@ -38,10 +40,18 @@ class MotionDetector {
 
 	
 	public:
+
+	///@brief Takes the incoming frame and performs background subtraction using previous frames.
+	///Performs background subtraction to detect changes in the frame i.e. motion. 
+	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
+	///@see HumanDetector::detect Camera:opencam
+	///@param camerafeed frame captured from PiCamera or Webcam
+	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 	 Mat ProcessContours(Mat camerafeed);
-	 int i = 0;
-	 int closecase();
-	 int flag = 0;
+
+	 //int i = 0;
+
+	 int flag = 0; //!<Flag variable to invoke HumanDetector thread t2
 };
 
 class HumanDetector{
@@ -130,15 +140,13 @@ class Camera {
 	 //Mat frame;		//!< Incoming camera feed	
 
 	public:
-		 int opencam(Mat frame);		
+
+		///@brief Opens the camera or webcam atached to the device to be further processed
+		///@param frame Is the initial frame to be passed the "frame" from the camera/webcam
+		///@returns Doesn't return anything but instead shows the final frame after processing using other methods
+		///@see ProcessContours(Mat CameraFeed)
+		int opencam(Mat frame);		
 };
-
-/**
-* @class Camera
-* @fn opencam
-* @brief Opens Camera and transmits video feed
-*/
-
 
 
  int Camera::opencam(Mat frame)  {
@@ -146,11 +154,6 @@ class Camera {
 		//Open the video feed for the webcam/camera
 		video.open(0);
 		sleep(3);
-
-
-		//Set width and height of the video feed
-		//video.set(CAP_PROP_FRAME_WIDTH,480);
-  		//video.set(CAP_PROP_FRAME_HEIGHT, 480);
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -188,10 +191,14 @@ class Camera {
   }
 
 
- Mat MotionDetector::ProcessContours(Mat camerafeed) {
+
+
+Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
+	//Convert the input image to grayscale
 	cvtColor(camerafeed, grayscale, COLOR_RGB2GRAY);
 
+	//Add a smoother to the image  
 	GaussianBlur(grayscale, grayscale, Size(21,21), 0);
 
 
