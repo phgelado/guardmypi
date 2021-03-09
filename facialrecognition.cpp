@@ -6,28 +6,37 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-  
+#include "opencv2/core.hpp"
+#include "opencv2/face.hpp"
+#include <fstream>
 #include <iostream>
 #include <stdio.h>
   
 using namespace std;
 using namespace cv;
+using namespace cv::face;
 
 class FaceDetector{
     public:
         // cascade classifier object
         CascadeClassifier face_cascade;
+        Ptr<LBPHFaceRecognizer> recogniser = face::LBPHFaceRecognizer::create();
+        int ID = -1;
+        double confidence = 0.0;
         // grayscale frame for processing
         Mat GrayFrame;
+        string name;
 
         // method for loading particular Haar cascade file
         int loadcascade(){
             // insert facial recognition cascade here	
-            face_cascade.load("cascade.xml");
+            face_cascade.load("haarcascade_frontalface_default.xml");
             // and here
-            if(!face_cascade.load("cascade.xml"))
+            recogniser->read("test.yml");
+
+            if(!face_cascade.load("haarcascade_frontalface_default.xml"))
            {
-                cerr<<"Error Loading XML file"<<endl;
+                cout<<"Error Loading XML file"<<endl;
             return 0;
            }    
         }
@@ -38,13 +47,27 @@ class FaceDetector{
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> humans;
             // detect humans in frame - adjust parameters as desired
-            face_cascade.detectMultiScale( GrayFrame, humans, 2, 2);     
+            face_cascade.detectMultiScale( GrayFrame, humans, 1.5, 2, 0, Size(30,30), Size(240,240));     
   
             // Draw rectangles on the detected humans
             for( int i = 0; i < humans.size(); i++ )
             {
-             rectangle(ReferenceFrame, humans[i], Scalar(0,255,0));
-            } 
+            Rect r = humans[i];
+            Scalar color = Scalar(255, 0, 0);
+            rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
+            r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 8, 0);
+            recogniser->predict(GrayFrame,ID,confidence);
+            if(ID ==0){
+                name = "Aidan";
+                putText(ReferenceFrame,name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);    
+
+            }
+            else
+                if(ID==1) {
+                    name = "Arnie";
+                    putText(ReferenceFrame,name,Point(40, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);    
+                } 
+            }
         }
 };
 
@@ -53,6 +76,7 @@ class Camera: VideoCapture{
   public:
       FaceDetector mydetector;
       Mat ReferenceFrame;
+
 
       // start camera method
       int start(){
