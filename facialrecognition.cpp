@@ -23,9 +23,9 @@ class FaceDetector{
         // method for loading particular Haar cascade file
         int loadcascade(){
             // insert facial recognition cascade here	
-            face_cascade.load("cascade.xml");
+            face_cascade.load("cascadelbp.xml");
             // and here
-            if(!face_cascade.load("cascade.xml"))
+            if(!face_cascade.load("cascadelbp.xml"))
            {
                 cerr<<"Error Loading XML file"<<endl;
             return 0;
@@ -38,7 +38,7 @@ class FaceDetector{
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> humans;
             // detect humans in frame - adjust parameters as desired
-            face_cascade.detectMultiScale( GrayFrame, humans, 2, 2);     
+            face_cascade.detectMultiScale( GrayFrame, humans, 1.05, 3);     
   
             // Draw rectangles on the detected humans
             for( int i = 0; i < humans.size(); i++ )
