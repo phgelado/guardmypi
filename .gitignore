@@ -43,3 +43,4 @@ CMakeLists.txt
 *.exe
 *.out
 *.app
+*.txt
