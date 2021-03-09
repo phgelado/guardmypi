@@ -10,6 +10,7 @@ motion
 motdetection
 Makefile
 CMakeLists.txt
+dox/
 
 # Prerequisites
 *.d
