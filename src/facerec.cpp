@@ -18,6 +18,7 @@
 #include "opencv2/core.hpp"
 #include "opencv2/face.hpp"
 #include "opencv2/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -66,6 +67,8 @@ int main(int argc, const char *argv[]) {
         string error_message = "This demo needs at least 2 images to work. Please add more images to your data set!";
         CV_Error(Error::StsError, error_message);
     }
+
+
     // The following lines simply get the last images from
     // your dataset and remove it from the vector. This is
     // done, so that the training data (which we learn the
@@ -73,6 +76,9 @@ int main(int argc, const char *argv[]) {
     // the model with, do not overlap.
     Mat testSample = images[images.size() - 1];
     int testLabel = labels[labels.size() - 1];
+
+    //Convert remaining images to grayscale to improve efficiency of LBPH
+    cvtColor(images, images, COLOR_BGR2GRAY);
     images.pop_back();
     labels.pop_back();
     // The following lines create an LBPH model for
