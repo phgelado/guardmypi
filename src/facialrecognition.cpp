@@ -47,7 +47,8 @@ class FaceDetector{
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> humans;
             // detect humans in frame - adjust parameters as desired
-            face_cascade.detectMultiScale( GrayFrame, humans, 1.5, 2, 0, Size(30,30), Size(240,240));     
+            face_cascade.detectMultiScale( GrayFrame, humans, 1.1, 2);     
+
   
             // Draw rectangles on the detected humans
             for( int i = 0; i < humans.size(); i++ )
