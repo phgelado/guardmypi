@@ -20,19 +20,21 @@ class FaceDetector{
     public:
         // cascade classifier object
         CascadeClassifier face_cascade;
-        Ptr<LBPHFaceRecognizer> recogniser = face::LBPHFaceRecognizer::create();
+        Ptr<FisherFaceRecognizer> recogniser = face::FisherFaceRecognizer::create(0,123);
         int ID = -1;
         double confidence = 0.0;
         // grayscale frame for processing
         Mat GrayFrame;
         string name;
+        int area;
 
         // method for loading particular Haar cascade file
         int loadcascade(){
             // insert facial recognition cascade here	
             face_cascade.load("haarcascade_frontalface_default.xml");
             // and here
-            recogniser->read("test.yml");
+            
+            recogniser->read("eigensmall.yml");
 
             if(!face_cascade.load("haarcascade_frontalface_default.xml"))
            {
@@ -47,27 +49,36 @@ class FaceDetector{
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> humans;
             // detect humans in frame - adjust parameters as desired
-            face_cascade.detectMultiScale( GrayFrame, humans, 1.1, 2);     
-
-  
+            face_cascade.detectMultiScale(GrayFrame, humans, 1.1, 8);     
+            resize(GrayFrame,GrayFrame,Size(168,192));
             // Draw rectangles on the detected humans
             for( int i = 0; i < humans.size(); i++ )
             {
             Rect r = humans[i];
+            area = r.width*r.height;
             Scalar color = Scalar(255, 0, 0);
-            rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
-            r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 8, 0);
+
+            if(area > 2000) {
+                rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
+                r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 2, 0);
+            }     
             recogniser->predict(GrayFrame,ID,confidence);
-            if(ID ==0){
+            //name = to_string(ID);
+            string conf = to_string(confidence);
+            cout << ID << "\t" << confidence << "\n";
+            putText(ReferenceFrame,conf,Point((10,20)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+
+
+            if(ID ==11 && confidence < 11000){
                 name = "Aidan";
-                putText(ReferenceFrame,name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);    
+                putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 
             }
-            else
-                if(ID==1) {
-                    name = "Arnie";
-                    putText(ReferenceFrame,name,Point(40, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);    
-                } 
+            
+                //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+                //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+
+
             }
         }
 };
@@ -79,20 +90,24 @@ class Camera: VideoCapture{
       Mat ReferenceFrame;
 
 
+
       // start camera method
       int start(){
             // initialise capture
             VideoCapture capture(0);   
             // load cascade here
             mydetector.loadcascade();   
-            if (!capture.isOpened()) return -1;
+            //if (!capture.isOpened()) return -1;
             while(1){
+              //ReferenceFrame =imread("aidantest.JPG");
               // get next frame
+
                capture >> ReferenceFrame;
                mydetector.detect(ReferenceFrame);
                if( ReferenceFrame.empty() )
                   break;
                // show image in window 
+               resize(ReferenceFrame,ReferenceFrame,Size(720,480));
                imshow( "Camera", ReferenceFrame );
                if (waitKey(10) == 27){       
                   break;
