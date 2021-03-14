@@ -2,11 +2,8 @@
 <opencv_storage>
 <cascade>
   <stageType>BOOST</stageType>
-<<<<<<< HEAD
+
   <featureType>HAAR</featureType>
-=======
-  <featureType>LBP</featureType>
->>>>>>> 94b34fb9a8ac7b3e6440b5ab465d4609b745a7b6
   <height>48</height>
   <width>27</width>
   <stageParams>
@@ -17,7 +14,6 @@
     <maxDepth>1</maxDepth>
     <maxWeakCount>100</maxWeakCount></stageParams>
   <featureParams>
-<<<<<<< HEAD
     <maxCatCount>0</maxCatCount>
     <featSize>1</featSize>
     <mode>ALL</mode></featureParams>
@@ -413,6 +409,8 @@
           21 19 6 6 2.</_></rects>
       <tilted>1</tilted></_></features></cascade>
 =======
+=======
+>>>>>>> 94b34fb9a8ac7b3e6440b5ab465d4609b745a7b6
     <maxCatCount>256</maxCatCount>
     <featSize>1</featSize></featureParams>
   <stageNum>6</stageNum>
@@ -546,5 +544,8 @@
     <_>
       <rect>
         10 13 4 4</rect></_></features></cascade>
+<<<<<<< HEAD
+>>>>>>> 94b34fb9a8ac7b3e6440b5ab465d4609b745a7b6
+=======
 >>>>>>> 94b34fb9a8ac7b3e6440b5ab465d4609b745a7b6
 </opencv_storage>
