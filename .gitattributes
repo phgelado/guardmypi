@@ -1,1 +1,4 @@
 eigensmall.yml filter=lfs diff=lfs merge=lfs -text
+*.yml filter=lfs diff=lfs merge=lfs -text
+test.yml filter=lfs diff=lfs merge=lfs -text
+eigen.yml filter=lfs diff=lfs merge=lfs -text
