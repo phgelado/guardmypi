@@ -1,6 +1,8 @@
 import React from 'react';
 import {animateScroll as scroll} from 'react-scroll'
-import { FaFacebook, FaGithub, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaFacebook, FaGithub, FaInstagram, FaTwitter, FaLinkedin} from 'react-icons/fa';
+import {SiHackaday} from 'react-icons/si'; 
+
 import{
     FooterContainer,
     FooterWrap,
@@ -46,6 +48,9 @@ const Footer = () => {
                         </SocialIconLink>
                         <SocialIconLink href='https://www.linkedin.com/company/guardmypi/' target='_blank' aria-label = 'Linkedin'>
                             <FaLinkedin/>
+                        </SocialIconLink>
+                        <SocialIconLink href='https://hackaday.io/project/178027-guardmypi' target='_blank' aria-label = 'Hackaday'>
+                            <SiHackaday/>
                         </SocialIconLink>
                     </SocialIcons>
                 </SocialMediaWrap>

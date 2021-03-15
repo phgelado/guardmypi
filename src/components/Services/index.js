@@ -20,17 +20,17 @@ const Services = () => {
                 <ServicesCard>
                     <ServicesIcon src ={Icon1}/>
                     <ServicesH2>Reduce expenses</ServicesH2>
-                    <ServicesP>GuardMyPi is an open-source, free to use security software tool. Your only cost is the hardware you want to pair with it!</ServicesP>
+                    <ServicesP>GuardMyPi is and will always be free and open-source. Your only cost is the hardware you want to pair it with!</ServicesP>
                 </ServicesCard>
                 <ServicesCard>
                     <ServicesIcon src ={Icon2}/>
                     <ServicesH2>Remote streaming</ServicesH2>
-                    <ServicesP>You can access your GuardMyPi stream from anywhere in the world!</ServicesP>
+                    <ServicesP>Access your GuardMyPi stream from anywhere in the world!</ServicesP>
                 </ServicesCard>
                 <ServicesCard>
                     <ServicesIcon src ={Icon3}/>
                     <ServicesH2>Smart security</ServicesH2>
-                    <ServicesP>With our ML algorithms, this is to be filled. <br /><br /><br /></ServicesP>
+                    <ServicesP>GuardMyPi is a smart, transparent and customisable, what you see and develop is what you get.<br /><br /><br /></ServicesP>
                 </ServicesCard>
             </ServicesWrapper>
         </ServicesContainer>
