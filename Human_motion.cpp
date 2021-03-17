@@ -18,9 +18,6 @@
 using namespace std;
 using namespace cv;
 
-
-
-
 /**
 * @class MotionDetector
 * @brief Analyses video feed from PiCamera to detect motion changes using background substraction
@@ -64,8 +61,8 @@ class HumanDetector{
 
         // method for loading particular Haar cascade file
         int loadcascade(){
-            human_cascade.load("haarcascade_upperbody.xml");
-            if(!human_cascade.load("haarcascade_upperbody.xml"))
+            human_cascade.load("src/haarcascade_upperbody.xml");
+            if(!human_cascade.load("src/haarcascade_upperbody.xml"))
            {
                 cerr<<"Error Loading XML file"<<endl;
             return 0;
@@ -116,10 +113,7 @@ class Camera {
 		//Open the video feed for the webcam/camera
 		video.open(0);
 		sleep(3);
-<<<<<<< HEAD
 		Hdetector.loadcascade();
-=======
->>>>>>> 8dc0ff79ed3df75628d88985f340ff3baad3be32
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
