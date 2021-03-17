@@ -63,8 +63,8 @@ int Camera::opencam()  {
 		video.open(0);
 
 		//Set width and height of the video feed
-		video.set(CAP_PROP_FRAME_WIDTH,480);
-  		video.set(CAP_PROP_FRAME_HEIGHT, 480);
+		//video.set(CAP_PROP_FRAME_WIDTH,480);
+  		//video.set(CAP_PROP_FRAME_HEIGHT, 480);
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -120,7 +120,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	absdiff(grayscale, scaled_avg, frame_diff);
 
 	//Threshold image for differences between the two frames.
-	threshold(frame_diff, frame_thresh, 1, 255, THRESH_BINARY);
+	threshold(frame_diff, frame_thresh, 15, 255, THRESH_BINARY);
 				
 	//Dilate the threshold image
 	dilate(frame_thresh, frame_thresh, Mat(), Point(-1,-1), 2);
@@ -134,8 +134,17 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) 
             continue;
+
+			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+			rect = boundingRect(cnts[i]);	// Contains coordinates of bounding rectangle for detected contours 
+			pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
+			pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
+			pt2.x = rect.x + rect.width;	// Final point along x-axis 
+			pt2.y = rect.y + rect.height;	//Final point along y-axis 
+
+			//Draws rectangle using start and stop coorinates
+			rectangle(camerafeed, pt1, pt2, CV_RGB(255,0,0), 2);
             		
-			cout << "Motion Detected - Initiate next thread";			
 		}
 		
 	return camerafeed;
