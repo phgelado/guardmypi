@@ -20,6 +20,7 @@ using namespace cv;
 
 
 
+
 /**
 * @class MotionDetector
 * @brief Analyses video feed from PiCamera to detect motion changes using background substraction
@@ -55,6 +56,7 @@ class MotionDetector {
 
 class HumanDetector{
     public:
+
         // cascade classifier object
         CascadeClassifier human_cascade;
         // grayscale frame for processing
@@ -86,6 +88,7 @@ class HumanDetector{
         }
 };
 
+
 /**
 * @class Camera
 * @brief Interface with the webcam or videofeed
@@ -113,7 +116,10 @@ class Camera {
 		//Open the video feed for the webcam/camera
 		video.open(0);
 		sleep(3);
+<<<<<<< HEAD
 		Hdetector.loadcascade();
+=======
+>>>>>>> 8dc0ff79ed3df75628d88985f340ff3baad3be32
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
