@@ -20,7 +20,7 @@ class FaceDetector{
     public:
         // cascade classifier object
         CascadeClassifier face_cascade;
-        Ptr<FisherFaceRecognizer> recogniser = face::FisherFaceRecognizer::create(0,123);
+        Ptr<FisherFaceRecognizer> recogniser = face::FisherFaceRecognizer::create(0,1000);
         int ID = -1;
         double confidence = 0.0;
         // grayscale frame for processing
@@ -34,7 +34,7 @@ class FaceDetector{
             face_cascade.load("haarcascade_frontalface_default.xml");
             // and here
             
-            recogniser->read("eigensmall.yml");
+            recogniser->read("guardingthepi.yml");
 
             if(!face_cascade.load("haarcascade_frontalface_default.xml"))
            {
@@ -57,20 +57,16 @@ class FaceDetector{
             Rect r = humans[i];
             area = r.width*r.height;
             Scalar color = Scalar(255, 0, 0);
-
-            if(area > 2000) {
-                rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
-                r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 2, 0);
-            }     
+ 
             recogniser->predict(GrayFrame,ID,confidence);
             //name = to_string(ID);
             string conf = to_string(confidence);
             cout << ID << "\t" << confidence << "\n";
-            putText(ReferenceFrame,conf,Point((10,20)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 
-
-            if(ID ==11 && confidence < 11000){
+            if(ID ==0 && confidence < 400){
                 name = "Aidan";
+                rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
+                r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 2, 0);   
                 putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 
             }
