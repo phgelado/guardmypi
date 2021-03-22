@@ -134,7 +134,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 
 	for(int i = 0; i< cnts.size(); i++) {
 		//Check to see if the contour is too small
-        if(contourArea(cnts[i]) < 5000) 
+        f(contourArea(cnts[i]) < 5000) 
             continue;
             		
 			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
@@ -145,7 +145,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 			pt2.y = rect.y + rect.height;	//Final point along y-axis 
 
 			//Draws rectangle using start and stop coorinates
-			rectangle(camerafeed, pt1, pt2, CV_RGB(255,0,0), 2);			
+			rectangle(camerafeed, pt1, pt2, CV_RGB(255,0,0), 2);		
 		}
 		
 	return camerafeed;
