@@ -94,7 +94,7 @@ class Camera {
 	protected:
 	 MotionDetector detector; //!< Instance of the Motion Detection
 	 HumanDetector Hdetector;
-	 Mat humanframe;
+	 Mat humanframe, frame;
 	 VideoCapture video;	//!< Video Input
 	 //Mat frame;		//!< Incoming camera feed	
 
@@ -104,11 +104,11 @@ class Camera {
 		///@param frame Is the initial frame to be passed the "frame" from the camera/webcam
 		///@returns Doesn't return anything but instead shows the final frame after processing using other methods
 		///@see ProcessContours(Mat CameraFeed)
-		int opencam(Mat frame);		
+		int opencam();		
 };
 
 
- int Camera::opencam(Mat frame)  {
+ int Camera::opencam()  {
 
 		//Open the video feed for the webcam/camera
 		video.open(0);
@@ -123,12 +123,13 @@ class Camera {
 			
 		//Grab the current frame
 		video.read(frame);
-		detector.ProcessContours(frame);
 		humanframe = frame;
 
+		detector.ProcessContours(frame);
+
 		if(detector.flag == 1) {
-			thread t2(&HumanDetector::detect, &Hdetector, humanframe);
-			t2.join();
+			thread t1(&HumanDetector::detect, &Hdetector, humanframe);
+			t1.join();
 			//detector.flag = 0;
 		}
 
@@ -149,9 +150,6 @@ class Camera {
 	destroyAllWindows();
     return 0;
   }
-
-
-
 
 Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
@@ -209,10 +207,8 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
  
 int main() {
 	Mat cameraframe;
-	Camera camptr;
+	Camera cam;
 	MotionDetector detector;
-	thread t1(&Camera::opencam, &camptr, cameraframe);
-	t1.join();
-	//delete camptr;
+	cam.opencam();
 	return 0;
 }
