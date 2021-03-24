@@ -58,6 +58,7 @@ class HumanDetector{
         CascadeClassifier human_cascade;
         // grayscale frame for processing
         Mat GrayFrame;
+		int flag = 0;
 
         // method for loading particular Haar cascade file
         int loadcascade(){
@@ -80,6 +81,7 @@ class HumanDetector{
             // Draw rectangles on the detected humans
             for( int i = 0; i < humans.size(); i++ )
             {
+			 flag = 1;
              rectangle(ReferenceFrame, humans[i], Scalar(0,255,0));
 			 
             }
@@ -200,11 +202,13 @@ class Camera {
 		if(detector.flag == 1) {
 			thread t1(&HumanDetector::detect, &Hdetector, frame);
 			t1.join();
-            thread t2(&Unlock::hand,&recognise,frame,background);
-            t2.join();
 			//detector.flag = 0;
 		}
 
+		if (Hdetector.flag == 1) {
+			thread t2(&Unlock::hand, &recognise, frame, background);
+			t2.join();
+		}
 		//Show the Video Feed
 		imshow("Camera", frame);
 
