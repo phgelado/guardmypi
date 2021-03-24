@@ -94,7 +94,7 @@ class Camera {
 	protected:
 	 MotionDetector detector; //!< Instance of the Motion Detection
 	 HumanDetector Hdetector;
-	 Mat humanframe, frame;
+	 Mat humanframe, frame, testframe;
 	 VideoCapture video;	//!< Video Input
 	 //Mat frame;		//!< Incoming camera feed	
 
@@ -123,6 +123,8 @@ class Camera {
 			
 		//Grab the current frame
 		video.read(frame);
+		resize(frame,frame,Size(340,200));
+		
 		humanframe = frame;
 
 		detector.ProcessContours(frame);
