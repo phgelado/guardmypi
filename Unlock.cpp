@@ -19,7 +19,7 @@ class Unlock {
         std::vector<Rect> handvec;
         Scalar color = Scalar(255, 0, 0);
         Point pt1;	//!<Start point/coordinate for the contour rectangle
-		Point pt2;	//!<End point/coordinate for the contour rectangle
+	Point pt2;	//!<End point/coordinate for the contour rectangle
     
     public:
         int loadcascade(){
@@ -53,7 +53,7 @@ class Unlock {
 	        absdiff(gray, new_avg, diff);
 
 	        //Threshold image for differences between the two frames.
-	        threshold(diff, thresh, 25, 255, THRESH_BINARY);
+	        threshold(diff, thresh, 50, 255, THRESH_BINARY);
 				
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
@@ -80,6 +80,7 @@ class Camera {
 	VideoCapture video;	//!< Video Input
 	Mat frame, threshframe;		//!< Incoming camera feed	
     Mat background;
+
 	public:
 		int opencam();
 };
@@ -98,6 +99,10 @@ int Camera::opencam()  {
 		//Set width and height of the video feed
 		//video.set(CAP_PROP_FRAME_WIDTH,480);
   		//video.set(CAP_PROP_FRAME_HEIGHT, 480);
+		int frame_width=  720;
+            	int frame_height= 480;
+            	int codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
+            	VideoWriter cap("hand.avi",codec,10, Size(frame_width,frame_height),true);
 
         ulock.loadcascade();
         video.read(background);
@@ -114,7 +119,9 @@ int Camera::opencam()  {
        	
 		//Show the Video Feed
 		imshow("Camera", frame);
-        imshow("Threshold", threshframe);
+        	imshow("Threshold", threshframe);
+		resize(frame,frame, Size(720,480));
+		cap.write(frame);
 
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
@@ -123,7 +130,7 @@ int Camera::opencam()  {
         
 	//Release video capture and write
 	video.release(); 
-
+	cap.release();
 	// Destroy all windows
 	destroyAllWindows();
     return 0;
