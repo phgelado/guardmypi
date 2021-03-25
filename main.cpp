@@ -13,10 +13,16 @@
 #include <cstring>
 #include <unistd.h>
 #include <thread>
+#include <ctime>
+#include <cstdlib>
+
 
 #define min_area 500 //pixels
 using namespace std;
 using namespace cv;
+
+
+
 
 /**
 * @class MotionDetector
@@ -97,7 +103,10 @@ class Unlock {
         Scalar color = Scalar(255, 0, 0);
         Point pt1;	//!<Start point/coordinate for the contour rectangle
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
-       
+		int count = 0;
+		clock_t startTime;
+		double secondsPassed;
+
     
     public:
         int flag = 0;
@@ -128,20 +137,36 @@ class Unlock {
 				
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
-            hand_cascade.detectMultiScale(thresh, handvec, 1.1, 8);     
+        	hand_cascade.detectMultiScale(thresh, handvec, 1.1, 8);  
+			
+	///////////////////////////////////////////////////////////////////////////////
+	//				Execute timer that waits X seconds for a hand detection
+	//////////////////////////////////////////////////////////////////////////////
+			//Timer implementation NEEDS FIXED only returns 0s 
+			if(handvec.size() < 1 && secondsPassed < 2) {
+				startTime = clock(); //Start timer
+				secondsPassed = secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+				}
 
-            for( int i = 0; i < handvec.size(); i++)
-            {
-                Rect rect = handvec[i];
-                pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
-			    pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
-			    pt2.x = rect.x + rect.width;	// Final point along x-axis 
-			    pt2.y = rect.y + rect.height;	//Final point along y-axis 
-                rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
-				putText(ReferenceFrame, "Hand Detected", Point(100, 50), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+	/////////////////////////////////////////////////////////////////////////////
+	//	Execute this if no hand or QR code is detected aka the intruder push notification stuff
+	/////////////////////////////////////////////////////////////////////////////
+			else if(secondsPassed >= 2) {
+				cout << "INTRUDER" << "\n";
+				//Escape the function here and set an intruder flag? break; or return 0 to terminate the function then do t2.join()?
+			}
 
-                }    
-
+			for( int i = 0; i < handvec.size(); i++)
+            	{
+                	Rect rect = handvec[i];
+                	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
+			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
+			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
+			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
+                	rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
+					putText(ReferenceFrame, "Hand Detected", Point(100, 50), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+                } 
+		
         return thresh;
           
         }
@@ -202,7 +227,6 @@ class Camera {
 		if(detector.flag == 1) {
 			thread t1(&HumanDetector::detect, &Hdetector, frame);
 			t1.join();
-			//detector.flag = 0;
 		}
 
 		if (Hdetector.flag == 1) {
@@ -212,7 +236,10 @@ class Camera {
 		//Show the Video Feed
 		imshow("Camera", frame);
 
-    
+
+		//Reset function probably gonna go in here. Code only works properly when I put flag resets here!
+		detector.flag = 0;
+		Hdetector.flag =0;
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
