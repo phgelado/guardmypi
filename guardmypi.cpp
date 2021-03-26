@@ -9,7 +9,7 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
-#include </home/aidan/repos/guardmypi/guardmypi.h>
+#include </home/aidan/repos/guardmypi/guardmypi.hpp>
 
 using namespace std;
 using namespace cv;
@@ -140,6 +140,9 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 				cout << "INTRUDER" << "\n";
 				//Escape the function here and set an intruder flag? break; or return 0 to terminate the function then do t2.join()?
 			}
+			else if(handvec.size() >= 1) {
+				flag = 1;
+			}
 
 			for( int i = 0; i < handvec.size(); i++)
             	{
@@ -155,6 +158,19 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
         return thresh;
           
         }
+
+
+
+int Lock::lock(int lockflag, int humanflag, int motionflag) {
+	if(lockflag == 0) {
+		return 0;
+	}
+	else {
+		humanflag = 0;
+		motionflag = 0;
+		sleep(60);
+	}
+}
 
 int Camera::opencam()  {
 
@@ -191,6 +207,15 @@ int Camera::opencam()  {
 			thread t2(&Unlock::hand, &recognise, frame, background);
 			t2.join();
 		}
+
+		/*
+		if(recognise.flag == 1) {
+			//Put code in here that looks for something to lock the system it will set lockflag == 1
+		}
+		*/
+
+		//locksystem.lock(flag, Hdetector.flag, detector.flag);
+
 		//Show the Video Feed
 		imshow("Camera", frame);
 
