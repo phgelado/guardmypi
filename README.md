@@ -156,7 +156,7 @@ pkg-config --modversion opencv
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-This space will show useful examples of how GuardMyPi can be used. <!-- Additional screenshots, code examples and demos work well in this space. You may also link to more resources. _For more examples, please refer to the [Documentation](https://example.com)_ -->
+![Image of Aidan](images/aidan.png)
 
 
 
