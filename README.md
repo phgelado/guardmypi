@@ -77,7 +77,7 @@ GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilis
 
 ### Built With
 
-* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+* [OpenCV](https://opencv.org/)
 
 ### Hardware used
 
