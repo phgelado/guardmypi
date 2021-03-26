@@ -73,29 +73,27 @@
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
-
+GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive a push notification via email.
 ### Built With
 
-* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+* C++
+* [OpenCV](https://opencv.org/)
+
 
 ### Hardware used
 
-* Raspberry Pi 3
-* Pi NoIR Camera V2
+* [Raspberry Pi 3B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+* [Pi NoIr Camera V2](https://www.raspberrypi.org/products/pi-noir-camera-v2/)
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-Instructions on setting up your project locally are coming soon...
-
-<!-- To get a local copy up and running follow these simple example steps. -->
 
 ### Prerequisites
 
 To be able to run this project locally you will need to install the following dependencies: 
 
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+* [CMake](https://cmake.org/)
 
 
 ### Installation of OpenCV4 on Raspberry Pi
@@ -203,20 +201,6 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 * [README Template](https://github.com/othneildrew/Best-README-Template)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
