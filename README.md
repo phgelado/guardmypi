@@ -157,7 +157,7 @@ pkg-config --modversion opencv
 ## Usage
 
 ![Image of Aidan](images/aidan.png)
-
+![Image of Kasper](images/kasper.png)
 
 
 <!-- ROADMAP -->
