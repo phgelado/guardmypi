@@ -15,6 +15,7 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
+#include </home/aidan/repos/guardmypi/guardmypi.h>
 
 
 #define min_area 500 //pixels
