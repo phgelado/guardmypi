@@ -161,7 +161,7 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 				
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
-        	hand_cascade.detectMultiScale(thresh, handvec, 1.1, 8);  
+        	hand_cascade.detectMultiScale(thresh, handvec, 1.3, 8);  
 			
 	///////////////////////////////////////////////////////////////////////////////
 	//				Execute timer that waits X seconds for a hand detection
@@ -243,7 +243,7 @@ int Camera::opencam()  {
 			thread t2(&Unlock::hand, &recognise, frame, background);
 			t2.join();
 		}
-		cout << "ID:" << recognise.ID << "\t Flag:" << recognise.faceflag;
+		//cout << "ID:" << recognise.ID << "\t Flag:" << recognise.faceflag;
 		/*
 		if(recognise.flag == 1) {
 			//Put code in here that looks for something to lock the system it will set lockflag == 1
