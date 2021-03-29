@@ -112,7 +112,7 @@ int Unlock::loadcascade(){
            }    
         }
 
-Mat Unlock::face(Mat ReferenceFrame) {
+Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	// store original frame as grayscale in gray frame
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> face;
@@ -128,30 +128,32 @@ Mat Unlock::face(Mat ReferenceFrame) {
             	recogniser->setThreshold(123);
 				
 				
-				startTime = clock(); //Start timer
-
-				while(secondsPassed < 10){
+				secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 				
-				recogniser->predict(GrayFrame,ID,confidence);
 
-				if(ID ==0){
-                	name = "Aidan";
-                	putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
-					faceflag = 1;
-					break;
-            }
-			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+				while(secondsPassed < 10 || ID != 0){		
+					recogniser->predict(GrayFrame,ID,confidence);
+					if(ID ==0){
+						intruderflag = 0;
+                		name = "Aidan";
+                		putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+						faceflag = 1;
+						break;
+           	 		}	
+				} 
+					
+				if(secondsPassed >= 10) {
+					intruderflag = 1;
+					cout << "Intruder";
 				}
-				cout << secondsPassed;
-
+			
             
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-
-
-            }
-			return ReferenceFrame;
-        }
+				 }
+				 return ReferenceFrame;
+}
+    
 
 
 
@@ -235,19 +237,19 @@ int Camera::opencam()  {
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
-
+		
 		// Loop through available frames
 		while (1) {
 			
 		//Grab the current frame
 		video.read(frame);
 		//resize(frame,frame,Size(340,200));
-	
+
 
 		detector.ProcessContours(frame);
-
+		clock_t startTime;
 		if(detector.flag == 1) {
-			thread t1(&Unlock::face, &recognise, frame);
+			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
 		}
 
