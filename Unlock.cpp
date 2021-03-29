@@ -33,8 +33,12 @@ class Unlock {
         }
 
         Mat hand(Mat ReferenceFrame, Mat background) {
+	    		
             cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
         	GaussianBlur(gray, gray, Size(21,21), 0);
+		resize(gray,gray,Size(480,300));
+		resize(background,background, Size(480,300));
+		
             if(avg.empty()==1) {
 			    gray.convertTo(avg, CV_32FC(gray.channels()));
 		        } 
@@ -53,7 +57,7 @@ class Unlock {
 	        absdiff(gray, new_avg, diff);
 
 	        //Threshold image for differences between the two frames.
-	        threshold(diff, thresh, 25, 255, THRESH_BINARY);
+	        threshold(diff, thresh, 50, 255, THRESH_BINARY);
 				
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
@@ -109,6 +113,8 @@ int Camera::opencam()  {
 			
 		//Grab the current frame
 		video.read(frame);
+		resize(frame,frame, Size(480,300));
+
 
 		threshframe = ulock.hand(frame, background);
        	
