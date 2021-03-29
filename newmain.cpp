@@ -15,7 +15,8 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
-#include </home/aidan/repos/guardmypi/guardmypi.hpp>
+#include </home/aidan/repos/guardmypi/guardmypi.h>
+
 using namespace std;
 using namespace cv;
 
@@ -23,6 +24,7 @@ using namespace cv;
 int main() {
     Mat cameraframe;
     Camera cam;
+    sleep(5);
     cam.opencam();
     return 0;
 }
