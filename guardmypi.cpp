@@ -234,6 +234,7 @@ int Camera::opencam()  {
         video.read(background);
         cvtColor(background, background, COLOR_RGB2GRAY);
         GaussianBlur(background, background, Size(21,21), 0);
+        int timerflag = 1;
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -247,8 +248,9 @@ int Camera::opencam()  {
 
 
 		detector.ProcessContours(frame);
-		clock_t startTime;
-		if(detector.flag == 1) {
+		if(detector.flag == 1) && (timerflag==1) {
+			clock_t startTime;
+			timerflag = 0;
 			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
 		}
