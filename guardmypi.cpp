@@ -130,9 +130,9 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 				
 				secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 				
-
+				recogniser->predict(GrayFrame,ID,confidence);
+				
 				while(secondsPassed < 10 || ID != 0){		
-					recogniser->predict(GrayFrame,ID,confidence);
 					if(ID ==0){
 						intruderflag = 0;
                 		name = "Aidan";
