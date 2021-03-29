@@ -235,6 +235,8 @@ int Camera::opencam()  {
         cvtColor(background, background, COLOR_RGB2GRAY);
         GaussianBlur(background, background, Size(21,21), 0);
         int timerflag = 1;
+		clock_t startTime;
+
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -248,8 +250,8 @@ int Camera::opencam()  {
 
 
 		detector.ProcessContours(frame);
-		if(detector.flag == 1) && (timerflag==1) {
-			clock_t startTime;
+		if(detector.flag == 1 && timerflag ==1) {
+			startTime = clock();
 			timerflag = 0;
 		}
 		if(detector.flag == 1) {
