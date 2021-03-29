@@ -119,6 +119,8 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             // detect humans in frame - adjust parameters as desired
             face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
             resize(GrayFrame,GrayFrame,Size(168,192));
+			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+			cout << secondsPassed <<"\n";
             // Draw rectangles on the detected humans
             for( int i = 0; i < face.size(); i++ )
             {
@@ -127,20 +129,20 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             	Scalar color = Scalar(255, 0, 0);
             	recogniser->setThreshold(123);
 				
-				
-				secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-				
 
-				while(secondsPassed < 10 || ID != 0){		
 					recogniser->predict(GrayFrame,ID,confidence);
-					if(ID ==0){
+					
+					if(ID ==0 && secondsPassed < 10){
 						intruderflag = 0;
                 		name = "Aidan";
                 		putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+						cout << "Welcome home";
+						secondsPassed = 0;
 						faceflag = 1;
+						
 						break;
-           	 		}	
-				} 
+					}
+			}
 					
 				if(secondsPassed >= 10) {
 					intruderflag = 1;
@@ -150,7 +152,7 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-				 }
+				 
 				 return ReferenceFrame;
 }
     
