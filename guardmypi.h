@@ -74,16 +74,18 @@ class Unlock {
 		// cascade classifier object
         CascadeClassifier face_cascade;
         Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123);
-        int ID = -1;
         double confidence = 0.0;
         // grayscale frame for processing
         Mat GrayFrame;
         string name;
         int area;
+		
  
     public:
         int faceflag = 0;
 		int handflag = 0;
+		int ID = -1;
+
         int loadcascade();
         Mat hand(Mat ReferenceFrame, Mat background);
 		Mat face(Mat ReferenceFrame);

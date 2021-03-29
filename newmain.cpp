@@ -15,7 +15,7 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
-#include </home/aidan/repos/guardmypi/guardmypi.h>
+#include "guardmypi.h"
 
 using namespace std;
 using namespace cv;

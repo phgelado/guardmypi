@@ -10,7 +10,7 @@
 #include <thread>
 #include <ctime>
 #include <cstdlib>
-#include </home/aidan/repos/guardmypi/guardmypi.h>
+#include "guardmypi.h"
 
 using namespace std;
 using namespace cv;
@@ -122,17 +122,16 @@ Mat Unlock::face(Mat ReferenceFrame) {
             // Draw rectangles on the detected humans
             for( int i = 0; i < face.size(); i++ )
             {
-            Rect r = face[i];
-            area = r.width*r.height;
-            Scalar color = Scalar(255, 0, 0);
-            recogniser->setThreshold(123);
-            recogniser->predict(GrayFrame,ID,confidence);
+            	Rect r = face[i];
+            	area = r.width*r.height;
+            	Scalar color = Scalar(255, 0, 0);
+            	recogniser->setThreshold(123);
+            	recogniser->predict(GrayFrame,ID,confidence);
 
-            if(ID ==0){
-				faceflag == 1;
-                name = "Aidan";
-                putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
-
+				if(ID ==0){
+                	name = "Aidan";
+                	putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+					faceflag = 1;
             }
             
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
@@ -217,7 +216,6 @@ int Camera::opencam()  {
 		//Open the video feed for the webcam/camera
 		video.open(0);
 		sleep(3);
-		Hdetector.loadcascade();
 		recognise.loadcascade();
         video.read(background);
         cvtColor(background, background, COLOR_RGB2GRAY);
@@ -232,9 +230,7 @@ int Camera::opencam()  {
 		//Grab the current frame
 		video.read(frame);
 		//resize(frame,frame,Size(340,200));
-		
-		humanframe = frame;
-		handframe = frame;
+	
 
 		detector.ProcessContours(frame);
 
@@ -247,7 +243,7 @@ int Camera::opencam()  {
 			thread t2(&Unlock::hand, &recognise, frame, background);
 			t2.join();
 		}
-
+		cout << "ID:" << recognise.ID << "\t Flag:" << recognise.faceflag;
 		/*
 		if(recognise.flag == 1) {
 			//Put code in here that looks for something to lock the system it will set lockflag == 1
@@ -262,7 +258,7 @@ int Camera::opencam()  {
 
 		//Reset function probably gonna go in here. Code only works properly when I put flag resets here!
 		detector.flag = 0;
-		Hdetector.flag =0;
+		recognise.faceflag=0;
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
