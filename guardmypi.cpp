@@ -183,11 +183,14 @@ int Unlock::hand(Mat ReferenceFrame, Mat background) {
 			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
 			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
                 	rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
-				}
-				if(handvec.size()!= 0){
-					   	lockflag == 1;
-						return 0;
+					handdetected = 1;				
+				
+				if(handdetected == 1){
+					cout << "Lock Flag internal:" <<lockflag << "\n";
+					break;
 						}
+				return 0;
+			}
 }
 
 
@@ -243,7 +246,6 @@ int Camera::opencam()  {
 		if(recognise.faceflag == 1) {
 			thread t3(&Unlock::hand, &recognise,frame,background);
 			t3.join();
-			cout << "Lock Flag:" << recognise.lockflag << "\n";
 			}
 
 		if(recognise.lockflag == 1) {
@@ -252,7 +254,7 @@ int Camera::opencam()  {
 		
 
 		//locksystem.lock(flag, Hdetector.flag, detector.flag);
-		detector.flag = 0;
+	
 		//Show the Video Feed
 		imshow("Camera", frame);
 
