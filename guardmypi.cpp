@@ -251,6 +251,8 @@ int Camera::opencam()  {
 		if(detector.flag == 1) && (timerflag==1) {
 			clock_t startTime;
 			timerflag = 0;
+		}
+		if(detector.flag == 1) {
 			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
 		}
