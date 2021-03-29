@@ -184,7 +184,7 @@ int Unlock::hand(Mat ReferenceFrame, Mat background) {
 			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
                 	rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
 					handdetected = 1;				
-				
+///////////////////////This still doesnt work/////////////////////
 				if(handdetected == 1){
 					cout << "Lock Flag internal:" <<lockflag << "\n";
 					break;
