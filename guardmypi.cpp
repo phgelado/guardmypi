@@ -126,13 +126,24 @@ Mat Unlock::face(Mat ReferenceFrame) {
             	area = r.width*r.height;
             	Scalar color = Scalar(255, 0, 0);
             	recogniser->setThreshold(123);
-            	recogniser->predict(GrayFrame,ID,confidence);
+				
+				
+				startTime = clock(); //Start timer
+
+				while(secondsPassed < 10){
+				
+				recogniser->predict(GrayFrame,ID,confidence);
 
 				if(ID ==0){
                 	name = "Aidan";
                 	putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 					faceflag = 1;
+					break;
             }
+			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+				}
+				cout << secondsPassed;
+
             
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
@@ -162,14 +173,13 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
         	hand_cascade.detectMultiScale(thresh, handvec, 1.3, 8);  
-			
+
+	/*		
 	///////////////////////////////////////////////////////////////////////////////
 	//				Execute timer that waits X seconds for a hand detection
 	//////////////////////////////////////////////////////////////////////////////
 			//Timer implementation NEEDS FIXED only returns 0s 
 			if(handvec.size() < 1 && secondsPassed < 2) {
-				startTime = clock(); //Start timer
-				secondsPassed = secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 				}
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -179,9 +189,12 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 				cout << "INTRUDER" << "\n";
 				//Escape the function here and set an intruder flag? break; or return 0 to terminate the function then do t2.join()?
 			}
+			
 			else if(handvec.size() >= 1) {
 				handflag = 1;
 			}
+
+			*/
 
 			for( int i = 0; i < handvec.size(); i++)
             	{
@@ -215,7 +228,6 @@ int Camera::opencam()  {
 
 		//Open the video feed for the webcam/camera
 		video.open(0);
-		sleep(3);
 		recognise.loadcascade();
         video.read(background);
         cvtColor(background, background, COLOR_RGB2GRAY);
