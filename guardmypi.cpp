@@ -112,7 +112,7 @@ int Unlock::loadcascade(){
            }    
         }
 
-Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
+int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	// store original frame as grayscale in gray frame
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> face;
@@ -120,7 +120,7 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
             resize(GrayFrame,GrayFrame,Size(168,192));
 			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-			cout << secondsPassed <<"\n";
+			//cout << secondsPassed <<"\n";
             // Draw rectangles on the detected humans
             for( int i = 0; i < face.size(); i++ )
             {
@@ -129,48 +129,35 @@ Mat Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             	Scalar color = Scalar(255, 0, 0);
             	recogniser->setThreshold(123);
 				
-<<<<<<< HEAD
-				
-				secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-				
-				recogniser->predict(GrayFrame,ID,confidence);
-				
-				while(secondsPassed < 10 || ID != 0){		
-					if(ID ==0){
-=======
 
-					recogniser->predict(GrayFrame,ID,confidence);
-					
+				recogniser->predict(GrayFrame,ID,confidence);
 					if(ID ==0 && secondsPassed < 10){
->>>>>>> f06523b3e8c11d6b8f90e983c850a4541ad2c7c7
 						intruderflag = 0;
                 		name = "Aidan";
                 		putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 						cout << "Welcome home";
 						secondsPassed = 0;
 						faceflag = 1;
-						
 						break;
+						
 					}
+					return 1;
+
 			}
-					
-				if(secondsPassed >= 10) {
+
+
+				if(secondsPassed >= 10 && ID !=0) {
 					intruderflag = 1;
-					cout << "Intruder";
+					return 0;
 				}
 			
-            
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-				 
-				 return ReferenceFrame;
 }
     
 
-
-
-Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
-            cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
+int Unlock::hand(Mat ReferenceFrame, Mat background) {
+	cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
         	GaussianBlur(gray, gray, Size(21,21), 0);
             if(avg.empty()==1) {
 			    gray.convertTo(avg, CV_32FC(gray.channels()));
@@ -187,56 +174,35 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 	        //Dilate the threshold image
 	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
         	hand_cascade.detectMultiScale(thresh, handvec, 1.3, 8);  
-
-	/*		
-	///////////////////////////////////////////////////////////////////////////////
-	//				Execute timer that waits X seconds for a hand detection
-	//////////////////////////////////////////////////////////////////////////////
-			//Timer implementation NEEDS FIXED only returns 0s 
-			if(handvec.size() < 1 && secondsPassed < 2) {
-				}
-
-	/////////////////////////////////////////////////////////////////////////////
-	//	Execute this if no hand or QR code is detected aka the intruder push notification stuff
-	/////////////////////////////////////////////////////////////////////////////
-			else if(secondsPassed >= 2) {
-				cout << "INTRUDER" << "\n";
-				//Escape the function here and set an intruder flag? break; or return 0 to terminate the function then do t2.join()?
-			}
-			
-			else if(handvec.size() >= 1) {
-				handflag = 1;
-			}
-
-			*/
-
 			for( int i = 0; i < handvec.size(); i++)
-            	{
+            	{   
+					cout << "Hand size:" << handvec.size();
                 	Rect rect = handvec[i];
                 	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
 			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
 			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
 			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
                 	rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
-					putText(ReferenceFrame, "Hand Detected", Point(100, 50), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-                } 
-		
-        return thresh;
-          
-        }
+				}
+				if(handvec.size()!= 0){
+					   	lockflag == 1;
+						return 0;
+						}
+}
 
 
-
-int Lock::lock(int lockflag, int humanflag, int motionflag) {
+/*
+int Camera::lock(int lockflag, int unlockflag, int motionflag, int intruderflag) {
 	if(lockflag == 0) {
 		return 0;
 	}
 	else {
-		humanflag = 0;
+		unlockflag = 0;
 		motionflag = 0;
 		sleep(60);
 	}
 }
+*/
 
 int Camera::opencam()  {
 
@@ -248,7 +214,6 @@ int Camera::opencam()  {
         GaussianBlur(background, background, Size(21,21), 0);
         int timerflag = 1;
 		clock_t startTime;
-
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
@@ -271,26 +236,28 @@ int Camera::opencam()  {
 			t1.join();
 		}
 
-		if (recognise.faceflag == 1) {
-			thread t2(&Unlock::hand, &recognise, frame, background);
-			t2.join();
+		if(recognise.intruderflag == 1) {
+			cout << "Intruder detected run Notification Thread\n";
 		}
-		//cout << "ID:" << recognise.ID << "\t Flag:" << recognise.faceflag;
-		/*
-		if(recognise.flag == 1) {
-			//Put code in here that looks for something to lock the system it will set lockflag == 1
+
+		if(recognise.faceflag == 1) {
+			thread t3(&Unlock::hand, &recognise,frame,background);
+			t3.join();
+			cout << "Lock Flag:" << recognise.lockflag << "\n";
+			}
+
+		if(recognise.lockflag == 1) {
+			cout << "Leave house lock procedure underway";
 		}
-		*/
+		
 
 		//locksystem.lock(flag, Hdetector.flag, detector.flag);
-
+		detector.flag = 0;
 		//Show the Video Feed
 		imshow("Camera", frame);
 
 
 		//Reset function probably gonna go in here. Code only works properly when I put flag resets here!
-		detector.flag = 0;
-		recognise.faceflag=0;
 		// For breaking the loop
 		if (waitKey(25) >= 0) break;
 
