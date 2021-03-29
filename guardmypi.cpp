@@ -3,16 +3,18 @@
 #include <opencv2/tracking.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
+#include "opencv2/face.hpp"
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
 #include <thread>
 #include <ctime>
 #include <cstdlib>
-#include </home/aidan/repos/guardmypi/guardmypi.hpp>
+#include </home/aidan/repos/guardmypi/guardmypi.h>
 
 using namespace std;
 using namespace cv;
+using namespace cv::face;
 
 Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
@@ -69,8 +71,8 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 }
 
 int HumanDetector::loadcascade(){
-            human_cascade.load("haarcascade_frontalface_default.xml");
-            if(!human_cascade.load("haarcascade_frontalface_default.xml"))
+            human_cascade.load("src/haarcascade_upperbody.xml");
+            if(!human_cascade.load("src/haarcascade_upperbody.xml"))
            {
                 cerr<<"Error Loading XML file"<<endl;
             return 0;
@@ -88,21 +90,59 @@ Mat HumanDetector::detect(Mat ReferenceFrame){
             for( int i = 0; i < humans.size(); i++ )
             {
 			 flag = 1;
-             rectangle(ReferenceFrame, humans[i], Scalar(0,255,0));
-			 
-            }
+			 Rect rect = humans[i];
+                	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
+			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
+			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
+			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
+            rectangle(ReferenceFrame, pt1,pt2, Scalar(0,255,0), 3, 2, 0);
+			 }
 			return ReferenceFrame; 
         }
 
 int Unlock::loadcascade(){
             hand_cascade.load("Hand_haar_cascade.xml");
-            
+			face_cascade.load("haarcascade_frontalface_default.xml");
+			recogniser->read("guardingthepi.yml");
+
             if(!hand_cascade.load("Hand_haar_cascade.xml"))
            {
                 cout<<"Error Loading XML file"<<endl;
             return 0;
            }    
         }
+
+Mat Unlock::face(Mat ReferenceFrame) {
+	// store original frame as grayscale in gray frame
+            cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
+            std::vector<Rect> face;
+            // detect humans in frame - adjust parameters as desired
+            face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
+            resize(GrayFrame,GrayFrame,Size(168,192));
+            // Draw rectangles on the detected humans
+            for( int i = 0; i < face.size(); i++ )
+            {
+            Rect r = face[i];
+            area = r.width*r.height;
+            Scalar color = Scalar(255, 0, 0);
+            recogniser->setThreshold(123);
+            recogniser->predict(GrayFrame,ID,confidence);
+
+            if(ID ==0){
+				faceflag == 1;
+                name = "Aidan";
+                putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+
+            }
+            
+                //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+                //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+
+
+            }
+			return ReferenceFrame;
+        }
+
 
 
 Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
@@ -141,7 +181,7 @@ Mat Unlock::hand(Mat ReferenceFrame, Mat background) {
 				//Escape the function here and set an intruder flag? break; or return 0 to terminate the function then do t2.join()?
 			}
 			else if(handvec.size() >= 1) {
-				flag = 1;
+				handflag = 1;
 			}
 
 			for( int i = 0; i < handvec.size(); i++)
@@ -199,11 +239,11 @@ int Camera::opencam()  {
 		detector.ProcessContours(frame);
 
 		if(detector.flag == 1) {
-			thread t1(&HumanDetector::detect, &Hdetector, frame);
+			thread t1(&Unlock::face, &recognise, frame);
 			t1.join();
 		}
 
-		if (Hdetector.flag == 1) {
+		if (recognise.faceflag == 1) {
 			thread t2(&Unlock::hand, &recognise, frame, background);
 			t2.join();
 		}
