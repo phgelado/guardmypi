@@ -69,8 +69,7 @@ class Unlock {
         Point pt1;	//!<Start point/coordinate for the contour rectangle
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
 		int count = 0;
-		clock_t startTime;
-		double secondsPassed;
+		
 		// cascade classifier object
         CascadeClassifier face_cascade;
         Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123);
@@ -84,11 +83,15 @@ class Unlock {
     public:
         int faceflag = 0;
 		int handflag = 0;
+		int intruderflag = 0;
+		int lockflag = 0;
+		int handdetected = 0;
 		int ID = -1;
+		double secondsPassed = 0.0;
 
         int loadcascade();
-        Mat hand(Mat ReferenceFrame, Mat background);
-		Mat face(Mat ReferenceFrame);
+        int hand(Mat ReferenceFrame, Mat background);
+		int face(Mat ReferenceFrame, clock_t startTime);
 };
 
 
@@ -105,7 +108,9 @@ class Camera{
 		Lock locksystem;
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
+		int hour;
 	    //Mat frame;		//!< Incoming camera feed	
+
         
         public:
 
@@ -114,7 +119,8 @@ class Camera{
 		///@returns Doesn't return anything but instead shows the final frame after processing using other methods
 		///@see ProcessContours(Mat CameraFeed)
 		int opencam();
-		int lock(int unlockflag);		
+		int gettime();
+		//int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);		
 
 };
 

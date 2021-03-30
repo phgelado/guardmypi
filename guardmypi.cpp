@@ -207,8 +207,14 @@ int Camera::lock(int lockflag, int unlockflag, int motionflag, int intruderflag)
 }
 */
 
-int Camera::opencam()  {
+int Camera::gettime() {
+	time_t ttime = time(0);
+    tm *local_time = gmtime(&ttime);
+	return int(1 + local_time->tm_hour);
+}
 
+int Camera::opencam()  {
+		
 		//Open the video feed for the webcam/camera
 		video.open(0);
 		recognise.loadcascade();
@@ -234,10 +240,19 @@ int Camera::opencam()  {
 			startTime = clock();
 			timerflag = 0;
 		}
+
+
 		if(detector.flag == 1) {
+			hour = gettime();
+			if(hour >= 7 && hour <= 20) {
+			
 			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
-		}
+			} /* else {
+			  thread t1(&Unlock::face, &recognise, frame, startTime);
+			  }
+			  */
+			}
 
 		if(recognise.intruderflag == 1) {
 			cout << "Intruder detected run Notification Thread\n";
