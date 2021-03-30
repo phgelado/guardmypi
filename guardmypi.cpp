@@ -70,27 +70,27 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	return camerafeed;
 }
 
-int HumanDetector::loadcascade(){
-            human_cascade.load("src/haarcascade_upperbody.xml");
-            if(!human_cascade.load("src/haarcascade_upperbody.xml"))
+int ObjectDetector::loadcascade(String cascadename){
+            cascade.load(cascadename);
+            if(!cascade.load(cascadename))
            {
                 cerr<<"Error Loading XML file"<<endl;
             return 0;
            }    
         }
 
-Mat HumanDetector::detect(Mat ReferenceFrame){
+Mat ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbours){
             // store original frame as grayscale in gray frame
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
-            std::vector<Rect> humans;
-            // detect humans in frame - adjust parameters as desired
-            human_cascade.detectMultiScale( GrayFrame, humans, 1.5, 2);     
+            std::vector<Rect> objects;
+            // detect objects in frame - adjust parameters as desired
+            cascade.detectMultiScale( GrayFrame, objects, scale_factor, neighbours);    
   
-            // Draw rectangles on the detected humans
-            for( int i = 0; i < humans.size(); i++ )
+            // Draw rectangles on the detected objects
+            for( int i = 0; i < objects.size(); i++ )
             {
 			 flag = 1;
-			 Rect rect = humans[i];
+			 Rect rect = objects[i];
                 	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
 			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
 			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
@@ -116,12 +116,12 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	// store original frame as grayscale in gray frame
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> face;
-            // detect humans in frame - adjust parameters as desired
+            // detect faces in frame - adjust parameters as desired
             face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
             resize(GrayFrame,GrayFrame,Size(168,192));
 			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 			//cout << secondsPassed <<"\n";
-            // Draw rectangles on the detected humans
+            // Draw rectangles on the detected faces
             for( int i = 0; i < face.size(); i++ )
             {
             	Rect r = face[i];
@@ -217,6 +217,7 @@ int Camera::opencam()  {
 		
 		//Open the video feed for the webcam/camera
 		video.open(0);
+		petdetector.loadcascade("haarcascade_dogface.xml");
 		recognise.loadcascade();
         video.read(background);
         cvtColor(background, background, COLOR_RGB2GRAY);
@@ -235,14 +236,19 @@ int Camera::opencam()  {
 		//resize(frame,frame,Size(340,200));
 
 
-		detector.ProcessContours(frame);
-		if(detector.flag == 1 && timerflag ==1) {
+		motiondetector.ProcessContours(frame);
+		/*if(detector.flag == 1 && timerflag ==1) {
 			startTime = clock();
 			timerflag = 0;
+		}*/
+
+
+		if(motiondetector.flag == 1) {
+			thread t0(&ObjectDetector::detect,&petdetector,frame, 1.3, 20);
+			t0.join();
 		}
 
-
-		if(detector.flag == 1) {
+			// all this  previously under if statement
 			hour = gettime();
 			if(hour >= 7 && hour <= 20) {
 			
@@ -252,7 +258,7 @@ int Camera::opencam()  {
 			  thread t1(&Unlock::face, &recognise, frame, startTime);
 			  }
 			  */
-			}
+			
 
 		if(recognise.intruderflag == 1) {
 			cout << "Intruder detected run Notification Thread\n";
