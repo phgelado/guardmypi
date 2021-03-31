@@ -191,6 +191,7 @@ secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 	else if (secondsPassed >=10 && QRunlockflag != 1) {
 		cout << "In loop:" << secondsPassed;
 		cout << "Intruder detected\n";
+		intruderflag = 1;
 	}
 }
 
