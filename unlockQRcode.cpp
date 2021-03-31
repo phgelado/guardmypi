@@ -7,6 +7,35 @@
 using namespace cv;
 using namespace std;
 
+int Unlock::QR(Mat frame) {
+
+  //QRcode detection 
+  std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
+  if(data.length()>0)
+  {
+    if(data=="user1234"){
+        cout << "Valid unlock key detected, decoded data: " << data << endl;
+        display(frame, bbox);
+        rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+        imshow("Rectified QRCode", rectifiedImage);
+
+        waitKey(0);
+    }
+    else {
+    
+    cout << "Invalid unlock key detected, decoded data: " << data << endl;
+    display(frame, bbox);
+    rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+    imshow("Rectified QRCode", rectifiedImage);
+
+    waitKey(0);}
+
+  }
+  else
+    cout << "QR Code not detected" << endl;
+}
+
+
 //display function
 void display(Mat &im, Mat &bbox)
 {
@@ -29,10 +58,8 @@ int main(int argc, char* argv[])
     cout << "No input camera object correctly loaded" << endl;
     //inputImage = imread("qrcode-learnopencv.jpg"); <- can also load images like this
 
-//QR CodeDetector object
-  QRCodeDetector qrDecoder;
-
-  Mat bbox, rectifiedImage;
+//QR CodeDetector obje#include <opencv2/imgcodecs.hpp>
+  
 
 //QRcode detection 
   std::string data = qrDecoder.detectAndDecode(inputImage, bbox, rectifiedImage);
