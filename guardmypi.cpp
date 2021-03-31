@@ -155,8 +155,10 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
 }
 
-int Unlock::QR(Mat frame) {
+int Unlock::QR(Mat frame, clock_t startTime) {
 
+	
+ secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
   //QRcode detection 
   std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
   if(data.length()>0)
@@ -169,23 +171,26 @@ int Unlock::QR(Mat frame) {
 
         //waitKey(0);
 		QRflag = 1;
+		return 1;
         //Call unlock function/change flags for unlock
     }
-	else {
+	else if (secondsPassed < 10 || data!="user1234") {
     
     cout << "Invalid unlock key detected, decoded data: " << data << endl;
     //display(frame, bbox);
     //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
     //imshow("Rectified QRCode", rectifiedImage);
-
+	return 0;
     //waitKey(0);
 	
 	}
     //Call unlock function/change flags
 
   }
-  else 
-    cout << "QR Code not detected" << endl;
+  else if (secondsPassed > 10) {
+	intruderflag = 1;
+	//cout << "Intruder: You didnt unlock in time!" << endl;
+  }
 	}
     
 
@@ -225,7 +230,6 @@ int Unlock::hand(Mat ReferenceFrame, Mat background) {
 				return 0;
 			}
 }
-
 
 
 int Camera::lock(int lockflag, int unlockflag, int motionflag, int intruderflag) {
@@ -272,15 +276,17 @@ int Camera::opencam()  {
 			timerflag = 0;
 		}
 
-
+		/*
 		if(motiondetector.flag == 1) {
 			thread t0(&ObjectDetector::detect,&petdetector,frame, 1.3, 20);
 			t0.join();
 		}
+		*/
 
 			// all this  previously under if statement
 			hour = gettime();
-			if(hour >= 7 && hour <= 20) {
+			/*
+			(hour >= 7 && hour <= 20) {
 			
 			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
@@ -288,13 +294,18 @@ int Camera::opencam()  {
 			  thread t1(&Unlock::QR, &recognise, frame);
 			  }
 			  */
-			
+
+		if (motiondetector.flag == 1 && hour >= 9) {
+			thread t1(&Unlock::QR, &recognise, frame,startTime);
+			t1.join();
+		}
+
 
 		if(recognise.intruderflag == 1) {
 			cout << "Intruder detected run Notification Thread\n";
 		}
 
-		if(recognise.faceflag == 1) {
+		if(recognise.faceflag  == 1 || recognise.QRflag == 1) {
 			thread t3(&Unlock::hand, &recognise,frame,background);
 			t3.join();
 			}

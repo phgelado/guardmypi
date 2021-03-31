@@ -97,7 +97,7 @@ class Unlock {
         int loadcascade();
         int hand(Mat ReferenceFrame, Mat background);
 		int face(Mat ReferenceFrame, clock_t startTime);
-		int QR(Mat frame);
+		int QR(Mat frame, clock_t startTime);
 };
 
 
