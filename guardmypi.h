@@ -33,21 +33,21 @@ class MotionDetector {
 	///@brief Takes the incoming frame and performs background subtraction using previous frames.
 	///Performs background subtraction to detect changes in the frame i.e. motion. 
 	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
-	///@see HumanDetector::detect Camera:opencam
+	///@see ObjectDetector::detect Camera:opencam
 	///@param camerafeed frame captured from PiCamera or Webcam
 	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 	 Mat ProcessContours(Mat camerafeed);
 
 	 //int i = 0;
 
-	 int flag = 0; //!<Flag variable to invoke HumanDetector thread t2
+	 int flag = 0; //!<Flag variable to invoke ObjectDetector thread t2
 };
 
-class HumanDetector{
+class ObjectDetector{
     public:
 
         // cascade classifier object
-        CascadeClassifier human_cascade;
+		CascadeClassifier cascade;
         // grayscale frame for processing
         Mat GrayFrame;
 		int flag = 0;
@@ -55,8 +55,8 @@ class HumanDetector{
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
 
         // method for loading particular Haar cascade file
-        int loadcascade();
-        Mat detect(Mat ReferenceFrame);
+        int loadcascade(String cascadename);
+        Mat detect(Mat ReferenceFrame, double scale_factor, int neighbours);
 
 };
 
@@ -102,9 +102,10 @@ class Lock {
 
 class Camera{
     protected:
-        MotionDetector detector; //!< Instance of the Motion Detection
+        MotionDetector motiondetector; //!< Instance of the Motion Detection
         Unlock recognise;
-	    HumanDetector Hdetector;
+	    ObjectDetector humandetector;
+		ObjectDetector petdetector;
 		Lock locksystem;
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
@@ -120,6 +121,7 @@ class Camera{
 		///@see ProcessContours(Mat CameraFeed)
 		int opencam();
 		int gettime();
+		int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);
 		//int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);		
 
 };
