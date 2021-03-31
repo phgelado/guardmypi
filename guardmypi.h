@@ -21,7 +21,7 @@ class MotionDetector {
 	 Mat frame_diff;	//!< Difference output between frames
 	 Mat grayscale;	//!< Grayscaled version of the camera frame
 	 Mat frame_thresh;	//!< Threshold frame
-	 Mat avg;		//!< Background frame
+	 				//!< Background frame
 	 Mat scaled_avg;	//!< 8-bit Absolute value frame
 	 vector<vector<Point> > cnts;	//!< Vector of points of detected contours
 	 Rect rect;	//!<Up-right rectangle to highlight detected contours
@@ -30,14 +30,14 @@ class MotionDetector {
 
 	
 	public:
-
+	Mat avg;	
 	///@brief Takes the incoming frame and performs background subtraction using previous frames.
 	///Performs background subtraction to detect changes in the frame i.e. motion. 
 	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
 	///@see ObjectDetector::detect Camera:opencam
 	///@param camerafeed frame captured from PiCamera or Webcam
 	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
-	 Mat ProcessContours(Mat camerafeed);
+	 Mat ProcessContours(Mat camerafeed, int resetflag);
 
 	 //int i = 0;
 
@@ -63,7 +63,7 @@ class ObjectDetector{
 
 class Unlock {
     protected: 
-        Mat avg,gray,thresh, new_avg, diff;
+        Mat gray,thresh, new_avg, diff;
         CascadeClassifier hand_cascade;
         std::vector<Rect> handvec;
         Scalar color = Scalar(255, 0, 0);
@@ -92,7 +92,8 @@ class Unlock {
 		int handdetected = 0;
 		int QRunlockflag = 0;
 		int QRlockflag = 0;
-		int resetflag = 1;
+		int resetflag = 0;
+		Mat avg;
 
 		int ID = -1;
 		double secondsPassed = 0.0;

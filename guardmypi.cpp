@@ -171,7 +171,6 @@ secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 
         //waitKey(0);
 		QRunlockflag = 1;
-		secondsPassed = 0;
 		return 1;
         //Call unlock function/change flags for unlock
 	
@@ -302,7 +301,6 @@ int Camera::opencam()  {
 			recognise.QRunlockflag = 0;
 			recognise.QRlockflag = 0;
 			cout << "Before:" << recognise.secondsPassed;
-			timerflag = 0;
 			waitKey(5000);
 			motiondetector.avg = testframe;
 			cout << recognise.avg;
@@ -342,14 +340,16 @@ int Camera::opencam()  {
 		if (motiondetector.flag == 1 && hour >= 9) {
 			thread t1(&Unlock::QRUnlock, &recognise, frame,startTime);
 			t1.join();
-			timerflag = 0;
-			motiondetector.flag() = 1;
+		}
 
+		if(recognise.QRunlockflag == 1) {
+			motiondetector.flag = 0;
+			timerflag = 1;
 		}
 
 		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
-			thread t1(&Unlock::QRLock, &recognise, frame);
-			t1.join();
+			thread t2(&Unlock::QRLock, &recognise, frame);
+			t2.join();
 			}
 		//Show the Video Feed
 		imshow("Camera", frame);
