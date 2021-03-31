@@ -1,6 +1,6 @@
 latex/
 html/
-CMakeFiles/
+/CMakeFiles/
 *.cmake
 CMakeCache.txt
 *.m
