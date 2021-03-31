@@ -16,7 +16,7 @@ using namespace std;
 using namespace cv;
 using namespace cv::face;
 
-Mat MotionDetector::ProcessContours(Mat camerafeed) {
+Mat MotionDetector::ProcessContours(Mat camerafeed, int resetflag) {
 	
 	//Convert the input image to grayscale
 	cvtColor(camerafeed, grayscale, COLOR_RGB2GRAY);
@@ -29,7 +29,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	*	If not, set the current frame to avg in the same format as the grayscale image
 	*	If the background frame is empty convert the current grayscale image to 32 bit float and store in the avg frame
 	*/
-	if(avg.empty()==1) {
+	if(avg.empty() == 1) {
 			grayscale.convertTo(avg, CV_32FC(grayscale.channels()));
 		}
 
@@ -158,11 +158,10 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
 int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
-	
- secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
   //QRcode detection 
   std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
-  if(data.length()>0)
+  if(data.length()>0 && secondsPassed < 10)
   {
     if(data=="user1234"){
         cout << "Valid unlock key detected, decoded data: " << data << endl;
@@ -177,9 +176,10 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
         //Call unlock function/change flags for unlock
 	
     }
-	else if (secondsPassed < 10 || QRunlockflag != 1) {
-    
-    cout << "Invalid unlock key detected, decoded data: " << data << endl;
+
+	else {
+    cout << "Invalid unlock key detected,decoded data: " << data << endl;
+	
     //display(frame, bbox);
     //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
     //imshow("Rectified QRCode", rectifiedImage);
@@ -188,14 +188,11 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	
 	}
     //Call unlock function/change flags
-
-  else if(secondsPassed >= 10 && QRunlockflag !=1) {
-		cout << "Intruder: unlock function failed\n";
-		intruderflag = 1;
-		return 0;
-  	}
   }
-
+	else if (secondsPassed >=10 && QRunlockflag != 1) {
+		cout << "In loop:" << secondsPassed;
+		cout << "Intruder detected\n";
+	}
 }
 
 int Unlock::QRLock(Mat frame) {
@@ -228,7 +225,7 @@ int Unlock::QRLock(Mat frame) {
 int Unlock::hand(Mat ReferenceFrame, Mat background) {
 	cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
         	GaussianBlur(gray, gray, Size(21,21), 0);
-            if(avg.empty()==1) {
+            if(avg.empty()==1 || resetflag == 1) {
 			    gray.convertTo(avg, CV_32FC(gray.channels()));
 		        } 
 
@@ -285,7 +282,6 @@ int Camera::opencam()  {
 		petdetector.loadcascade("haarcascade_dogface.xml");
 		recognise.loadcascade();
         video.read(background);
-		testframe = background;
         cvtColor(background, background, COLOR_RGB2GRAY);
         GaussianBlur(background, background, Size(21,21), 0);
         int timerflag = 1;
@@ -305,15 +301,20 @@ int Camera::opencam()  {
 			recognise.intruderflag = 0;
 			recognise.QRunlockflag = 0;
 			recognise.QRlockflag = 0;
+			cout << "Before:" << recognise.secondsPassed;
+			timerflag = 0;
 			waitKey(5000);
+			motiondetector.avg = testframe;
+			cout << recognise.avg;
 			video.read(frame);
+			motiondetector.ProcessContours(frame, recognise.resetflag);
 			}
 
 			//Grab the current frame
 			video.read(frame);
 			//resize(frame,frame,Size(340,200));
 
-		motiondetector.ProcessContours(frame);
+		motiondetector.ProcessContours(frame, recognise.resetflag);
 		if(motiondetector.flag == 1 && timerflag ==1) {
 			startTime = clock();
 			timerflag = 0;
@@ -341,6 +342,9 @@ int Camera::opencam()  {
 		if (motiondetector.flag == 1 && hour >= 9) {
 			thread t1(&Unlock::QRUnlock, &recognise, frame,startTime);
 			t1.join();
+			timerflag = 0;
+			motiondetector.flag() = 1;
+
 		}
 
 		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
@@ -365,7 +369,8 @@ int Camera::opencam()  {
 		if (waitKey(25) >= 0) break;
 
 		} // end while (video.read(frame))
-    
+
+	recognise.resetflag = 0;
 	
 	//Release video capture and write
 	video.release(); 
