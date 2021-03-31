@@ -174,7 +174,7 @@ int Unlock::QR(Mat frame, clock_t startTime) {
 		return 1;
         //Call unlock function/change flags for unlock
     }
-	else if (secondsPassed < 10 || data!="user1234") {
+	else if (secondsPassed < 10 || QRflag != 1) {
     
     cout << "Invalid unlock key detected, decoded data: " << data << endl;
     //display(frame, bbox);
@@ -187,7 +187,7 @@ int Unlock::QR(Mat frame, clock_t startTime) {
     //Call unlock function/change flags
 
   }
-  else if (secondsPassed > 10) {
+  else if (secondsPassed > 10 && QRflag !=1) {
 	intruderflag = 1;
 	//cout << "Intruder: You didnt unlock in time!" << endl;
   }
