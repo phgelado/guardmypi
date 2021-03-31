@@ -15,20 +15,24 @@ int Unlock::QR(Mat frame) {
   {
     if(data=="user1234"){
         cout << "Valid unlock key detected, decoded data: " << data << endl;
-        display(frame, bbox);
-        rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-        imshow("Rectified QRCode", rectifiedImage);
+        //display(frame, bbox);
+        //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+        //imshow("Rectified QRCode", rectifiedImage);
 
-        waitKey(0);
+        //waitKey(0);
+
+        //Call unlock function/change flags for unlock
     }
     else {
     
     cout << "Invalid unlock key detected, decoded data: " << data << endl;
-    display(frame, bbox);
-    rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-    imshow("Rectified QRCode", rectifiedImage);
+    //display(frame, bbox);
+    //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+    //imshow("Rectified QRCode", rectifiedImage);
 
-    waitKey(0);}
+    //waitKey(0);}
+
+    //Call unlock function/change flags
 
   }
   else
