@@ -352,6 +352,7 @@ int Camera::opencam()  {
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
 			}
+			
 		//Show the Video Feed
 		imshow("Camera", frame);
 
