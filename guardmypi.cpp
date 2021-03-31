@@ -352,15 +352,24 @@ int Camera::opencam()  {
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
 			}
-			
+		
 		//Show the Video Feed
 		imshow("Camera", frame);
-
 	
-
 
 		if(recognise.intruderflag == 1) {
 			cout << "Intruder detected run Notification Thread\n";
+			// Get the frame
+			//Mat save_img; frame >> save_img;
+
+			if(frame.empty())
+			{
+			  std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
+			}
+			// Save the frame into a file
+			imwrite("test.jpg", frame); // A JPG FILE IS BEING SAVED
+			//sleep(0.1);
+
 		}
 
 
@@ -373,6 +382,9 @@ int Camera::opencam()  {
 		} // end while (video.read(frame))
 
 	recognise.resetflag = 0;
+	
+	//Show the Video Feed
+	imshow("Camera", frame);
 	
 	//Release video capture and write
 	video.release(); 
