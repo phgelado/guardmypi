@@ -90,6 +90,7 @@ class Unlock {
 		int intruderflag = 0;
 		int lockflag = 0;
 		int handdetected = 0;
+		int QRflag = 0;
 		int ID = -1;
 		double secondsPassed = 0.0;
 

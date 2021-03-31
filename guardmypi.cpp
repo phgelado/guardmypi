@@ -154,6 +154,39 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
                 //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
 }
+
+int Unlock::QR(Mat frame) {
+
+  //QRcode detection 
+  std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
+  if(data.length()>0)
+  {
+    if(data=="user1234"){
+        cout << "Valid unlock key detected, decoded data: " << data << endl;
+        //display(frame, bbox);
+        //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+        //imshow("Rectified QRCode", rectifiedImage);
+
+        //waitKey(0);
+		QRflag = 1;
+        //Call unlock function/change flags for unlock
+    }
+	else {
+    
+    cout << "Invalid unlock key detected, decoded data: " << data << endl;
+    //display(frame, bbox);
+    //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+    //imshow("Rectified QRCode", rectifiedImage);
+
+    //waitKey(0);
+	
+	}
+    //Call unlock function/change flags
+
+  }
+  else 
+    cout << "QR Code not detected" << endl;
+	}
     
 
 int Unlock::hand(Mat ReferenceFrame, Mat background) {
@@ -252,7 +285,7 @@ int Camera::opencam()  {
 			thread t1(&Unlock::face, &recognise, frame, startTime);
 			t1.join();
 			} /* else {
-			  thread t1(&Unlock::face, &recognise, frame, startTime);
+			  thread t1(&Unlock::QR, &recognise, frame);
 			  }
 			  */
 			
