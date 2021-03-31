@@ -90,14 +90,16 @@ class Unlock {
 		int intruderflag = 0;
 		int lockflag = 0;
 		int handdetected = 0;
-		int QRflag = 0;
+		int QRunlockflag = 0;
+		int QRlockflag = 0;
 		int ID = -1;
 		double secondsPassed = 0.0;
 
         int loadcascade();
         int hand(Mat ReferenceFrame, Mat background);
 		int face(Mat ReferenceFrame, clock_t startTime);
-		int QR(Mat frame, clock_t startTime);
+		int QRUnlock(Mat frame, clock_t startTime);
+		int QRLock(Mat frame);
 };
 
 
@@ -127,7 +129,7 @@ class Camera{
 		///@see ProcessContours(Mat CameraFeed)
 		int opencam();
 		int gettime();
-		int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);
+		int lock(int lockflag, int unlockflag, int motionflag, int intruderflag, int QRunlock, int QRlock);
 		//int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);		
 
 };

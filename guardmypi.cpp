@@ -155,7 +155,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
                 //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
 }
 
-int Unlock::QR(Mat frame, clock_t startTime) {
+int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
 	
  secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
@@ -170,11 +170,11 @@ int Unlock::QR(Mat frame, clock_t startTime) {
         //imshow("Rectified QRCode", rectifiedImage);
 
         //waitKey(0);
-		QRflag = 1;
+		QRunlockflag = 1;
 		return 1;
         //Call unlock function/change flags for unlock
     }
-	else if (secondsPassed < 10 || QRflag != 1) {
+	else if (secondsPassed < 10 || QRunlockflag != 1) {
     
     cout << "Invalid unlock key detected, decoded data: " << data << endl;
     //display(frame, bbox);
@@ -187,12 +187,39 @@ int Unlock::QR(Mat frame, clock_t startTime) {
     //Call unlock function/change flags
 
   }
-  else if (secondsPassed > 10 && QRflag !=1) {
+  else if (secondsPassed > 10 && QRunlockflag !=1) {
 	intruderflag = 1;
 	//cout << "Intruder: You didnt unlock in time!" << endl;
   }
 	}
-    
+
+int Unlock::QRLock(Mat frame) {
+
+	
+  //QRcode detection 
+  std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
+  if(data.length()>0)
+  {
+	while(QRlockflag != 1){
+
+    if(data=="lock"){
+        cout << "System will be locked leave premises now" << data << endl;
+        //display(frame, bbox);
+        //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
+        //imshow("Rectified QRCode", rectifiedImage);
+
+        //waitKey(0);
+		QRlockflag = 1;
+		
+        //Call unlock function/change flags for unlock
+    		} 
+			else {
+				continue;
+			}
+		}
+ 	 }
+	return 1;
+}   
 
 int Unlock::hand(Mat ReferenceFrame, Mat background) {
 	cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
@@ -232,12 +259,14 @@ int Unlock::hand(Mat ReferenceFrame, Mat background) {
 }
 
 
-int Camera::lock(int lockflag, int unlockflag, int motionflag, int intruderflag) {
+int Camera::lock(int lockflag, int unlockflag, int motionflag, int intruderflag,int QRunlock, int QRlock) {
 		unlockflag = 0;
 		motionflag = 0;
 		intruderflag = 0;
 		lockflag = 0;
-		sleep(60);
+		QRunlock = 0;
+		QRlock = 0;
+		sleep(10);
 		return 0;
 	}
 
@@ -296,7 +325,7 @@ int Camera::opencam()  {
 			  */
 
 		if (motiondetector.flag == 1 && hour >= 9) {
-			thread t1(&Unlock::QR, &recognise, frame,startTime);
+			thread t1(&Unlock::QRUnlock, &recognise, frame,startTime);
 			t1.join();
 		}
 
@@ -305,19 +334,16 @@ int Camera::opencam()  {
 			cout << "Intruder detected run Notification Thread\n";
 		}
 
-		if(recognise.faceflag  == 1 || recognise.QRflag == 1) {
-			thread t3(&Unlock::hand, &recognise,frame,background);
-			t3.join();
+		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
+			thread t1(&Unlock::QRLock, &recognise, frame);
+			t1.join();
 			}
 
-		if(recognise.lockflag == 1) {
+		if(recognise.QRlockflag == 1) {
+			lock(recognise.lockflag,recognise.faceflag, motiondetector.flag, recognise.intruderflag, recognise.QRlockflag, recognise.QRunlockflag);
 			cout << "Leave house lock procedure underway";
-			lock(recognise.lockflag,recognise.faceflag, motiondetector.flag, recognise.intruderflag);
 		}
-		
-
-		//locksystem.lock(flag, Hdetector.flag, detector.flag);
-	
+			
 		//Show the Video Feed
 		imshow("Camera", frame);
 
