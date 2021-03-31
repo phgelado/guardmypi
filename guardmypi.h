@@ -3,6 +3,7 @@
 #include <opencv2/tracking.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include "opencv2/face.hpp"
 #include <iostream>
 #include <cstring>
@@ -69,6 +70,7 @@ class Unlock {
         Point pt1;	//!<Start point/coordinate for the contour rectangle
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
 		int count = 0;
+
 		
 		// cascade classifier object
         CascadeClassifier face_cascade;
@@ -78,6 +80,8 @@ class Unlock {
         Mat GrayFrame;
         string name;
         int area;
+		QRCodeDetector qrDecoder;
+		Mat bbox, rectifiedImage;
 		
  
     public:
@@ -92,6 +96,7 @@ class Unlock {
         int loadcascade();
         int hand(Mat ReferenceFrame, Mat background);
 		int face(Mat ReferenceFrame, clock_t startTime);
+		int QR(Mat frame);
 };
 
 
