@@ -1,11 +1,3 @@
-/**
-* @file         guardmypi.cpp
-* @brief        Library of Classes and Methods use in the GuardMyPi System
-* @author       Aidan Porteous, Magnus Bell Cochran, Pedro Hernandez Gelado
-*/
-
-
-
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -139,6 +131,9 @@ int Unlock::loadcascade(){
 ///@param startTime Time stamp initially called prior to the methd
 ///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
+
+	//Find the number of seconds passed since the method was initially called
+	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 			
 	// store original frame as grayscale in gray frame
     cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
@@ -151,10 +146,6 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	//Resize frame to quicken recognition process
 	resize(GrayFrame,GrayFrame,Size(168,192));
 	
-	//Find the number of seconds passed since the method was initially called
-	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-            
-	
 	// Draw rectangles on the detected faces
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
@@ -163,6 +154,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
 		//Call facial recognition method
 		recogniser->predict(GrayFrame,ID,confidence);
+		cout << ID;
 		if(ID ==0 && secondsPassed < 10){	//0 is the residents face ID
 			intruderflag = 0;				//Keep intruder flag 0
             name = "Aidan";					//Set the name to the appropriate resident
@@ -175,15 +167,13 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 			}
 		return 1;
 	}
-	/*
-	if(secondsPassed >= 10 && ID !=0) {
+	
+	if(secondsPassed >= 10 && faceflag != 1) {
 		intruderflag = 1;
 		return 0;
 		}
-	*/
+	
 }
-
-
 
 int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
@@ -274,7 +264,7 @@ int Camera::opencam()  {
         cvtColor(background, background, COLOR_RGB2GRAY);
         GaussianBlur(background, background, Size(21,21), 0);
 		
-		//Set timer flag high and 
+		//Set timer flag high to make sure timer remains inactive
         timerflag = 1;
 
         // Check that video is opened
@@ -283,61 +273,75 @@ int Camera::opencam()  {
 		// Loop through the captured frames
 		while (1) {
 
-			
+			//QRlockflag is high if a resident wants to (re)lock the system
 			if(recognise.QRlockflag == 1) {
 			cout << "Flag before:" << recognise.intruderflag << "\n";
-			cout << "\t" << recognise.QRlockflag << "Leave house lock procedure underway";			
+			cout << "\t" << recognise.QRlockflag << "Leave house lock procedure underway";	
+
+			//reset all flags		
 			motiondetector.flag = 0;
 			recognise.intruderflag = 0;
 			recognise.QRunlockflag = 0;
 			recognise.QRlockflag = 0;
+			recognise.faceflag = 0;
 			cout << "Before:" << recognise.secondsPassed;
+
+			//Wait time before the system is (re)armed
 			waitKey(5000);
-			motiondetector.avg = testframe;
-			cout << recognise.avg;
+
+			/*
+			Reset average frame so the quick change of frame before and after the wait time 
+			has elapsed doesn't trigger the motion detector flag
+			*/
+			motiondetector.avg = testframe;  //Empty frame
+			
+			//Take in a new frame
 			video.read(frame);
+
+			//Process the new frame for motion detection 
 			motiondetector.ProcessContours(frame, recognise.resetflag);
 			}
 
 			//Grab the current frame
 			video.read(frame);
-			//resize(frame,frame,Size(340,200));
 
+		//Call the motion detection method
 		motiondetector.ProcessContours(frame, recognise.resetflag);
+
+		//Once motion is detected take a Timestamp and set timerflag low to begin counting
 		if(motiondetector.flag == 1 && timerflag ==1) {
 			startTime = clock();
 			timerflag = 0;
 		}
 
-		/*
-		if(motiondetector.flag == 1) {
-			thread t0(&ObjectDetector::detect,&petdetector,frame, 1.3, 20);
-			t0.join();
-		}
-		*/
-
-			// all this  previously under if statement
+			//Get the current hour of time to decide unlock method
 			hour = gettime();
-			/*
-			(hour >= 7 && hour <= 20) {
-			
-			thread t1(&Unlock::face, &recognise, frame, startTime);
-			t1.join();
-			} /* else {
-			  thread t1(&Unlock::QR, &recognise, frame);
-			  }
-			  */
+			if (hour >= 7 && hour < 20) {
+				thread t1(&Unlock::face, &recognise, frame, startTime);
+				t1.join();
+				}  else {
+			  		thread t1(&Unlock::QRUnlock, &recognise, frame,startTime);
+			  	}
+			  
 
+
+		/*
 		if (motiondetector.flag == 1 && hour >= 9) {
 			thread t1(&Unlock::QRUnlock, &recognise, frame,startTime);
 			t1.join();
 		}
+		*/
 
-		if(recognise.QRunlockflag == 1) {
+		//Once a QR code or face has been recognised reset the motion and timerflag to stop the timer
+		if(recognise.QRunlockflag == 1 || recognise.faceflag == 1) {
 			motiondetector.flag = 0;
 			timerflag = 1;
 		}
 
+		/*
+		Once an unlock method has a flag set high from recognition then run the QR lock method
+		so the user can then lock the system and set the lock flag high
+		*/
 		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
@@ -345,8 +349,12 @@ int Camera::opencam()  {
 		
 		//Show the Video Feed
 		imshow("Camera", frame);
-	
 
+	
+		/*
+		If the unlock system cannot recognise either the resident or a viable QR code
+		then thse intruderflag is set high
+		*/
 		if(recognise.intruderflag == 1) {
 			cout << "Intruder detected run Notification Thread\n";
 			// Get the frame

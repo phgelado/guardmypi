@@ -110,8 +110,8 @@ class Camera{
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
 		int hour;
-	    //Mat frame;		//!< Incoming camera feed	
-
+		int timerflag;
+		clock_t startTime;
         
         public:
 
