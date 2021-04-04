@@ -1,3 +1,11 @@
+/**
+* @file         guardmypi.cpp
+* @brief        Library of Classes and Methods use in the GuardMyPi System
+* @author       Aidan Porteous, Magnus Bell Cochran, Pedro Hernandez Gelado
+*/
+
+
+
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -16,6 +24,12 @@ using namespace std;
 using namespace cv;
 using namespace cv::face;
 
+	///@brief Takes the incoming frame and performs background subtraction using previous frames.
+	///Performs background subtraction to detect changes in the frame i.e. motion. 
+	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
+	///@see ObjectDetector::detect Camera:opencam
+	///@param camerafeed frame captured from PiCamera or Webcam
+	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 Mat MotionDetector::ProcessContours(Mat camerafeed, int resetflag) {
 	
 	//Convert the input image to grayscale
@@ -40,7 +54,7 @@ Mat MotionDetector::ProcessContours(Mat camerafeed, int resetflag) {
 	//wont allow convertScaleAbs(avg, avg)
 	convertScaleAbs(avg, scaled_avg);
 
-	//	Calculate the absolute difference between the current image and the background image
+	//Calculate the absolute difference between the current image and the background image
 	absdiff(grayscale, scaled_avg, frame_diff);
 
 	//Threshold image for differences between the two frames.
@@ -57,18 +71,16 @@ Mat MotionDetector::ProcessContours(Mat camerafeed, int resetflag) {
 	for(int i = 0; i< cnts.size(); i++) {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
-			//cout <<"No Motion\n" << flag;
             continue;
 		}
-            flag = 1;
-			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-		
-			//cout<<"Motion Detected\n" << flag;
-					
+            flag = 1; //Set motion flag to high
+			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);					
 		}
 		
 	return camerafeed;
 }
+
+
 
 int ObjectDetector::loadcascade(String cascadename){
             cascade.load(cascadename);
@@ -80,30 +92,34 @@ int ObjectDetector::loadcascade(String cascadename){
         }
 
 Mat ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbours){
-            // store original frame as grayscale in gray frame
-            cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
-            std::vector<Rect> objects;
-            // detect objects in frame - adjust parameters as desired
-            cascade.detectMultiScale( GrayFrame, objects, scale_factor, neighbours);    
+    // store original frame as grayscale in gray frame
+    cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
+            
+	std::vector<Rect> objects;
+           
+	// detect objects in frame - adjust parameters as desired
+    cascade.detectMultiScale( GrayFrame, objects, scale_factor, neighbours);    
   
-            // Draw rectangles on the detected objects
-            for( int i = 0; i < objects.size(); i++ )
-            {
-			 flag = 1;
-			 Rect rect = objects[i];
-                	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
-			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
-			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
-			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
-            rectangle(ReferenceFrame, pt1,pt2, Scalar(0,255,0), 3, 2, 0);
-			 }
-			return ReferenceFrame; 
-        }
+    // Draw rectangles on the detected objects
+    for( int i = 0; i < objects.size(); i++ )	{
+		flag = 1;
+		Rect rect = objects[i];
+        pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
+		pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
+		pt2.x = rect.x + rect.width;	// Final point along x-axis 
+		pt2.y = rect.y + rect.height;	//Final point along y-axis 
+        rectangle(ReferenceFrame, pt1,pt2, Scalar(0,255,0), 3, 2, 0);
+		}
+	return ReferenceFrame; 
+    }
 
+///@brief Loads the hand and face cascades used to unlock the system during
+///daytime hours (9am-8pm)
+///@see Unlock::face
 int Unlock::loadcascade(){
-            hand_cascade.load("Hand_haar_cascade.xml");
-			face_cascade.load("haarcascade_frontalface_default.xml");
-			recogniser->read("guardingthepi.yml");
+            hand_cascade.load("Hand_haar_cascade.xml"); //Load the hand cascade
+			face_cascade.load("haarcascade_frontalface_default.xml"); //Load the face detection cascade
+			recogniser->read("guardingthepi.yml");	//Load the trained face recognition
 
             if(!hand_cascade.load("Hand_haar_cascade.xml"))
            {
@@ -112,86 +128,91 @@ int Unlock::loadcascade(){
            }    
         }
 
+
+///@brief This method takes the input frame from the camera if the time
+///is between 8am and 9pm. It additionally takes the time stamp called immediately
+///before the function. 
+///The method looks for a particularly trained face depending on the trained algorithm (*.yml file), which
+///if not detected in less than 10s return 0 and set the intruder flag high alerting the user.
+///@see Unlock::loadcascade()
+///@param ReferenceFrame Input frame from the video frame capture
+///@param startTime Time stamp initially called prior to the methd
+///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
-	// store original frame as grayscale in gray frame
-            cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
-            std::vector<Rect> face;
-            // detect faces in frame - adjust parameters as desired
-            face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
-            resize(GrayFrame,GrayFrame,Size(168,192));
-			secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-			//cout << secondsPassed <<"\n";
-            // Draw rectangles on the detected faces
-            for( int i = 0; i < face.size(); i++ )
-            {
-            	Rect r = face[i];
-            	area = r.width*r.height;
-            	Scalar color = Scalar(255, 0, 0);
-            	recogniser->setThreshold(123);
-				
-
-				recogniser->predict(GrayFrame,ID,confidence);
-					if(ID ==0 && secondsPassed < 10){
-						intruderflag = 0;
-                		name = "Aidan";
-                		putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
-						cout << "Welcome home";
-						secondsPassed = 0;
-						faceflag = 1;
-						break;
-						
-					}
-					return 1;
-
-			}
-
-				/*
-				if(secondsPassed >= 10 && ID !=0) {
-					intruderflag = 1;
-					return 0;
-				}
-				*/
 			
-                //putText(ReferenceFrame, name,Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-                //putText(ReferenceFrame, conf,Point(30, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+	// store original frame as grayscale in gray frame
+    cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
+
+    std::vector<Rect> face; //!<Initialise Vecotor to store points of detected faces
+
+    // detect faces in frame - adjust parameters as desired
+    face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);  
+	
+	//Resize frame to quicken recognition process
+	resize(GrayFrame,GrayFrame,Size(168,192));
+	
+	//Find the number of seconds passed since the method was initially called
+	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+            
+	
+	// Draw rectangles on the detected faces
+    for( int i = 0; i < face.size(); i++ )	{
+        Rect r = face[i];
+		//Set maximum confidence threshold for face prediction
+        recogniser->setThreshold(123);
+
+		//Call facial recognition method
+		recogniser->predict(GrayFrame,ID,confidence);
+		if(ID ==0 && secondsPassed < 10){	//0 is the residents face ID
+			intruderflag = 0;				//Keep intruder flag 0
+            name = "Aidan";					//Set the name to the appropriate resident
+			//Put name above the resident's head for confirmation
+            putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
+			cout << "Welcome home";
+			secondsPassed = 0;				//Reset the secondsPassed method
+			faceflag = 1;					//Set the facial recognition flag to high
+			break;							//Break from the loop
+			}
+		return 1;
+	}
+	/*
+	if(secondsPassed >= 10 && ID !=0) {
+		intruderflag = 1;
+		return 0;
+		}
+	*/
 }
+
+
 
 int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
 secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-  //QRcode detection 
-  std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
-  if(data.length()>0 && secondsPassed < 10)
-  {
-    if(data=="user1234"){
-        cout << "Valid unlock key detected, decoded data: " << data << endl;
-        //display(frame, bbox);
-        //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-        //imshow("Rectified QRCode", rectifiedImage);
 
-        //waitKey(0);
+//QRcode detection   
+std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
+
+if(data.length()>0 && secondsPassed < 10) {
+    
+	if(data=="user1234"){
+        
+		cout << "Valid unlock key detected, decoded data: " << data << endl;
+
 		QRunlockflag = 1;
-		return 1;
-        //Call unlock function/change flags for unlock
-	
+		
+		return 1;	
     }
 
 	else {
-    cout << "Invalid unlock key detected,decoded data: " << data << endl;
-	
-    //display(frame, bbox);
-    //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-    //imshow("Rectified QRCode", rectifiedImage);
-	return 0;
-    //waitKey(0);
-	
+    	cout << "Invalid unlock key detected,decoded data: " << data << endl;
+		return 0;
 	}
-    //Call unlock function/change flags
   }
-	else if (secondsPassed >=10 && QRunlockflag != 1) {
-		cout << "In loop:" << secondsPassed;
-		cout << "Intruder detected\n";
-		intruderflag = 1;
+	
+else if (secondsPassed >=10 && QRunlockflag != 1) {
+	cout << "In loop:" << secondsPassed;
+	cout << "Intruder detected\n";
+	intruderflag = 1;
 	}
 }
 
@@ -220,44 +241,6 @@ int Unlock::QRLock(Mat frame) {
 	}
 	return 0;
 }
-   
-
-int Unlock::hand(Mat ReferenceFrame, Mat background) {
-	cvtColor(ReferenceFrame, gray, COLOR_RGB2GRAY);
-        	GaussianBlur(gray, gray, Size(21,21), 0);
-            if(avg.empty()==1 || resetflag == 1) {
-			    gray.convertTo(avg, CV_32FC(gray.channels()));
-		        } 
-
-	        convertScaleAbs(background, new_avg);
-
-	       //Calculate the absolute difference between the current image and the background image
-	        absdiff(gray, new_avg, diff);
-
-	        //Threshold image for differences between the two frames.
-	        threshold(diff, thresh, 50, 255, THRESH_BINARY);
-				
-	        //Dilate the threshold image
-	        dilate(thresh, thresh, Mat(), Point(-1,-1), 2); 
-        	hand_cascade.detectMultiScale(thresh, handvec, 1.3, 8);  
-			for( int i = 0; i < handvec.size(); i++)
-            	{   
-					cout << "Hand size:" << handvec.size();
-                	Rect rect = handvec[i];
-                	pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
-			    	pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
-			    	pt2.x = rect.x + rect.width;	// Final point along x-axis 
-			    	pt2.y = rect.y + rect.height;	//Final point along y-axis 
-                	rectangle(ReferenceFrame, pt1,pt2, color, 3, 2, 0);
-					handdetected = 1;				
-///////////////////////This still doesnt work/////////////////////
-				if(handdetected == 1){
-					cout << "Lock Flag internal:" <<lockflag << "\n";
-					break;
-						}
-				return 0;
-			}
-}
 
 
 int Camera::lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag) {
@@ -275,22 +258,29 @@ int Camera::gettime() {
 	return int(1 + local_time->tm_hour);
 }
 
+///@brief Opens the camera in the main thread and runs an infinite loop of video capture.
+///Each frame is processed by various methods to detect motion, facial recognition and QR recognition.
+///@see Unlock::face() Unlock::QRUnlock Unlock::QRLock MotionDetector::ProcessContours 
 int Camera::opencam()  {
 		
 		//Open the video feed for the webcam/camera
 		video.open(0);
+		//Run all the loadcascade methods for each detection algorithm
 		petdetector.loadcascade("haarcascade_dogface.xml");
 		recognise.loadcascade();
+
+		//Collect a frame of the background
         video.read(background);
         cvtColor(background, background, COLOR_RGB2GRAY);
         GaussianBlur(background, background, Size(21,21), 0);
-        int timerflag = 1;
-		clock_t startTime;
+		
+		//Set timer flag high and 
+        timerflag = 1;
 
         // Check that video is opened
 	    if (!video.isOpened()) return -1;
 		
-		// Loop through available frames
+		// Loop through the captured frames
 		while (1) {
 
 			
