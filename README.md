@@ -78,6 +78,7 @@ GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilis
 
 * C++
 * [OpenCV](https://opencv.org/)
+* [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 
 
 ### Hardware used
@@ -94,6 +95,12 @@ To be able to run this project locally you will need to install the following de
 
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
 * [CMake](https://cmake.org/)
+* [mjpg-streamer]
+
+Moreover, you will need to create a backup key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use a high encryption (256 bit +) hashed key. The following websites might help you do this: 
+
+*[QR Code Generator](https://www.qr-code-generator.com/)
+*[Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
 
 
 ### Installation of OpenCV4 on Raspberry Pi
