@@ -114,10 +114,6 @@ class Camera{
         
         public:
 
-		
 		int opencam();
 		int gettime();
-		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);
-		//int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);		
-
 };

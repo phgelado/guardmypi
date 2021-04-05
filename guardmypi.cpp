@@ -129,7 +129,6 @@ int Unlock::loadcascade(){
 ///@param ReferenceFrame Input frame from the video frame capture
 ///@param startTime Time stamp initially called prior to the methd
 ///@returns camerafeed with or without "Motion Detected" text to signify code functioning
-
 int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
 	// store original frame as grayscale in gray frame
@@ -169,172 +168,190 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 		return 1;
 	}	
 
+	//After 10s the intruder flag is set high if the resident's face is not detected
 	if(secondsPassed >= 10 && faceflag !=1) {
-		intruderflag = 1;
-		return 0;
+		//!<Set intruder flag high to then alert the user!
+		intruderflag = 1;	
+		//!< Break from the function
+		return 0;	
 		}
-				
 }
 
+///@brief  This method is the alternative unlocking method once it is night time
+///@see Unlock::loadcascade() Unlock::face()
+///@param frame Input frame from the video frame capture
+///@param startTime Time stamp initially called prior to the methd
+///@returns 1 to escape function once QR code is detected
+///@returns 0 to escape function if the incorrect/no QR code is detected
 int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
+	//Calculate the number of seconds passed
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+
 	//QRcode detection 
 	std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
-	if(data.length()>0 && secondsPassed < 10) {
-		if(data=="user1234"){
+	
+	if(data.length()>0 && secondsPassed < 10) { //data length is > 0 if it has read a QR code
+
+		if(data=="unlock"){			//!<QR code must equate unlock
 			cout << "Valid unlock key detected, decoded data: " << data << endl;
-			QRunlockflag = 1;
-			return 1;
+			//!<Set QR flag high so system knows that it is in the unlocked state
+			QRunlockflag = 1;		
+			return 1;		//Break from code
 		}
 
-	else {
-    cout << "Invalid unlock key detected,decoded data: " << data << endl;
-	return 0;
-	
-	} 
-	 }
-	else if (secondsPassed >=10 && QRunlockflag != 1) {
-		cout << "In loop:" << secondsPassed;
-		cout << "Intruder detected\n";
+		//!< Condition is added incase the wrong QR Code has been shown
+		else {  
+    		cout << "Invalid unlock key detected,decoded data: " << data << endl;
+			return 0;
+		} 
+	}
+	//!< Condition is met if the timer has expired and the QR code has not been presented
+	else if (secondsPassed >=10 && QRunlockflag != 1) {		
+		//!<Set the intruder flag high to alert the user and break from the function
 		intruderflag = 1;
+		return 0;
 	}
 }
 
+///@brief This method looks for another QR code whilst the system is in its unlocked 
+///state. Until the camera detects a QR code with a key called "lock" then nothing happens.
+///@param frame Input frame from the camera feed
+///@param startTime Time stamp initially called prior to the methd
+///@returns 1 to escape function once QR code is detected
+///@returns 0 to escape function if the incorrect/no QR code is detected
 int Unlock::QRLock(Mat frame) {
 
-	
   //QRcode detection 
   std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
-  if(data.length()>0)
-  {
+  
+  //!Condition looking for a QR Code
+  if(data.length()>0)	{
 
-    if(data == "lock" && QRlockflag == 0){
+	//!<Conditional statement looking for a QR Code called lock
+	if(data == "lock" && QRlockflag == 0){
+
         cout << "System will be locked leave premises now" << data << endl;
-        //display(frame, bbox);
-        //rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-        //imshow("Rectified QRCode", rectifiedImage);
-
-        //waitKey(0);
+  		//!<Set lock flag high to engage the system re-arming state letting the user leave etc...
 		QRlockflag = 1;
-		return 1;
-		
-        //Call unlock function/change flags for unlock
+		return 1;  //Break from function
     		} 
-
-
 	}
-	return 0;
+	return 0;  //!<Nothing happening so jjust break from function and return 0
 }
-   
 
-
-
-int Camera::lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag) {
-		motionflag = 0;
-		faceflag = 0;
-		intruderflag = 0;
-		QRunlockflag = 0;
-		QRlockflag = 0;
-		sleep(5);
-	}
-
+///@brief Calculates the current hour of the day to ensure the system knows what method 
+///of unlocking the system to use
+///@see Unlock::face() Unlock::QRUnlock()
+///@returns The current hour of the day for GMT zone
 int Camera::gettime() {
-	time_t ttime = time(0);
-    tm *local_time = gmtime(&ttime);
-	return int(1 + local_time->tm_hour);
+	time_t ttime = time(0);	//!<Time since January 1st 1990
+    tm *local_time = gmtime(&ttime);	//!<Get GMT 
+	return int(1 + local_time->tm_hour);	//!< Return the hour of the day
 }
 
+///@brief Opens the camera in the main thread and runs an infinite loop of frame capturing.
+///Each frame is processed by various methods to detect motion, facial recognition and QR recognition.
+///@see Unlock::face() Unlock::QRUnlock Unlock::QRLock MotionDetector::ProcessContours()
 int Camera::opencam()  {
 		
-		//Open the video feed for the webcam/camera
-		video.open(0);
-		petdetector.loadcascade("haarcascade_dogface.xml");
-		recognise.loadcascade();
-        video.read(background);
-        cvtColor(background, background, COLOR_RGB2GRAY);
-        GaussianBlur(background, background, Size(21,21), 0);
-        int timerflag = 1;
-		clock_t startTime;
+	//Open the video feed for the webcam/camera
+	video.open(0);
 
-        // Check that video is opened
-	    if (!video.isOpened()) return -1;
+	//!< Run all the loadcascade methods for each detection algorithm
+	petdetector.loadcascade("haarcascade_dogface.xml");
+	recognise.loadcascade();
+
+	//!<Set timerflag high 
+	int timerflag = 1;
+
+	// Check that video is opened
+	if (!video.isOpened()) return -1;
+	
+	// Loop through available frames 
+	while (1) {
 		
-		// Loop through available frames
-		while (1) {
+		//Grab the current frame
+		video.read(frame);
 
-			
-			if(recognise.QRlockflag == 1) {
-			cout << "Flag before:" << recognise.intruderflag << "\n";
-			cout << "\t" << recognise.QRlockflag << "Leave house lock procedure underway";			
-			motiondetector.flag = 0;
-			recognise.intruderflag = 0;
-			recognise.QRunlockflag = 0;
-			recognise.QRlockflag = 0;
-			recognise.faceflag = 0;
-			cout << "Before:" << recognise.secondsPassed;
-			waitKey(5000);
-			motiondetector.avg = testframe;
-			cout << recognise.avg;
-			video.read(frame);
-			motiondetector.ProcessContours(frame);
-			}
-
-			//Grab the current frame
-			video.read(frame);
-			//resize(frame,frame,Size(340,200));
-
+		//!<Call the motion detector method and supply the input frame
 		motiondetector.ProcessContours(frame);
+
+		//!<If motion is detected start the timer...
 		if(motiondetector.flag == 1 && timerflag ==1) {
 			startTime = clock();
 			timerflag = 0;
 		}
 
+		//Check the time to run the appropriate unlocking method
+		hour = gettime();
+		
+		//!<If the time is between 7am and 8pm then run facial recognition
+		if (hour >= 7 && hour <= 20 && motiondetector.flag ==1 ) {
+			//!<Create a thread to break off from main and run the facial recognition
+			thread t1(&Unlock::face, &recognise, frame, startTime);	
+			t1.join();
+			}  
+			//!<If it is night time the system struggles to identify faces so invoke QR Unlocking
+			else if (hour < 7 && hour > 20 && motiondetector.flag == 1) {
+					//!<Break off from main and run the QR Code in a seperate thread
+					thread t1(&Unlock::QRUnlock, &recognise, frame, startTime);
+			}
 		/*
-		if(motiondetector.flag == 1) {
-			thread t0(&ObjectDetector::detect,&petdetector,frame, 1.3, 20);
-			t0.join();
-		}
+		*If either unlocking method has been satisfied then reset the motionflag and timerflag.
+		*This essentially resets the timer, then calls the Locking method in a seperate thread from main
+		*The system is currently in the unlocked state if this condition is met
 		*/
-
-			// all this  previously under if statement
-			hour = gettime();
-			
-			if (hour >= 7 && hour <= 20 && motiondetector.flag ==1 ) {
-				thread t1(&Unlock::face, &recognise, frame, startTime);
-				t1.join();
-				}  else if (hour < 7 && hour > 20 && motiondetector.flag == 1) {
-			 		 thread t1(&Unlock::QRUnlock, &recognise, frame, startTime);
-			  	}
-			
-		if(recognise.QRunlockflag == 1 || recognise.faceflag == 1) {
+		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
 			motiondetector.flag = 0;
 			timerflag = 1;
-		}
-
-		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
-			}
-		//Show the Video Feed
-		imshow("Camera", frame);
-
-	
-
-
-		if(recognise.intruderflag == 1) {
-			cout << "Intruder detected run Notification Thread\n";
 		}
 
-		if (waitKey(25) >= 0) break;
+		if(recognise.QRlockflag == 1) {
+			//!<Reset all the required flags to rearm the system	
+			motiondetector.flag = 0;
+			recognise.intruderflag = 0;
+			recognise.QRunlockflag = 0;
+			recognise.QRlockflag = 0;
+			recognise.faceflag = 0;
 
-		} // end while (video.read(frame))
+			//!<Wait 60s for the user to leave the house before activating the system
+			waitKey(5000);
 
+			//!< Empty the running average frame for the motion detector by assigning an empty frame
+			motiondetector.avg = testframe;
+		}
+
+		/*
+		*If any of the unlocking methods are not satisfied then this flag is set high
+		*The user will then be alerted and a casting of the current frames will be sent to the user
+		*/
+		if(recognise.intruderflag == 1) {
+		
+		//!<Check the frame is not empty
+		if(frame.empty())	{
+			  std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
+			}
+
+			// Save the frame into a file capturing a pic of the intruder
+			imwrite("test.jpg", frame); 
+			}
+
+		//Show the Video Feed
+		imshow("Camera", frame);
 	
-	//Release video capture and write
-	video.release(); 
 
-	// Destroy all windows
-	destroyAllWindows();
-    return 0;
-  }
+	if (waitKey(25) >= 0) break;
+
+	} // end while (video.read(frame))
+
+
+//Release video capture and write
+video.release(); 
+
+// Destroy all windows
+destroyAllWindows();
+return 0;
+}
