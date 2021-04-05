@@ -97,10 +97,10 @@ To be able to run this project locally you will need to install the following de
 * [CMake](https://cmake.org/)
 * [mjpg-streamer]
 
-Moreover, you will need to create a backup key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use a high encryption (256 bit +) hashed key. The following websites might help you do this: 
+Moreover, you will need to create a backup key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. The following websites might help you do this: 
 
-*[QR Code Generator](https://www.qr-code-generator.com/)
-*[Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
+* [QR Code Generator](https://www.qr-code-generator.com/)
+* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
 
 
 ### Installation of OpenCV4 on Raspberry Pi
