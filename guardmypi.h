@@ -29,7 +29,7 @@ class MotionDetector {
 	
 	public:
 	Mat avg; //!< Running average of the camerafeed 
-	Mat ProcessContours(Mat camerafeed, int resetflag);
+	Mat ProcessContours(Mat camerafeed);
 	int flag = 0; //!<Flag variable to invoke ObjectDetector thread t2
 };
 
@@ -88,7 +88,6 @@ class Unlock {
 		double secondsPassed = 0.0;
 
         int loadcascade();
-        int hand(Mat ReferenceFrame, Mat background);
 		int face(Mat ReferenceFrame, clock_t startTime);
 		int QRUnlock(Mat frame, clock_t startTime);
 		int QRLock(Mat frame);
@@ -122,4 +121,3 @@ class Camera{
 		//int lock(int lockflag, int unlockflag, int motionflag, int intruderflag);		
 
 };
-
