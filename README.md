@@ -202,7 +202,8 @@ Similar to a VPN, but easier to install, it also allows you to access your Pi's 
 
 In order to start the streaming, run the following command from your root, i.e. pi@raspberrypi
 ```
-sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" - o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
+sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" 
+- o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
 ```
 
 ## Setting up Dataplicity
