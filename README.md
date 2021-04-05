@@ -213,7 +213,7 @@ Dataplicity should already be up and running from installation, double check you
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](//https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
 
 
 
