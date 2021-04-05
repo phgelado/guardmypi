@@ -171,7 +171,7 @@ sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
 ```
 cd mjpg-streamer
 ```
-3. Build and install mjpg-streamer using CMake.
+4. Build and install mjpg-streamer using CMake.
 ```
 make
 sudo make install
