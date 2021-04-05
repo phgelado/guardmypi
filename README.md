@@ -159,6 +159,23 @@ git clone https://gist.github.com/sol-prog/ed383474872958081985de733eaf352d open
 pkg-config --modversion opencv
 ```
 
+### Installation of mjpg-streamer on Raspberry Pi 4
+
+1. Ensure you have CMake installed, as well as the dependencies mjpg-streamer uses: 
+```
+sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+```
+
+2. Clone the mjpg-streamer repository you can find [here](https://github.com/jacksonliam/mjpg-streamer).
+3. Access the mjpg-streamer directory. 
+```
+cd mjpg-streamer
+```
+3. Build and install mjpg-streamer using CMake.
+```
+make
+sudo make install
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
