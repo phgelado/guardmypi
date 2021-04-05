@@ -74,11 +74,13 @@
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive a push notification via email.
+
 ### Built With
 
 * C++
 * [OpenCV](https://opencv.org/)
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
+* [Dataplicity](https://www.dataplicity.com/)
 
 
 ### Hardware used
@@ -96,6 +98,7 @@ To be able to run this project locally you will need to install the following de
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
 * [CMake](https://cmake.org/)
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
+* [Dataplicity](https://www.dataplicity.com/)
 
 Moreover, you will need to create a backup key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. The following websites might help you do this: 
 
@@ -177,12 +180,26 @@ make
 sudo make install
 ```
 
+### Installation of Dataplicity
+
+Dataplicity is a simple to use, free tool for you to access and control your RaspberryPi remotely. Similar to a VPN, but easier to install, it also allows you to access your Pi's port 80 through a domain, which is where we will stream our live camera feed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 ![Image of Aidan](images/aidan.png)
 ![Image of Kasper](images/kasper.png)
 
+## Setting up streaming
+
+In order to start the streaming, run the following command from your root, i.e. pi@raspberrypi
+```
+sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" - o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
+```
+
+## Setting up Dataplicity
+
+Dataplicity should already be up and running from installation, double check you can see and access your device [here](https://www.dataplicity.com/devices). 
 
 <!-- ROADMAP -->
 ## Roadmap
