@@ -78,7 +78,7 @@ GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilis
 
 * C++
 * [OpenCV](https://opencv.org/)
-* [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer/)
+* [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 
 
 ### Hardware used
