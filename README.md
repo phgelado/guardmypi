@@ -100,10 +100,13 @@ To be able to run this project locally you will need to install the following de
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 * [Dataplicity](https://www.dataplicity.com/)
 
-Moreover, you will need to create a backup key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. The following websites might help you do this: 
+Moreover, you will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
+
+* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
+
+And then copy and paste your key into a QR code generator, ensuring you click on "text": 
 
 * [QR Code Generator](https://www.qr-code-generator.com/)
-* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
 
 
 ### Installation of OpenCV4 on Raspberry Pi
@@ -182,7 +185,9 @@ sudo make install
 
 ### Installation of Dataplicity
 
-Dataplicity is a simple to use, free tool for you to access and control your RaspberryPi remotely. Similar to a VPN, but easier to install, it also allows you to access your Pi's port 80 through a domain, which is where we will stream our live camera feed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
+Dataplicity is a simple to use, safe and free tool for you to access and control your RaspberryPi remotely, allowing you to setup and start your alarm from anywhere, as well as accessing the camera's live video feed. 
+
+Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 through an internet domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
 
 <!-- USAGE EXAMPLES -->
 ## Usage
