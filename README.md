@@ -87,6 +87,9 @@ GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilis
 
 * [Raspberry Pi 3B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 * [Pi NoIr Camera V2](https://www.raspberrypi.org/products/pi-noir-camera-v2/)
+* [Infrared LED Ring](https://www.amazon.co.uk/Infrared-Illuminator-Board-Security-Camera/dp/B0057DPXI4/ref=sr_1_3?dchild=1&keywords=Infrared+IR+board&qid=1614706403&sr=8-3)
+* [Step Up DC-DC converter](https://www.ebay.co.uk/itm/MT3608-DC-DC-Voltage-Step-Up-Adjustable-Boost-Converter-Module-2A-UK/193424475011)
+* [Camera Enclosure](https://thepihut.com/products/raspberry-pi-4-3-camera-case)
 
 <!-- GETTING STARTED -->
 ## Getting Started
