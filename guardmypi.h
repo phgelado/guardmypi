@@ -16,6 +16,10 @@ using namespace std;
 using namespace cv;
 using namespace cv::face;
 
+/**
+* @class MotionDetector
+* @brief Analyses video feed from PiCamera to detect motion changes 
+*/
 class MotionDetector {
 	protected:
 	 Mat frame_diff;	//!< Difference output between frames
@@ -33,6 +37,10 @@ class MotionDetector {
 	int flag = 0; //!<Flag variable to invoke ObjectDetector thread t2
 };
 
+/**
+* @class ObjectDetector
+* @brief Used to analyse incoming feed from the camera for different objects such as Pets etc...
+*/
 class ObjectDetector{
     public:
 
@@ -50,6 +58,10 @@ class ObjectDetector{
 
 };
 
+/**
+* @class Unlock
+* @brief Contains various methods to unlock the system 
+*/
 class Unlock {
     protected: 
         Mat gray,thresh, new_avg, diff;
@@ -93,12 +105,10 @@ class Unlock {
 		int QRLock(Mat frame);
 };
 
-
-class Lock {
-	public:
-	int lock(int lockflag, int humanflag, int motionflag);
-};
-
+/**
+* @class Camera
+* @brief Interfaces in the main program to open/close the camera and create new threads
+*/
 class Camera{
     protected:
         MotionDetector motiondetector; //!< Instance of the Motion Detection
