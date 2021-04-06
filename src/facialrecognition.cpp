@@ -5,6 +5,7 @@
 
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include <opencv2/videoio.hpp>  
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core.hpp"
 #include "opencv2/face.hpp"
@@ -20,7 +21,7 @@ class FaceDetector{
     public:
         // cascade classifier object
         CascadeClassifier face_cascade;
-        Ptr<FisherFaceRecognizer> recogniser = face::FisherFaceRecognizer::create(0,1000);
+        Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123);
         int ID = -1;
         double confidence = 0.0;
         // grayscale frame for processing
@@ -31,12 +32,12 @@ class FaceDetector{
         // method for loading particular Haar cascade file
         int loadcascade(){
             // insert facial recognition cascade here	
-            face_cascade.load("haarcascade_frontalface_default.xml");
+            face_cascade.load("haarcascade_frontalface_alt_tree.xml");
             // and here
             
             recogniser->read("guardingthepi.yml");
 
-            if(!face_cascade.load("haarcascade_frontalface_default.xml"))
+            if(!face_cascade.load("haarcascade_frontalface_alt_tree.xml"))
            {
                 cout<<"Error Loading XML file"<<endl;
             return 0;
@@ -44,7 +45,7 @@ class FaceDetector{
         }
 
         // method for detecting humans in frame
-        void detect(Mat ReferenceFrame){
+        void detect(Mat ReferenceFrame ){
             // store original frame as grayscale in gray frame
             cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             std::vector<Rect> humans;
@@ -57,13 +58,13 @@ class FaceDetector{
             Rect r = humans[i];
             area = r.width*r.height;
             Scalar color = Scalar(255, 0, 0);
- 
+            recogniser->setThreshold(0);
             recogniser->predict(GrayFrame,ID,confidence);
             //name = to_string(ID);
             string conf = to_string(confidence);
             cout << ID << "\t" << confidence << "\n";
 
-            if(ID ==0 && confidence < 400){
+            if(ID ==0 && confidence <82){
                 name = "Aidan";
                 rectangle( ReferenceFrame, Point(round(r.x*1), round(r.y*1)), Point(round((r.x +
                 r.width-1)*1), round((r.y + r.height-1)*1)), color, 3, 2, 0);   
@@ -84,13 +85,15 @@ class Camera: VideoCapture{
   public:
       FaceDetector mydetector;
       Mat ReferenceFrame;
-
-
+      Mat background;
 
       // start camera method
       int start(){
             // initialise capture
             VideoCapture capture(0);   
+            int frame_width=  720;
+            int frame_height= 480;
+
             // load cascade here
             mydetector.loadcascade();   
             //if (!capture.isOpened()) return -1;
@@ -103,12 +106,13 @@ class Camera: VideoCapture{
                if( ReferenceFrame.empty() )
                   break;
                // show image in window 
-               resize(ReferenceFrame,ReferenceFrame,Size(720,480));
+                resize(ReferenceFrame,ReferenceFrame, Size(720,480));
                imshow( "Camera", ReferenceFrame );
                if (waitKey(10) == 27){       
                   break;
                }   
             } 
+            capture.release();
           return 0;
       }                   
 };

@@ -18,7 +18,6 @@
 #include "opencv2/core.hpp"
 #include "opencv2/face.hpp"
 #include "opencv2/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -49,6 +48,7 @@ int main(int argc, const char *argv[]) {
         cout << "usage: " << argv[0] << " <csv.ext>" << endl;
         exit(1);
     }
+    // Get the path to your CSV.
     string fn_csv = string(argv[1]);
     // These vectors hold the images and corresponding labels.
     vector<Mat> images;
@@ -67,8 +67,6 @@ int main(int argc, const char *argv[]) {
         string error_message = "This demo needs at least 2 images to work. Please add more images to your data set!";
         CV_Error(Error::StsError, error_message);
     }
-
-
     // The following lines simply get the last images from
     // your dataset and remove it from the vector. This is
     // done, so that the training data (which we learn the
@@ -76,9 +74,6 @@ int main(int argc, const char *argv[]) {
     // the model with, do not overlap.
     Mat testSample = images[images.size() - 1];
     int testLabel = labels[labels.size() - 1];
-
-    //Convert remaining images to grayscale to improve efficiency of LBPH
-    cvtColor(images, images, COLOR_BGR2GRAY);
     images.pop_back();
     labels.pop_back();
     // The following lines create an LBPH model for
@@ -103,32 +98,32 @@ int main(int argc, const char *argv[]) {
     //
     //      cv::face::LBPHFaceRecognizer::create(1,8,8,8,123.0)
     //
-    Ptr<LBPHFaceRecognizer> model = LBPHFaceRecognizer::create();
+    Ptr<LBPHFaceRecognizer> model = LBPHFaceRecognizer::create(1,8,8,8,85);
+        model->setThreshold(100);
+
     model->train(images, labels);
-    model->save("test.yml");
-    
+    model->save("guardingthepi.yml");
     // The following line predicts the label of a given
     // test image:
-    //int predictedLabel = model->predict(testSample);
+    int predictedLabel = model->predict(testSample);
     //
     // To get the confidence of a prediction call the model with:
     //
-    int predictedLabel = -1;
-    double confidence = 0.0;
-      model->predict(testSample, predictedLabel, confidence);
+         //int predictedLabel = -1;
+         double confidence = 0.0;
+         model->predict(testSample, predictedLabel, confidence);
     //
-    string result_message = format("Predicted class = %d / Actual class = %d. / Confidence = %.f", predictedLabel, testLabel, confidence);
+    string result_message = format("Predicted class = %d / Actual class = %d. / Confidence = %f", predictedLabel, testLabel, confidence);
     cout << result_message << endl;
     // First we'll use it to set the threshold of the LBPHFaceRecognizer
     // to 0.0 without retraining the model. This can be useful if
     // you are evaluating the model:
     //
-    model->setThreshold(0.0);
     // Now the threshold of this model is set to 0.0. A prediction
     // now returns -1, as it's impossible to have a distance below
     // it
-    predictedLabel = model->predict(testSample);
-    cout << "Predicted class = " << predictedLabel << endl;
+    //predictedLabel = model->predict(testSample);
+    //cout << "Predicted class = " << predictedLabel << endl;
     // Show some informations about the model, as there's no cool
     // Model data to display as in Eigenfaces/Fisherfaces.
     // Due to efficiency reasons the LBP images are not stored
