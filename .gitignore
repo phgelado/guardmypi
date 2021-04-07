@@ -1,6 +1,6 @@
 latex/
 html/
-CMakeFiles/
+/CMakeFiles/
 *.cmake
 CMakeCache.txt
 *.m
@@ -44,4 +44,7 @@ dox/
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 *.txt
+=======
+>>>>>>> 831483f80739f71dbafec3fa639ac92113adf56d

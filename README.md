@@ -73,29 +73,43 @@
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. Facial recognition software is used to distinguish between house members (including pets) and intruders. If an intruder is detected, a notification is sent to the user via a web application. 
+GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive a push notification via email.
 
 ### Built With
 
-* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+* C++
+* [OpenCV](https://opencv.org/)
+* [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
+* [Dataplicity](https://www.dataplicity.com/)
+
 
 ### Hardware used
 
-* Raspberry Pi 3
-* Pi NoIR Camera V2
+* [Raspberry Pi 3B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+* [Pi NoIr Camera V2](https://www.raspberrypi.org/products/pi-noir-camera-v2/)
+* [Infrared LED Ring](https://www.amazon.co.uk/Infrared-Illuminator-Board-Security-Camera/dp/B0057DPXI4/ref=sr_1_3?dchild=1&keywords=Infrared+IR+board&qid=1614706403&sr=8-3)
+* [Step Up DC-DC converter](https://www.ebay.co.uk/itm/MT3608-DC-DC-Voltage-Step-Up-Adjustable-Boost-Converter-Module-2A-UK/193424475011)
+* [Camera Enclosure](https://thepihut.com/products/raspberry-pi-4-3-camera-case)
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-Instructions on setting up your project locally are coming soon...
-
-<!-- To get a local copy up and running follow these simple example steps. -->
 
 ### Prerequisites
 
 To be able to run this project locally you will need to install the following dependencies: 
 
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
+* [CMake](https://cmake.org/)
+* [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
+* [Dataplicity](https://www.dataplicity.com/)
+
+Moreover, you will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
+
+* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
+
+And then copy and paste your key into a QR code generator, ensuring you click on "text": 
+
+* [QR Code Generator](https://www.qr-code-generator.com/)
 
 
 ### Installation of OpenCV4 on Raspberry Pi
@@ -154,18 +168,52 @@ git clone https://gist.github.com/sol-prog/ed383474872958081985de733eaf352d open
 pkg-config --modversion opencv
 ```
 
+### Installation of mjpg-streamer on Raspberry Pi
+
+1. Ensure you have CMake installed, as well as the dependencies mjpg-streamer uses: 
+```
+sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+```
+
+2. Clone the mjpg-streamer repository you can find [here](https://github.com/jacksonliam/mjpg-streamer).
+3. Access the mjpg-streamer directory. 
+```
+cd mjpg-streamer
+```
+4. Build and install mjpg-streamer using CMake.
+```
+make
+sudo make install
+```
+
+### Installation of Dataplicity
+
+Dataplicity is a simple to use, safe and free tool for you to access and control your RaspberryPi remotely, allowing you to setup and start your alarm from anywhere, as well as accessing the camera's live video feed. 
+
+Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 (http://localhost:80) through a domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-This space will show useful examples of how GuardMyPi can be used. <!-- Additional screenshots, code examples and demos work well in this space. You may also link to more resources. _For more examples, please refer to the [Documentation](https://example.com)_ -->
+![Image of Aidan](images/aidan.png)
+![Image of Kasper](images/kasper.png)
 
+## Setting up streaming
 
+In order to start the streaming, run the following command from your root, i.e. pi@raspberrypi
+```
+sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" 
+- o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
+```
+
+## Setting up Dataplicity
+
+Dataplicity should already be up and running from installation, double check you can see and access your device [here](https://www.dataplicity.com/devices). 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](//https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
 
 
 
@@ -203,20 +251,6 @@ Project Link: [https://github.com/phgelado/guardmypi](https://github.com/phgelad
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 * [README Template](https://github.com/othneildrew/Best-README-Template)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
