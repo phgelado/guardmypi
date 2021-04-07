@@ -111,7 +111,7 @@ And then copy and paste your key into a QR code generator, ensuring you click on
 
 * [QR Code Generator](https://www.qr-code-generator.com/)
 
-You can then download this or take a screenshot of this screenshot, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
+You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
 
 
 ### Installation of OpenCV4 on Raspberry Pi
