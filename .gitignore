@@ -9,6 +9,8 @@ Doxyfile
 motion
 motdetection
 Makefile
+CMakeLists.txt
+dox/
 
 # Prerequisites
 *.d
@@ -42,3 +44,4 @@ Makefile
 *.exe
 *.out
 *.app
+*.txt
