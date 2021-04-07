@@ -115,7 +115,6 @@ class Camera{
         Unlock recognise;
 	    ObjectDetector humandetector;
 		ObjectDetector petdetector;
-		Lock locksystem;
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
 		int hour;

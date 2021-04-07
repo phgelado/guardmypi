@@ -22,7 +22,6 @@ using namespace cv::face;
 ///@see ObjectDetector::detect Camera:opencam
 ///@param camerafeed frame captured from PiCamera or Webcam
 ///@returns camerafeed with or without "Motion Detected" text to signify code functioning
-
 Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
 	//Convert the input image to grayscale
