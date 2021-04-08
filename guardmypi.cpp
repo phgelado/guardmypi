@@ -223,6 +223,7 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	//!< Condition is met if the timer has expired and the QR code has not been presented
 	else if (secondsPassed >=10 && QRunlockflag != 1) {		
 		//!<Set the intruder flag high to alert the user and break from the function
+		cout << "Intruder detected";
 		intruderflag = 1;
 		return 0;
 	}
@@ -276,9 +277,16 @@ int Camera::opencam()  {
 	petdetector.loadcascade("haarcascade_dogface.xml");
 	recognise.loadcascade();
 
-	//!<Set timerflag shigh 
+	//!<Set timerflags high 
 	pet_timerflag = 1;
 	recognise_timerflag = 1;
+	int frame_width = static_cast<int>(video.get(CAP_PROP_FRAME_WIDTH)); //get the width of frames of the video
+	int frame_height = static_cast<int>(video.get(CAP_PROP_FRAME_HEIGHT)); //get the height of frames of the video
+	Size frame_size(frame_width, frame_height);
+    int frames_per_second = 10;
+
+    //Create and initialize the VideoWriter object 
+   	VideoWriter oVideoWriter("MyVideo.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), frames_per_second, frame_size, true); 
 
 	// Check that video is opened
 	if (!video.isOpened()) return -1;
@@ -329,6 +337,7 @@ int Camera::opencam()  {
 		else if (hour < 7 && hour > 20 && petdetector.flag == 0) {
 					//!<Break off from main and run the QR Code in a seperate thread
 					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
+					t1.join();
 		}
 		/*
 		*If either unlocking method has been satisfied then reset the motionflag and timerflag.
@@ -366,6 +375,7 @@ int Camera::opencam()  {
 		*The user will then be alerted and a casting of the current frames will be sent to the user
 		*/
 		if(recognise.intruderflag == 1) {
+			oVideoWriter.write(frame); 
 			recognise_timerflag = 1;
 			petdetector.flag = -1;
 		
