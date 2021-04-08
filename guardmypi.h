@@ -65,17 +65,16 @@ class Unlock {
         Mat gray,thresh, new_avg, diff,GrayFrame;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
         CascadeClassifier hand_cascade; //!< Instance of the HAAR cascade object
         Scalar color = Scalar(255, 0, 0);
-        Point pt1;	//!<	Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<	End point/coordinate for the contour rectangle
         CascadeClassifier face_cascade;  //!< Instance of the HAAR classifier for facial detection
         Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123); //!< Instance of LBPH algorithm
         double confidence = 0.0; //!< Confidence level is altered by the LBPH algorithm of the chances it is the correct face
-        string name;		//!< Name of the recognised resident		
-		QRCodeDetector qrDecoder; //!< Instance of the 
-		Mat bbox, rectifiedImage;
+        string name;			//!< Name of the recognised resident		
+		QRCodeDetector qrDecoder; //!< Instance of the QR Code detection object
+		Mat bbox, rectifiedImage;	//!< Holds the rectified QR Code and position of the QR Code
 		
  
     public:
+		//Flags used to trigger new thread creation
         int faceflag = 0;
 		int handflag = 0;
 		int intruderflag = 0;
@@ -86,13 +85,13 @@ class Unlock {
 		int resetflag = 0;
 		Mat avg;
 
-		int ID = -1;
-		double secondsPassed = 0.0;
+		int ID = -1;					//Initial LBPH ID
+		double secondsPassed = 0.0;		//Number of seconds passed since the current timestamp
 
-        int loadcascade();
-		int face(Mat ReferenceFrame, clock_t startTime);
-		int QRUnlock(Mat frame, clock_t startTime);
-		int QRLock(Mat frame);
+        int loadcascade();			//Method used to load all necessary cascade files (xml and yml)
+		int face(Mat ReferenceFrame, clock_t startTime);	//Method used to for facial recognition
+		int QRUnlock(Mat frame, clock_t startTime);		//Method used to unlock system with QR Code
+		int QRLock(Mat frame);		//Method used to lock system using QR Code
 };
 
 /**
@@ -115,7 +114,7 @@ class Camera{
         
         public:
 		
-		int opencam();
-		int gettime();
-		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);
+		int opencam();		//Method used to open up the systems camera and runs an infinite loop of frame capturing	
+		int gettime();		//Used to collect the time in GMT 
+		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);	//Method called to reset all flag variables and re-arm the system
 };
