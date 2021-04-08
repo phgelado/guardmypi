@@ -117,6 +117,9 @@ class Camera{
 		ObjectDetector petdetector;
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
+
+    
+    	
 		int hour;
 		int pet_timerflag;
 		int recognise_timerflag;
