@@ -123,7 +123,7 @@ class Camera{
 		clock_t startTime;
         
         public:
-
+		
 		int opencam();
 		int gettime();
 };
