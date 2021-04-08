@@ -162,7 +162,6 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
-        area = r.width*r.height;
         Scalar color = Scalar(255, 0, 0);
         recogniser->setThreshold(123);
 		

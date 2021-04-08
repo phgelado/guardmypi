@@ -33,7 +33,7 @@ class MotionDetector {
 	
 	public:
 	Mat avg; //!< Running average of the camerafeed 
-	Mat ProcessContours(Mat camerafeed);
+	Mat ProcessContours(Mat camerafeed); // Motion Detector method
 	int flag = 0; //!<Flag variable to invoke ObjectDetector thread t2
 };
 
@@ -43,45 +43,35 @@ class MotionDetector {
 */
 class ObjectDetector{
     protected:
-        // cascade classifier object
-		CascadeClassifier cascade;
-        // grayscale frame for processing
-        Mat GrayFrame;
-		Point pt1;	//!<Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<End point/coordinate for the contour rectangle
+		CascadeClassifier cascade; //!< cascade classifier object
+        Mat GrayFrame; 	        //!< grayscale frame for processing
+		Point pt1;	//!< Start point/coordinate for the object rectangle
+	    Point pt2;	//!< End point/coordinate for the object rectangle
 
 	public:
 		int flag = -1;
-        // method for loading particular Haar cascade file
-        int loadcascade(String cascadename);
-        int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime);
+        int loadcascade(String cascadename); // Method for loading particular Haar cascade file
+        int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime); // Method for detecting the object in frame
 
 };
 
 /**
 * @class Unlock
-* @brief Contains various methods to unlock the system 
+* @brief Contains various methods to unlock the system. Facial recognition utiises a LBPH algorithm to preict a detected face. 
+* QR detection is also implemented using the QRCodeDetector object. 
 */
 class Unlock {
     protected: 
-        Mat gray,thresh, new_avg, diff;
-        CascadeClassifier hand_cascade;
-        std::vector<Rect> handvec;
+        Mat gray,thresh, new_avg, diff,GrayFrame;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
+        CascadeClassifier hand_cascade; //!< Instance of the HAAR cascade object
         Scalar color = Scalar(255, 0, 0);
-        Point pt1;	//!<Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<End point/coordinate for the contour rectangle
-		int count = 0;
-
-		
-		// cascade classifier object
-        CascadeClassifier face_cascade;
-        Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123);
-        double confidence = 0.0;
-        // grayscale frame for processing
-        Mat GrayFrame;
-        string name;
-        int area;
-		QRCodeDetector qrDecoder;
+        Point pt1;	//!<	Start point/coordinate for the contour rectangle
+	    Point pt2;	//!<	End point/coordinate for the contour rectangle
+        CascadeClassifier face_cascade;  //!< Instance of the HAAR classifier for facial detection
+        Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123); //!< Instance of LBPH algorithm
+        double confidence = 0.0; //!< Confidence level is altered by the LBPH algorithm of the chances it is the correct face
+        string name;		//!< Name of the recognised resident		
+		QRCodeDetector qrDecoder; //!< Instance of the 
 		Mat bbox, rectifiedImage;
 		
  
@@ -112,22 +102,18 @@ class Unlock {
 class Camera{
     protected:
         MotionDetector motiondetector; //!< Instance of the Motion Detection
-        Unlock recognise;
-	    ObjectDetector humandetector;
-		ObjectDetector petdetector;
-	    Mat humanframe, frame, testframe, background, handframe;
-	    VideoCapture video;	//!< Video Input
-
-    
-    	
-		int hour;
-		int pet_timerflag;
-		int recognise_timerflag;
-		clock_t pet_startTime;
-		clock_t recognise_startTime;
+        Unlock recognise;			//!< Instance of the unlock class with uses of facial recognition, QR Detection
+		ObjectDetector petdetector; //!< Instance of the object detector that will be accessing the ped detection method
+	    Mat frame, testframe; //!< Various Mat variables assigned to the video feed and empty testframe used to reset frames
+	    VideoCapture video;		//!< Video input capture object
+		int hour;			//!< Hour time in GMT	
+		int pet_timerflag;		//!< Timer flag used solely for pet detection
+		int recognise_timerflag;	//!< Human unlocking timer flag used in the unlock methods
+		clock_t pet_startTime;		//!< Used to capture a time stamp whenever motion is detected originally
+		clock_t recognise_startTime; 	//!< With no pet detetected then a time stamp is taken before running the appropriate unlock method
         
         public:
-
+		
 		int opencam();
 		int gettime();
 		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);
