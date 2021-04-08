@@ -383,10 +383,8 @@ int Camera::opencam()  {
 			recognise_timerflag = 1;
 			petdetector.flag = -1;
 		
-<<<<<<< HEAD
-=======
+
 			//Check the frame is not empty
->>>>>>> cdd9abfb109562e028079bd97f59d106ef06d9bf
 			if(frame.empty())	{
 			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
