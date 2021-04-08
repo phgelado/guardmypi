@@ -170,7 +170,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
             name = "Aidan";					//Set the name to the appropriate resident
 			//Put name above the resident's head for confirmation
             putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
-			cout << "Welcome home";
+			//cout << "Welcome home";
 			secondsPassed = 0;				//Reset the secondsPassed method
 			faceflag = 1;					//Set the facial recognition flag to high
 			break;							//Break from the loop
@@ -203,8 +203,8 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	
 	if(data.length()>0 && secondsPassed < 10) { //data length is > 0 if it has read a QR code
 
-		if(data=="unlock"){			//QR code must equate unlock
-			//cout << "Valid unlock key detected, decoded data: " << data << endl;
+		if(data=="user1234"){			//QR code must equate unlock
+		//	cout << "Valid unlock key detected, decoded data: " << data << endl;
 			//Set QR flag high so system knows that it is in the unlocked state
 			QRunlockflag = 1;		
 			return 1;		//Break from code
@@ -212,14 +212,14 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
 		// Condition is added incase the wrong QR Code has been shown
 		else {  
-    		// << "Invalid unlock key detected,decoded data: " << data << endl;
+    	//	cout << "Invalid unlock key detected,decoded data: " << data << endl;
 			return 0;
 		} 
 	}
 	// Condition is met if the timer has expired and the QR code has not been presented
 	else if (secondsPassed >=10 && QRunlockflag != 1) {		
 		//Set the intruder flag high to alert the user and break from the function
-		cout << "Intruder detected";
+		//cout << "Intruder detected";
 		intruderflag = 1;
 		return 0;
 	}
@@ -243,7 +243,7 @@ int Unlock::QRLock(Mat frame) {
 	//Conditional statement looking for a QR Code called lock
 	if(data == "lock" && QRlockflag == 0){
 
-        cout << "System will be locked leave premises now" << data << endl;
+       // cout << "System will be locked leave premises now" << data << endl;
   		//Set lock flag high to engage the system re-arming state letting the user leave etc...
 		QRlockflag = 1;
 		return 1;  //Break from function
@@ -281,6 +281,7 @@ int Camera::opencam()  {
 	int frame_height = static_cast<int>(video.get(CAP_PROP_FRAME_HEIGHT)); //get the height of frames of the video
 	Size frame_size(frame_width, frame_height);
     int frames_per_second = 10;
+    int iterationflag = 1;
 
     //Create and initialize the VideoWriter object 
    	VideoWriter oVideoWriter("MyVideo.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), frames_per_second, frame_size, true); 
@@ -293,7 +294,6 @@ int Camera::opencam()  {
 		
 		//Grab the current frame
 		video.read(frame);
-		//resize(frame,frame, Size(320,480));
 		
 		if(recognise.QRlockflag == 1) {
 			//Reset all the required flags to rearm the system	
@@ -304,6 +304,7 @@ int Camera::opencam()  {
 			recognise.QRlockflag = 0;
 			recognise.faceflag = 0;
 			pet_timerflag = 1;
+			iterationflag =1;
 			recognise_timerflag = 1;
 			recognise.intruderflag = 0;
 			motiondetector.avg = testframe;
@@ -335,7 +336,7 @@ int Camera::opencam()  {
 		motiondetector.ProcessContours(frame);
 
 		}
-
+		//cout << motiondetector.flag;
 /*
 		//If motion is detected start the timer...
 		if(motiondetector.flag == 1 && pet_timerflag ==1) {
@@ -360,7 +361,6 @@ int Camera::opencam()  {
 		if (recognise_timerflag ==1 && motiondetector.flag == 1){
 			recognise_startTime = clock();
 			recognise_timerflag = 0;
-			motiondetector.avg = testframe;
 
 			//motiondetector.flag = 0;
 		}
@@ -368,16 +368,17 @@ int Camera::opencam()  {
 		//Check the time to run the appropriate unlocking method
 		hour = gettime();
 		//If the time is between 7am and 8pm then run facial recognition
-		if (hour >= 7 && hour <= 20 && motiondetector.flag == 1) {
+		if (hour >= 7 && hour <= 20 && motiondetector.flag == 1 && iterationflag ==1) {
 			//Create a thread to break off from main and run the facial recognition
 			thread t1(&Unlock::face, &recognise, frame, recognise_startTime);	
 			t1.join();
 		}  
 		//If it is night time the system struggles to identify faces so invoke QR Unlocking
-		else if (hour < 7 && hour > 20 ) {
+		else if (hour > 20 && motiondetector.flag == 1 && iterationflag == 1) {
 					//Break off from main and run the QR Code in a seperate thread
 					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
 					t1.join();
+					
 		}
 		/*
 		*If either unlocking method has been satisfied then reset the motionflag and timerflag.
@@ -386,6 +387,7 @@ int Camera::opencam()  {
 		*/
 		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
 			//petdetector.flag = -1;
+			iterationflag = 0;
 			recognise_timerflag = 1;
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
