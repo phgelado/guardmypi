@@ -42,16 +42,16 @@ class MotionDetector {
 * @brief Used to analyse incoming feed from the camera for different objects such as Pets etc...
 */
 class ObjectDetector{
-    public:
-
+    protected:
         // cascade classifier object
 		CascadeClassifier cascade;
         // grayscale frame for processing
         Mat GrayFrame;
-		int flag = -1;
 		Point pt1;	//!<Start point/coordinate for the contour rectangle
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
 
+	public:
+		int flag = -1;
         // method for loading particular Haar cascade file
         int loadcascade(String cascadename);
         int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime);
