@@ -106,7 +106,7 @@ int ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbou
 	{
 		if(objects.size() >=1 && secondsPassed< 10){
 			flag = 1;
-			putText(ReferenceFrame, "Pet Detected", Point(1100, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+			putText(ReferenceFrame, "Pet Detected", Point(110, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
 			break;
 		}
 
@@ -162,7 +162,6 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
-        area = r.width*r.height;
         Scalar color = Scalar(255, 0, 0);
         recogniser->setThreshold(123);
 		

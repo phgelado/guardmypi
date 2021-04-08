@@ -65,17 +65,16 @@ class Unlock {
         Mat gray,thresh, new_avg, diff;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
         CascadeClassifier hand_cascade; //!< Instance of the HAAR cascade object
         Scalar color = Scalar(255, 0, 0);
-        Point pt1;	//!<	Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<	End point/coordinate for the contour rectangle
         CascadeClassifier face_cascade;  //!< Instance of the HAAR classifier for facial detection
         Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123); //!< Instance of LBPH algorithm
         double confidence = 0.0; //!< Confidence level is altered by the LBPH algorithm of the chances it is the correct face
-        string name;		//!< Name of the recognised resident		
-		QRCodeDetector qrDecoder; //!< Instance of the 
-		Mat bbox, rectifiedImage;
+        string name;			//!< Name of the recognised resident		
+		QRCodeDetector qrDecoder; //!< Instance of the QR Code detection object
+		Mat bbox, rectifiedImage;	//!< Holds the rectified QR Code and position of the QR Code
 		
  
     public:
+
         int faceflag = 0;
 		int handflag = 0;
 		int intruderflag = 0;
