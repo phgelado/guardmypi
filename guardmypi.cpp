@@ -368,10 +368,9 @@ int Camera::opencam()  {
 
 			// Empty the running average frame for the motion detector by assigning an empty frame
 			motiondetector.avg = testframe;
-			
+			video.read(frame);
 			motiondetector.ProcessContours(frame);
 			motiondetector.flag = 0;
-
 		}
 
 		/*If an intruder is detected in the home... */
