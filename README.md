@@ -184,6 +184,7 @@ git clone https://github.com/jacksonliam/mjpg-streamer
 4. Access the mjpg-streamer directory. 
 ```
 cd mjpg-streamer
+cd mjpg-streamer-experimental
 ```
 4. Build and install mjpg-streamer using CMake.
 ```
