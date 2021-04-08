@@ -76,35 +76,48 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	return camerafeed;
 }
 
+///@brief Loads the classifier with a given cascade file
+///@param cascadename File name of cascade XML file
 int ObjectDetector::loadcascade(String cascadename){
-            cascade.load(cascadename);
-            if(!cascade.load(cascadename))
-           {
-                cerr<<"Error Loading XML file"<<endl;
-            return 0;
-           }    
-        }
+	cascade.load(cascadename);
+	if(!cascade.load(cascadename))
+	{
+		cerr<<"Error Loading XML file"<<endl;
+	return 0;
+	}    
+}
 
-Mat ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbours){
+///@brief Performs object detection on the incoming frame for the given cascade file. If the object (in this case a pet)
+/// is detected within 10 seconds, a flag is raised. If not, the flag is set to 0.
+///@param ReferenceFrame Input frame from the video frame capture
+///@param scale_factor Parameter given to detectMultiScale method, specifying how much the image size is reduced at each image scale
+///@param neighbours Parameter given to detectMultiScale method, specifying how many neighbors each candidate rectangle should have to retain it
+///@param startTime Initial time stamp used to calculate time passed
+int ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime){
 	// store original frame as grayscale in gray frame
 	cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
 	std::vector<Rect> objects;
 	// detect objects in frame - adjust parameters as desired
 	cascade.detectMultiScale( GrayFrame, objects, scale_factor, neighbours);    
-
-	// Draw rectangles on the detected objects
-	for( int i = 0; i < objects.size(); i++ )
+	
+	int secondsPassed = (clock() - startTime) /CLOCKS_PER_SEC;
+	cout << secondsPassed << "\t" << flag << "\n";
+	for( int i = 0; i < 1000; i++ )
 	{
-		flag = 1;
-		Rect rect = objects[i];
-			pt1.x = rect.x;					// Origin point of rectangle on the x-axis 
-			pt1.y = rect.y;					// Origin point of rectangle on the y-axis 
-			pt2.x = rect.x + rect.width;	// Final point along x-axis 
-			pt2.y = rect.y + rect.height;	//Final point along y-axis 
-	rectangle(ReferenceFrame, pt1,pt2, Scalar(0,255,0), 3, 2, 0);
+		if(objects.size() >=1 && secondsPassed< 10){
+			flag = 1;
+			putText(ReferenceFrame, "Pet Detected", Point(1100, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
+			break;
 		}
-	return ReferenceFrame; 
+
+		if (secondsPassed>=10 && objects.size() == 0){
+			flag = 0;
+			break;
+		}		 
+		
+	}
 }
+
 ///@brief Loads the hand and face cascades used to unlock the system during
 ///daytime hours (7am-8pm)
 ///@see Unlock::face
@@ -145,6 +158,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	
 	//Find the number of seconds passed since the method was initially called
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
+	cout << secondsPassed << "\t" << faceflag << "\t" << intruderflag << "\n";
 
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
@@ -262,8 +276,9 @@ int Camera::opencam()  {
 	petdetector.loadcascade("haarcascade_dogface.xml");
 	recognise.loadcascade();
 
-	//!<Set timerflag high 
-	int timerflag = 1;
+	//!<Set timerflag shigh 
+	pet_timerflag = 1;
+	recognise_timerflag = 1;
 
 	// Check that video is opened
 	if (!video.isOpened()) return -1;
@@ -278,33 +293,51 @@ int Camera::opencam()  {
 		motiondetector.ProcessContours(frame);
 
 		//!<If motion is detected start the timer...
-		if(motiondetector.flag == 1 && timerflag ==1) {
-			startTime = clock();
-			timerflag = 0;
+		if(motiondetector.flag == 1 && pet_timerflag ==1) {
+			pet_startTime = clock();
+			pet_timerflag = 0;
+		}
+
+		if (motiondetector.flag ==1){
+				thread t0(&ObjectDetector::detect,&petdetector,frame, 1.3, 50,pet_startTime);
+				t0.join();
+		}
+
+		// if a pet is detected reset the flags i.e. go back to normal
+		if (petdetector.flag ==1){
+			motiondetector.flag = 0;
+			pet_timerflag = 1;
+			petdetector.flag = -1;
+		}
+
+		if (petdetector.flag ==0 && recognise_timerflag ==1){
+			recognise_startTime = clock();
+			recognise_timerflag = 0;
+			motiondetector.flag = 0;
+			pet_timerflag = 1;
 		}
 
 		//Check the time to run the appropriate unlocking method
 		hour = gettime();
-		
 		//!<If the time is between 7am and 8pm then run facial recognition
-		if (hour >= 7 && hour <= 20 && motiondetector.flag ==1 ) {
+		if (hour >= 7 && hour <= 20 && petdetector.flag == 0 ) {
 			//!<Create a thread to break off from main and run the facial recognition
-			thread t1(&Unlock::face, &recognise, frame, startTime);	
+			thread t1(&Unlock::face, &recognise, frame, recognise_startTime);	
 			t1.join();
-			}  
-			//!<If it is night time the system struggles to identify faces so invoke QR Unlocking
-			else if (hour < 7 && hour > 20 && motiondetector.flag == 1) {
+		}  
+		//!<If it is night time the system struggles to identify faces so invoke QR Unlocking
+		else if (hour < 7 && hour > 20 && petdetector.flag == 0) {
 					//!<Break off from main and run the QR Code in a seperate thread
-					thread t1(&Unlock::QRUnlock, &recognise, frame, startTime);
-			}
+					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
+		}
 		/*
 		*If either unlocking method has been satisfied then reset the motionflag and timerflag.
 		*This essentially resets the timer, then calls the Locking method in a seperate thread from main
 		*The system is currently in the unlocked state if this condition is met
 		*/
 		if(recognise.faceflag  == 1 || recognise.QRunlockflag == 1) {
-			motiondetector.flag = 0;
-			timerflag = 1;
+			petdetector.flag = -1;
+			recognise_timerflag = 1;
 			thread t2(&Unlock::QRLock, &recognise, frame);
 			t2.join();
 		}
@@ -312,10 +345,14 @@ int Camera::opencam()  {
 		if(recognise.QRlockflag == 1) {
 			//!<Reset all the required flags to rearm the system	
 			motiondetector.flag = 0;
+			petdetector.flag = -1;
 			recognise.intruderflag = 0;
 			recognise.QRunlockflag = 0;
 			recognise.QRlockflag = 0;
 			recognise.faceflag = 0;
+			pet_timerflag = 1;
+			recognise_timerflag = 1;
+			recognise.intruderflag = 0;
 
 			//!<Wait 60s for the user to leave the house before activating the system
 			waitKey(5000);
@@ -329,29 +366,30 @@ int Camera::opencam()  {
 		*The user will then be alerted and a casting of the current frames will be sent to the user
 		*/
 		if(recognise.intruderflag == 1) {
+			recognise_timerflag = 1;
+			petdetector.flag = -1;
 		
-		//!<Check the frame is not empty
-		if(frame.empty())	{
-			  std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
+			//!<Check the frame is not empty
+			if(frame.empty())	{
+			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
 
 			// Save the frame into a file capturing a pic of the intruder
 			imwrite("test.jpg", frame); 
-			}
+		}
 
 		//Show the Video Feed
 		imshow("Camera", frame);
 	
-
-	if (waitKey(25) >= 0) break;
+		if (waitKey(25) >= 0) break;
 
 	} // end while (video.read(frame))
 
 
-//Release video capture and write
-video.release(); 
+	//Release video capture and write
+	video.release(); 
 
-// Destroy all windows
-destroyAllWindows();
-return 0;
+	// Destroy all windows
+	destroyAllWindows();
+	return 0;
 }
