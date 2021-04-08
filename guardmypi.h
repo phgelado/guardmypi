@@ -112,16 +112,15 @@ class Unlock {
 class Camera{
     protected:
         MotionDetector motiondetector; //!< Instance of the Motion Detection
-        Unlock recognise;
-	    ObjectDetector humandetector;
-		ObjectDetector petdetector;
-	    Mat humanframe, frame, testframe, background, handframe;
-	    VideoCapture video;	//!< Video Input
-		int hour;
-		int pet_timerflag;
-		int recognise_timerflag;
-		clock_t pet_startTime;
-		clock_t recognise_startTime;
+        Unlock recognise;			//!< Instance of the unlock class with uses of facial recognition, QR Detection
+		ObjectDetector petdetector; //!< Instance of the object detector that will be accessing the ped detection method
+	    Mat frame, testframe; //!< Various Mat variables assigned to the video feed and empty testframe used to reset frames
+	    VideoCapture video;		//!< Video input capture object
+		int hour;			//!< Hour time in GMT	
+		int pet_timerflag;		//!< Timer flag used solely for pet detection
+		int recognise_timerflag;	//!< Human unlocking timer flag used in the unlock methods
+		clock_t pet_startTime;		//!< Used to capture a time stamp whenever motion is detected originally
+		clock_t recognise_startTime; 	//!< With no pet detetected then a time stamp is taken before running the appropriate unlock method
         
         public:
 		
