@@ -107,6 +107,7 @@ class Camera{
 	    Mat frame, testframe; //!< Various Mat variables assigned to the video feed and empty testframe used to reset frames
 	    VideoCapture video;		//!< Video input capture object
 		int hour;			//!< Hour time in GMT	
+		int emailflag = 1;  //!< Flag used for email sending
 		int pet_timerflag;		//!< Timer flag used solely for pet detection
 		int recognise_timerflag;	//!< Human unlocking timer flag used in the unlock methods
 		clock_t pet_startTime;		//!< Used to capture a time stamp whenever motion is detected originally
