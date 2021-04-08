@@ -16,12 +16,12 @@ using namespace std;
 using namespace cv;
 using namespace cv::face;
 
-///@brief Takes the incoming frame and performs background subtraction using previous frames.
-///Performs background subtraction to detect changes in the frame i.e. motion. 
-///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
-///@see ObjectDetector::detect Camera:opencam
-///@param camerafeed frame captured from PiCamera or Webcam
-///@returns camerafeed with or without "Motion Detected" text to signify code functioning
+	///@brief Takes the incoming frame and performs background subtraction using previous frames.
+	///Performs background subtraction to detect changes in the frame i.e. motion. 
+	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
+	///@see ObjectDetector::detect Camera:opencam
+	///@param camerafeed frame captured from PiCamera or Webcam
+	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	
 	//Convert the input image to grayscale
@@ -170,9 +170,9 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
 	//After 10s the intruder flag is set high if the resident's face is not detected
 	if(secondsPassed >= 10 && faceflag !=1) {
-		//Set intruder flag high to then alert the user!
+		//!<Set intruder flag high to then alert the user!
 		intruderflag = 1;	
-		//Break from the function
+		//!< Break from the function
 		return 0;	
 		}
 }
