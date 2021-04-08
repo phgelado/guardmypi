@@ -62,7 +62,7 @@ class ObjectDetector{
 */
 class Unlock {
     protected: 
-        Mat gray,thresh, new_avg, diff;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
+        Mat gray,thresh, new_avg, diff,GrayFrame;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
         CascadeClassifier hand_cascade; //!< Instance of the HAAR cascade object
         Scalar color = Scalar(255, 0, 0);
         CascadeClassifier face_cascade;  //!< Instance of the HAAR classifier for facial detection
