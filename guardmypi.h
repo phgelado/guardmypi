@@ -48,13 +48,13 @@ class ObjectDetector{
 		CascadeClassifier cascade;
         // grayscale frame for processing
         Mat GrayFrame;
-		int flag = 0;
+		int flag = -1;
 		Point pt1;	//!<Start point/coordinate for the contour rectangle
 	    Point pt2;	//!<End point/coordinate for the contour rectangle
 
         // method for loading particular Haar cascade file
         int loadcascade(String cascadename);
-        Mat detect(Mat ReferenceFrame, double scale_factor, int neighbours);
+        int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime);
 
 };
 
@@ -115,15 +115,17 @@ class Camera{
         Unlock recognise;
 	    ObjectDetector humandetector;
 		ObjectDetector petdetector;
-		Lock locksystem;
 	    Mat humanframe, frame, testframe, background, handframe;
 	    VideoCapture video;	//!< Video Input
 		int hour;
-		int timerflag;
-		clock_t startTime;
+		int pet_timerflag;
+		int recognise_timerflag;
+		clock_t pet_startTime;
+		clock_t recognise_startTime;
         
         public:
 
 		int opencam();
 		int gettime();
+		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);
 };
