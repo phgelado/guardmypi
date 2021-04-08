@@ -33,7 +33,7 @@ class MotionDetector {
 	
 	public:
 	Mat avg; //!< Running average of the camerafeed 
-	Mat ProcessContours(Mat camerafeed);
+	Mat ProcessContours(Mat camerafeed); // Motion Detector method
 	int flag = 0; //!<Flag variable to invoke ObjectDetector thread t2
 };
 
@@ -43,45 +43,35 @@ class MotionDetector {
 */
 class ObjectDetector{
     protected:
-        // cascade classifier object
-		CascadeClassifier cascade;
-        // grayscale frame for processing
-        Mat GrayFrame;
-		Point pt1;	//!<Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<End point/coordinate for the contour rectangle
+		CascadeClassifier cascade; //!< cascade classifier object
+        Mat GrayFrame; 	        //!< grayscale frame for processing
+		Point pt1;	//!< Start point/coordinate for the object rectangle
+	    Point pt2;	//!< End point/coordinate for the object rectangle
 
 	public:
 		int flag = -1;
-        // method for loading particular Haar cascade file
-        int loadcascade(String cascadename);
-        int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime);
+        int loadcascade(String cascadename); // Method for loading particular Haar cascade file
+        int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime); // Method for detecting the object in frame
 
 };
 
 /**
 * @class Unlock
-* @brief Contains various methods to unlock the system 
+* @brief Contains various methods to unlock the system. Facial recognition utiises a LBPH algorithm to preict a detected face. 
+* QR detection is also implemented using the QRCodeDetector object. 
 */
 class Unlock {
     protected: 
-        Mat gray,thresh, new_avg, diff;
-        CascadeClassifier hand_cascade;
-        std::vector<Rect> handvec;
+        Mat gray,thresh, new_avg, diff;	//!< Various members to contain a grayscale, threshold, running average and difference frame 
+        CascadeClassifier hand_cascade; //!< Instance of the HAAR cascade object
         Scalar color = Scalar(255, 0, 0);
-        Point pt1;	//!<Start point/coordinate for the contour rectangle
-	    Point pt2;	//!<End point/coordinate for the contour rectangle
-		int count = 0;
-
-		
-		// cascade classifier object
-        CascadeClassifier face_cascade;
-        Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123);
-        double confidence = 0.0;
-        // grayscale frame for processing
-        Mat GrayFrame;
-        string name;
-        int area;
-		QRCodeDetector qrDecoder;
+        Point pt1;	//!<	Start point/coordinate for the contour rectangle
+	    Point pt2;	//!<	End point/coordinate for the contour rectangle
+        CascadeClassifier face_cascade;  //!< Instance of the HAAR classifier for facial detection
+        Ptr<LBPHFaceRecognizer> recogniser = LBPHFaceRecognizer::create(1,8,8,8,123); //!< Instance of LBPH algorithm
+        double confidence = 0.0; //!< Confidence level is altered by the LBPH algorithm of the chances it is the correct face
+        string name;		//!< Name of the recognised resident		
+		QRCodeDetector qrDecoder; //!< Instance of the 
 		Mat bbox, rectifiedImage;
 		
  
