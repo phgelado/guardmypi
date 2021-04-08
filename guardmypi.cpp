@@ -373,7 +373,7 @@ int Camera::opencam()  {
 
 		//...send an email to the user...
 		if (recognise.intruderflag ==1 && emailflag == 1 ){
-			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous@btinternet.com");
+			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous98@gmail.com");
 			emailflag = 0;
 
 		}
@@ -383,10 +383,7 @@ int Camera::opencam()  {
 			recognise_timerflag = 1;
 			petdetector.flag = -1;
 		
-<<<<<<< HEAD
-=======
 			//Check the frame is not empty
->>>>>>> cdd9abfb109562e028079bd97f59d106ef06d9bf
 			if(frame.empty())	{
 			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
