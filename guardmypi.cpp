@@ -369,22 +369,29 @@ int Camera::opencam()  {
 			motiondetector.avg = testframe;
 		}
 
-		/*
-		*If any of the unlocking methods are not satisfied then this flag is set high
-		*The user will then be alerted and a casting of the current frames will be sent to the user
-		*/
+		/*If an intruder is detected in the home... */
+
+		//...send an email to the user...
+		if (recognise.intruderflag ==1 && emailflag == 1 ){
+			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous@btinternet.com");
+			emailflag = 0;
+
+		}
+		//... begin writing the video footage to a .avi file...
 		if(recognise.intruderflag == 1) {
 			oVideoWriter.write(frame); 
 			recognise_timerflag = 1;
 			petdetector.flag = -1;
 		
-			//!<Check the frame is not empty
 			if(frame.empty())	{
 			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
 
-			// Save the frame into a file capturing a pic of the intruder
+			// ...continually save the frames into a jpg file which will then be
+			// streamed to the website.
 			imwrite("test.jpg", frame); 
+
+		/* End of intruder code */
 		}
 
 		//Show the Video Feed
