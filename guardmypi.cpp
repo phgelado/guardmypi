@@ -147,7 +147,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	// store original frame as grayscale in gray frame
     cvtColor(ReferenceFrame, GrayFrame, COLOR_BGR2GRAY);
             
-	//!<Initialise Vecotor to store points of detected faces		
+	//Initialise Vecotor to store points of detected faces		
 	std::vector<Rect> face;
 
     // detect faces in frame - adjust parameters as desired
@@ -183,9 +183,9 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
 	//After 10s the intruder flag is set high if the resident's face is not detected
 	if(secondsPassed >= 10 && faceflag !=1) {
-		//!<Set intruder flag high to then alert the user!
+		//Set intruder flag high to then alert the user!
 		intruderflag = 1;	
-		//!< Break from the function
+		// Break from the function
 		return 0;	
 		}
 }
@@ -206,22 +206,22 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	
 	if(data.length()>0 && secondsPassed < 10) { //data length is > 0 if it has read a QR code
 
-		if(data=="unlock"){			//!<QR code must equate unlock
+		if(data=="unlock"){			//QR code must equate unlock
 			cout << "Valid unlock key detected, decoded data: " << data << endl;
-			//!<Set QR flag high so system knows that it is in the unlocked state
+			//Set QR flag high so system knows that it is in the unlocked state
 			QRunlockflag = 1;		
 			return 1;		//Break from code
 		}
 
-		//!< Condition is added incase the wrong QR Code has been shown
+		// Condition is added incase the wrong QR Code has been shown
 		else {  
     		cout << "Invalid unlock key detected,decoded data: " << data << endl;
 			return 0;
 		} 
 	}
-	//!< Condition is met if the timer has expired and the QR code has not been presented
+	// Condition is met if the timer has expired and the QR code has not been presented
 	else if (secondsPassed >=10 && QRunlockflag != 1) {		
-		//!<Set the intruder flag high to alert the user and break from the function
+		//Set the intruder flag high to alert the user and break from the function
 		cout << "Intruder detected";
 		intruderflag = 1;
 		return 0;
@@ -242,16 +242,16 @@ int Unlock::QRLock(Mat frame) {
   //!Condition looking for a QR Code
   if(data.length()>0)	{
 
-	//!<Conditional statement looking for a QR Code called lock
+	//Conditional statement looking for a QR Code called lock
 	if(data == "lock" && QRlockflag == 0){
 
         cout << "System will be locked leave premises now" << data << endl;
-  		//!<Set lock flag high to engage the system re-arming state letting the user leave etc...
+  		//Set lock flag high to engage the system re-arming state letting the user leave etc...
 		QRlockflag = 1;
 		return 1;  //Break from function
     		} 
 	}
-	return 0;  //!<Nothing happening so jjust break from function and return 0
+	return 0;  //Nothing happening so jjust break from function and return 0
 }
 
 ///@brief Calculates the current hour of the day to ensure the system knows what method 
@@ -259,9 +259,9 @@ int Unlock::QRLock(Mat frame) {
 ///@see Unlock::face() Unlock::QRUnlock()
 ///@returns The current hour of the day for GMT zone
 int Camera::gettime() {
-	time_t ttime = time(0);	//!<Time since January 1st 1990
-    tm *local_time = gmtime(&ttime);	//!<Get GMT 
-	return int(1 + local_time->tm_hour);	//!< Return the hour of the day
+	time_t ttime = time(0);	//Time since January 1st 1990
+    tm *local_time = gmtime(&ttime);	//Get GMT 
+	return int(1 + local_time->tm_hour);	// Return the hour of the day
 }
 
 ///@brief Opens the camera in the main thread and runs an infinite loop of frame capturing.
@@ -272,11 +272,11 @@ int Camera::opencam()  {
 	//Open the video feed for the webcam/camera
 	video.open(0);
 
-	//!< Run all the loadcascade methods for each detection algorithm
+	// Run all the loadcascade methods for each detection algorithm
 	petdetector.loadcascade("haarcascade_dogface.xml");
 	recognise.loadcascade();
 
-	//!<Set timerflags high 
+	//Set timerflags high 
 	pet_timerflag = 1;
 	recognise_timerflag = 1;
 	int frame_width = static_cast<int>(video.get(CAP_PROP_FRAME_WIDTH)); //get the width of frames of the video
@@ -296,10 +296,10 @@ int Camera::opencam()  {
 		//Grab the current frame
 		video.read(frame);
 
-		//!<Call the motion detector method and supply the input frame
+		//Call the motion detector method and supply the input frame
 		motiondetector.ProcessContours(frame);
 
-		//!<If motion is detected start the timer...
+		//If motion is detected start the timer...
 		if(motiondetector.flag == 1 && pet_timerflag ==1) {
 			pet_startTime = clock();
 			pet_timerflag = 0;
@@ -326,15 +326,15 @@ int Camera::opencam()  {
 
 		//Check the time to run the appropriate unlocking method
 		hour = gettime();
-		//!<If the time is between 7am and 8pm then run facial recognition
+		//If the time is between 7am and 8pm then run facial recognition
 		if (hour >= 7 && hour <= 20 && petdetector.flag == 0 ) {
-			//!<Create a thread to break off from main and run the facial recognition
+			//Create a thread to break off from main and run the facial recognition
 			thread t1(&Unlock::face, &recognise, frame, recognise_startTime);	
 			t1.join();
 		}  
-		//!<If it is night time the system struggles to identify faces so invoke QR Unlocking
+		//If it is night time the system struggles to identify faces so invoke QR Unlocking
 		else if (hour < 7 && hour > 20 && petdetector.flag == 0) {
-					//!<Break off from main and run the QR Code in a seperate thread
+					//Break off from main and run the QR Code in a seperate thread
 					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
 					t1.join();
 		}
@@ -351,7 +351,7 @@ int Camera::opencam()  {
 		}
 
 		if(recognise.QRlockflag == 1) {
-			//!<Reset all the required flags to rearm the system	
+			//Reset all the required flags to rearm the system	
 			motiondetector.flag = 0;
 			petdetector.flag = -1;
 			recognise.intruderflag = 0;
@@ -362,10 +362,10 @@ int Camera::opencam()  {
 			recognise_timerflag = 1;
 			recognise.intruderflag = 0;
 
-			//!<Wait 60s for the user to leave the house before activating the system
+			//Wait 60s for the user to leave the house before activating the system
 			waitKey(5000);
 
-			//!< Empty the running average frame for the motion detector by assigning an empty frame
+			// Empty the running average frame for the motion detector by assigning an empty frame
 			motiondetector.avg = testframe;
 		}
 
@@ -378,7 +378,7 @@ int Camera::opencam()  {
 			recognise_timerflag = 1;
 			petdetector.flag = -1;
 		
-			//!<Check the frame is not empty
+			//Check the frame is not empty
 			if(frame.empty())	{
 			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
