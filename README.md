@@ -178,7 +178,10 @@ sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
 ```
 
 2. Clone the mjpg-streamer repository you can find [here](https://github.com/jacksonliam/mjpg-streamer).
-3. Access the mjpg-streamer directory. 
+```
+git clone https://github.com/jacksonliam/mjpg-streamer
+```
+4. Access the mjpg-streamer directory. 
 ```
 cd mjpg-streamer
 ```
