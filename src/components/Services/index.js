@@ -1,6 +1,6 @@
 import React from 'react'
-import Icon1 from '../../images/svg-1.svg'
-import Icon2 from '../../images/svg-2.svg'
+import Icon1 from '../../images/svg-7.svg'
+import Icon2 from '../../images/svg-6.svg'
 import Icon3 from '../../images/svg-3.svg'
 import {ServicesContainer,
 ServicesH1,
@@ -30,7 +30,7 @@ const Services = () => {
                 <ServicesCard>
                     <ServicesIcon src ={Icon3}/>
                     <ServicesH2>Smart security</ServicesH2>
-                    <ServicesP>With our ML algorithms, this is to be filled. <br /><br /><br /></ServicesP>
+                    <ServicesP>With our ML algorithms GuardMyPi is convenient, hastle free and automated. <br /><br /><br /></ServicesP>
                 </ServicesCard>
             </ServicesWrapper>
         </ServicesContainer>

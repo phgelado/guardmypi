@@ -29,11 +29,11 @@ const HeroSection = () => {
                      Protect your berries from unauthorised tampering.
                 </HeroP>
                 <HeroBtnWrapper>
-                    <ButtonRouter to='/interest' onMouseEnter={onHover}
+                    <ButtonRouter to='/signup' onMouseEnter={onHover}
                     onMouseLeave={onHover} 
                     primary = 'true'
                     dark = 'true' smooth={true} duration={500} spy={true} exact='true' offset={-80}>
-                        Register your interest {hover ? <ArrowForward /> : <ArrowRight/>}
+                        Sign Up Now! {hover ? <ArrowForward /> : <ArrowRight/>}
                     </ButtonRouter>
                 </HeroBtnWrapper>
             </HeroContent>

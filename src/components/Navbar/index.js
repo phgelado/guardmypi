@@ -38,7 +38,7 @@ const Navbar = ({ toggle }) => {
     <IconContext.Provider value = {{color : '#fff'}}>
         <Nav scrollNav = {scrollNav}>
             <NavbarContainer>
-                <NavLogo to='/' onClick={toggleHome}>
+                <NavLogo to='/' onClick={toggleHome} >
                     GuardMyPi
                 </NavLogo>
                 <MobileIcon onClick={toggle}>

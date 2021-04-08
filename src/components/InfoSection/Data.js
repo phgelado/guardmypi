@@ -42,7 +42,7 @@ export const homeObjThree ={
     description: 'If an intrusion occurs, GuardMyPi will notify you and you\'ll be able to access live feed of your home on your GuardMyPi web-app',
     buttonLabel: 'Get Started',
     imgStart: false,
-    img: require('../../images/svg-3.svg').default,
+    img: require('../../images/svg-4.svg').default,
     alt: 'Car',
     dark: true,
     primary: true,
