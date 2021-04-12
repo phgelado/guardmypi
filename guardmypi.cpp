@@ -228,6 +228,30 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	}
 }
 
+int Unlock::Deactivate(Mat frame) {
+	//QRcode detection 
+	std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
+	
+	if(data.length()>0) { //data length is > 0 if it has read a QR code
+
+		if(data=="unlock"){			//QR code must equate unlock
+		//	cout << "Valid unlock key detected, decoded data: " << data << endl;
+			//Set QR flag high so system knows that it is in the unlocked state
+			QRunlockflag = 1;	
+			faceflag = 1;
+			intruderflag = 0;	
+			return 1;		//Break from code
+		}
+
+		// Condition is added incase the wrong QR Code has been shown
+		else {  
+    	//	cout << "Invalid unlock key detected,decoded data: " << data << endl;
+			return 0;
+		} 
+	}
+}
+
+
 ///@brief This method looks for another QR code whilst the system is in its unlocked 
 ///state. Until the camera detects a QR code with a key called "lock" then nothing happens.
 ///@param frame Input frame from the camera feed
@@ -406,6 +430,7 @@ int Camera::opencam(int camport)  {
 			cout << "Intruder Detected";
 			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" magnusbc98@gmail.com");
 			emailflag = 0;
+			iterationflag = 0;
 		}
 		//... begin writing the video footage to a .avi file...
 		if(recognise.intruderflag == 1) {
@@ -416,6 +441,9 @@ int Camera::opencam(int camport)  {
 			sleep(0.005);
 			recognise_timerflag = 1;
 			//petdetector.flag = -1;
+			thread t1(&Unlock::Deactivate, &recognise, frame);
+			t1.join();
+					
 		
 			//Check the frame is not empty
 			if(frame.empty())	{

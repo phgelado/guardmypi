@@ -92,6 +92,7 @@ class Unlock {
 		int face(Mat ReferenceFrame, clock_t startTime);	//Method used to for facial recognition
 		int QRUnlock(Mat frame, clock_t startTime);		//Method used to unlock system with QR Code
 		int QRLock(Mat frame);		//Method used to lock system using QR Code
+		int Deactivate(Mat frame);
 };
 
 /**
