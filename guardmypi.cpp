@@ -375,6 +375,7 @@ int Camera::opencam(int camport)  {
 			//Create a thread to break off from main and run the facial recognition
 			thread t1(&Unlock::face, &recognise, frame, recognise_startTime);	
 			t1.join();
+			
 		}  
 		//If it is night time the system struggles to identify faces so invoke QR Unlocking
 		else if (hour < 7 && hour > 20 && motiondetector.flag == 1 && iterationflag == 1) {
