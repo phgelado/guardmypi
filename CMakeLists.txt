@@ -10,5 +10,4 @@ add_executable( main main.cpp)
 add_executable(newmain newmain.cpp)
 target_link_libraries( main gmp ${OpenCV_LIBS} )
 target_link_libraries( newmain gmp ${OpenCV_LIBS} )
-
 add_test (Name Test COMMAND Test)
