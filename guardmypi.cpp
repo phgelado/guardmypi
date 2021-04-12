@@ -151,7 +151,8 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
     // detect faces in frame - adjust parameters as desired
 	face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
-            
+    
+	resize(GrayFrame,GrayFrame,Size(168,192));
 	
 	//Find the number of seconds passed since the method was initially called
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
@@ -161,10 +162,10 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
         Rect r = face[i];
         Scalar color = Scalar(255, 0, 0);
       
-		
+		recogniser->setThreshold(123);
 		//Call facial recognition method
 		recogniser->predict(GrayFrame,ID,confidence);
-		
+		cout << "ID:" << ID;
 		if(ID ==0 && secondsPassed < 10){	//0 is the residents face ID
 			intruderflag = 0;				//Keep intruder flag 0
             name = "Aidan";					//Set the name to the appropriate resident
@@ -232,7 +233,6 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 ///@returns 1 to escape function once QR code is detected
 ///@returns 0 to escape function if the incorrect/no QR code is detected
 int Unlock::QRLock(Mat frame) {
-	resize(frame, frame, Size(240,240));
 
   //QRcode detection 
   std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
@@ -334,6 +334,7 @@ int Camera::opencam()  {
 		//Call the motion detector method and supply the input frame
 		if(motiondetector.flag == 0) {
 		motiondetector.ProcessContours(frame);
+		cout << "Motion Detection:" << motiondetector.flag;
 
 		}
 		//cout << motiondetector.flag;
@@ -374,7 +375,7 @@ int Camera::opencam()  {
 			t1.join();
 		}  
 		//If it is night time the system struggles to identify faces so invoke QR Unlocking
-		else if (hour > 20 && motiondetector.flag == 1 && iterationflag == 1) {
+		else if (hour < 7 && hour > 20 && motiondetector.flag == 1 && iterationflag == 1) {
 					//Break off from main and run the QR Code in a seperate thread
 					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
 					t1.join();
@@ -398,7 +399,8 @@ int Camera::opencam()  {
 		/*If an intruder is detected in the home... */
 
 		//...send an email to the user...
-		if (recognise.intruderflag ==1 && emailflag == 1 ){
+		if (recognise.intruderflag ==1 && emailflag == 1){
+			cout << "Intruder Detected";
 			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous98@gmail.com");
 			emailflag = 0;
 
