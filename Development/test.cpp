@@ -19,11 +19,13 @@ Camera Cam;
 BOOST_AUTO_TEST_CASE(FailTest)
 {
     BOOST_CHECK_EQUAL(-1, Cam.opencam(1));
-    BOOST_CHECK(!boost::filesystem::exists("/home/aidan/repos/guardmypi/test.jpwg"));
+    BOOST_CHECK(boost::filesystem::exists("/home/aidan/repos/guardmypi/test.jpg"));
 }
 
 BOOST_AUTO_TEST_CASE(PassTest)
 {
     BOOST_CHECK_EQUAL(0,Cam.opencam(0));
     BOOST_CHECK(boost::filesystem::exists("/home/aidan/repos/guardmypi/test.jpg"));
+    BOOST_CHECK(boost::filesystem::exists("/home/aidan/repos/guardmypi/guardingthepi.yml"));
+
 }
