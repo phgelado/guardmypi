@@ -206,7 +206,7 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	
 	if(data.length()>0 && secondsPassed < 10) { //data length is > 0 if it has read a QR code
 
-		if(data=="user1234"){			//QR code must equate unlock
+		if(data=="unlock"){			//QR code must equate unlock
 		//	cout << "Valid unlock key detected, decoded data: " << data << endl;
 			//Set QR flag high so system knows that it is in the unlocked state
 			QRunlockflag = 1;		
