@@ -267,10 +267,10 @@ int Camera::gettime() {
 ///@brief Opens the camera in the main thread and runs an infinite loop of frame capturing.
 ///Each frame is processed by various methods to detect motion, facial recognition and QR recognition.
 ///@see Unlock::face() Unlock::QRUnlock Unlock::QRLock MotionDetector::ProcessContours()
-int Camera::opencam()  {
+int Camera::opencam(int camport)  {
 		
 	//Open the video feed for the webcam/camera
-	video.open(0);
+	video.open(camport);
 
 	// Run all the loadcascade methods for each detection algorithm
 	petdetector.loadcascade("haarcascade_dogface.xml");

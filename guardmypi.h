@@ -114,7 +114,7 @@ class Camera{
         
         public:
 		
-		int opencam();		//Method used to open up the systems camera and runs an infinite loop of frame capturing	
+		int opencam(int camport);		//Method used to open up the systems camera and runs an infinite loop of frame capturing	
 		int gettime();		//Used to collect the time in GMT 
 		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);	//Method called to reset all flag variables and re-arm the system
 };
