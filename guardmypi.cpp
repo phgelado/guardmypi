@@ -159,7 +159,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	//Find the number of seconds passed since the method was initially called
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
 	//cout << secondsPassed << "\t" << faceflag << "\t" << intruderflag << "\n";
-
+	cout << intruderflag << "\n";
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
         Scalar color = Scalar(255, 0, 0);
@@ -168,7 +168,6 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 		//Call facial recognition method
 		recogniser->setThreshold(123);
 		recogniser->predict(GrayFrame,ID,confidence);
-		cout << "ID:" << ID;
 		if(ID ==0 && secondsPassed < 10){	//0 is the residents face ID
 			intruderflag = 0;				//Keep intruder flag 0
             name = "Aidan";					//Set the name to the appropriate resident
@@ -291,6 +290,7 @@ int Camera::opencam(int camport)  {
 	// Check that video is opened
 	if (!video.isOpened()) return -1;
 	
+	//system("xterm -hold -e 'sudo LD_LIBRARY_PATH=/home/pi/mjpg-streamer/mjpg-streamer-experimental mjpg_streamer -i \"input_file.so -f /home/pi/guardmypi -n test.jpg\" -o \"output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80\"' & ");
 	// Loop through available frames 
 	while (1) {
 		
@@ -336,7 +336,7 @@ int Camera::opencam(int camport)  {
 		//Call the motion detector method and supply the input frame
 		if(motiondetector.flag == 0) {
 		motiondetector.ProcessContours(frame);
-		cout << "Motion Detection:" << motiondetector.flag;
+		//cout << "Motion Detection:" << motiondetector.flag;
 
 		}
 		//cout << motiondetector.flag;
@@ -379,7 +379,7 @@ int Camera::opencam(int camport)  {
 		}  
 		//If it is night time the system struggles to identify faces so invoke QR Unlocking
 		else if (hour < 7 && hour > 20 && motiondetector.flag == 1 && iterationflag == 1) {
-					//Break off from main and run the QR Code in a seperate thread
+					//Break offf from main and run the QR Code in a seperate thread
 					thread t1(&Unlock::QRUnlock, &recognise, frame, recognise_startTime);
 					t1.join();
 					
@@ -404,26 +404,23 @@ int Camera::opencam(int camport)  {
 		//...send an email to the user...
 		if (recognise.intruderflag ==1 && emailflag == 1){
 			cout << "Intruder Detected";
-			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous98@gmail.com");
+			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" magnusbc98@gmail.com");
 			emailflag = 0;
-
 		}
 		//... begin writing the video footage to a .avi file...
 		if(recognise.intruderflag == 1) {
 			oVideoWriter.write(frame); 
+			// ...continually save the frames into a jpg file which will then be
+			// streamed to the website.
+			imwrite("test.jpg", frame); 
+			sleep(0.005);
 			recognise_timerflag = 1;
 			//petdetector.flag = -1;
 		
-
 			//Check the frame is not empty
 			if(frame.empty())	{
 			  	std::cerr << "Something is wrong with the webcam, could not get frame." << std::endl;
 			}
-
-			// ...continually save the frames into a jpg file which will then be
-			// streamed to the website.
-			imwrite("test.jpg", frame); 
-
 		/* End of intruder code */
 		}
 
@@ -433,7 +430,6 @@ int Camera::opencam(int camport)  {
 		if (waitKey(25) >= 0) break;
 
 	} // end while (video.read(frame))
-
 
 	//Release video capture and write
 	video.release(); 
