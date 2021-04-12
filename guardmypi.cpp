@@ -152,8 +152,9 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 
     // detect faces in frame - adjust parameters as desired
 	face_cascade.detectMultiScale(GrayFrame, face, 1.3, 8);     
-    
-    resize(GrayFrame,GrayFrame, Size(168,192));
+        resize(GrayFrame,GrayFrame, Size(168,192));
+
+
 	
 	//Find the number of seconds passed since the method was initially called
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
@@ -163,7 +164,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
         Rect r = face[i];
         Scalar color = Scalar(255, 0, 0);
       
-		
+		recogniser->setThreshold(123);
 		//Call facial recognition method
 		recogniser->setThreshold(123);
 		recogniser->predict(GrayFrame,ID,confidence);
@@ -335,6 +336,7 @@ int Camera::opencam()  {
 		//Call the motion detector method and supply the input frame
 		if(motiondetector.flag == 0) {
 		motiondetector.ProcessContours(frame);
+		cout << "Motion Detection:" << motiondetector.flag;
 
 		}
 		//cout << motiondetector.flag;
@@ -399,7 +401,8 @@ int Camera::opencam()  {
 		/*If an intruder is detected in the home... */
 
 		//...send an email to the user...
-		if (recognise.intruderflag ==1 && emailflag == 1 ){
+		if (recognise.intruderflag ==1 && emailflag == 1){
+			cout << "Intruder Detected";
 			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" aidan.porteous98@gmail.com");
 			emailflag = 0;
 
