@@ -1,9 +1,5 @@
-/**
-* @file         newmain.cpp
-* @brief        Testing main with new header file
-* @author       Aidan Porteous
-*/
-
+#define BOOST_TEST_MODULE SqrTests
+#include <boost/test/unit_test.hpp>
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -17,12 +13,14 @@
 #include <cstdlib>
 #include "guardmypi.h"
 
-using namespace std;
-using namespace cv;
+Camera Cam;
 
+BOOST_AUTO_TEST_CASE(FailTest)
+{
+    BOOST_CHECK_EQUAL(-1, Cam.opencam(1));
+}
 
-int main() {
-    Mat cameraframe;
-    Camera cam;
-    return 0;
+BOOST_AUTO_TEST_CASE(PassTest)
+{
+    BOOST_CHECK_EQUAL(0,Cam.opencam(0));
 }
