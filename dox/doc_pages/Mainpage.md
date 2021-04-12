@@ -81,6 +81,35 @@ git clone https://gist.github.com/sol-prog/ed383474872958081985de733eaf352d open
 ```sh
 pkg-config --modversion opencv
 ```
+
+@section MJPG Streamer 
+
+1. Ensure you have CMake installed, as well as the dependencies mjpg-streamer uses: 
+```
+sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+```
+
+2. Clone the mjpg-streamer repository you can find here https://github.com/jacksonliam/mjpg-streamer.
+```
+git clone https://github.com/jacksonliam/mjpg-streamer
+```
+4. Access the mjpg-streamer directory. 
+```
+cd mjpg-streamer
+cd mjpg-streamer-experimental
+```
+4. Build and install mjpg-streamer using CMake.
+```
+make
+sudo make install
+```
+
+@section Installing Dataplicity
+
+Dataplicity is a simple to use, safe and free tool for you to access and control your RaspberryPi remotely, allowing you to setup and start your alarm from anywhere, as well as accessing the camera's live video feed. 
+
+Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 (http://localhost:80) through a domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions here: https://www.dataplicity.com/.
+
 @section MotionDetector
 
 The system has to be capable of detecting changes in individual frames. The changes in these frames are what allow computer visual applications to detect motion. However, while consecutive frames are not identical the MotionDetector class applies a Gaussian blur to the data to filter high frequency noise that would irregularly trigger the motion warning and the rest of the system. 
