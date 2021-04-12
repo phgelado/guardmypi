@@ -25,6 +25,6 @@ int main() {
     Mat cameraframe;
     Camera cam;
     sleep(5);
-    cam.opencam();
+    cam.opencam(0);
     return 0;
 }
