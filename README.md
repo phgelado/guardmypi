@@ -62,6 +62,7 @@
         <li><a href="#installation-of-mailutils">Installation of mailutils</a></li> 
       </ul>
     </li>
+    <li><a href="#how-to-use">How to use</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
