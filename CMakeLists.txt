@@ -4,17 +4,10 @@ find_package( OpenCV REQUIRED )
 add_subdirectory (Development)
 include_directories( ${OpenCV_INCLUDE_DIRS})
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-<<<<<<< HEAD
-add_executable( HumanMotion src/Human_motion.cpp )
-target_link_libraries( HumanMotion ${OpenCV_LIBS} )
-
-
-=======
 enable_testing()
-add_library (gmp guardmypi.cpp guardmypi.h)
-add_executable( main main.cpp)
-add_executable(newmain newmain.cpp)
+add_library (gmp src/guardmypi.cpp src/guardmypi.h)
+add_executable( main src/main.cpp)
+add_executable(newmain src/newmain.cpp)
 target_link_libraries( main gmp ${OpenCV_LIBS} )
 target_link_libraries( newmain gmp ${OpenCV_LIBS} )
 add_test (Name Test COMMAND Test)
->>>>>>> Integration
