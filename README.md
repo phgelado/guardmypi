@@ -98,11 +98,10 @@ GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilis
 
 To be able to run this project locally you will need to install the following dependencies: 
 
-* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
 * [CMake](https://cmake.org/)
+* [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 * [Dataplicity](https://www.dataplicity.com/)
-* Postfix
 * mailutils
 
 Moreover, you will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
@@ -114,6 +113,10 @@ And then copy and paste your key into a QR code generator, ensuring you click on
 * [QR Code Generator](https://www.qr-code-generator.com/)
 
 You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
+
+### Installation of CMake
+
+sudo apt-get install cmake
 
 
 ### Installation of OpenCV4 on Raspberry Pi
@@ -200,11 +203,6 @@ Dataplicity is a simple to use, safe and free tool for you to access and control
 
 Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 (http://localhost:80) through a domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
 
-<!-- USAGE EXAMPLES -->
-## Usage
-
-![Image of Aidan](images/aidan.png)
-![Image of Kasper](images/kasper.png)
 
 ## Setting up streaming
 
@@ -217,6 +215,15 @@ sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmy
 ## Setting up Dataplicity
 
 Dataplicity should already be up and running from installation, double check you can see and access your device [here](https://www.dataplicity.com/devices). 
+
+## Installation of mailutils
+sudo apt install mailutils
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+![Image of Aidan](images/aidan.png)
+![Image of Kasper](images/kasper.png)
 
 <!-- ROADMAP -->
 ## Roadmap
