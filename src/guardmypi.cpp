@@ -122,11 +122,10 @@ int ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbou
 ///daytime hours (7am-8pm)
 ///@see Unlock::face
 int Unlock::loadcascade(){
-	hand_cascade.load("Hand_haar_cascade.xml");
-	face_cascade.load("haarcascade_frontalface_default.xml");
-	recogniser->read("guardingthepi.yml");
+	face_cascade.load("src/haarcascade_frontalface_default.xml");
+	recogniser->read("src/guardingthepi.yml");
 
-	if(!hand_cascade.load("Hand_haar_cascade.xml"))
+	if(!face_cascade.load("src/haarcascade_frontalface_default.xml"))
 	{
 		cout<<"Error Loading XML file"<<endl;
 	return 0;
@@ -296,7 +295,7 @@ int Camera::opencam(int camport)  {
 	video.open(camport);
 
 	// Run all the loadcascade methods for each detection algorithm
-	petdetector.loadcascade("haarcascade_dogface.xml");
+	petdetector.loadcascade("src/haarcascade_dogface.xml");
 	recognise.loadcascade();
 
 	//Set timerflags high 
