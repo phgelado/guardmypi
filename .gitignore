@@ -11,7 +11,7 @@ motdetection
 Makefile
 CMakeLists.txt
 dox/
-.DS_Store
+*.DS_Store
 
 # Prerequisites
 *.d
