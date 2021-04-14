@@ -64,11 +64,11 @@
     <li>
       <a href="#how-to-use">How to use</a>
       <ul>
+        <li><a href="#building-the-program">Building the Program</a></li>
         <li><a href="#customisation">Customisation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#usage">Usage Examples</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -211,6 +211,8 @@ sudo apt install mailutils
 <!-- HOW TO USE -->
 ## How to use
 
+### Building the Program
+
 ```
 git clone https://github.com/phgelado/guardmypi
 cd guardmypi
@@ -236,19 +238,12 @@ Note that the program is currently set up to run for a specific user. If you wis
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage Examples
 
 ![Image of Motion Detection](images/motion.png)
 ![Image of Aidan](images/aidan.png)
 ![Image of QR Code](images/qr.png)
 ![Image of Kasper](images/kasper.png)
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
-
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
