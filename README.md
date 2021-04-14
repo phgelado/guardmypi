@@ -64,11 +64,11 @@
     <li>
       <a href="#how-to-use">How to use</a>
       <ul>
+        <li><a href="#building-the-program">Building the Program</a></li>
         <li><a href="#customisation">Customisation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#usage">Usage Examples</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
