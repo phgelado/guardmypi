@@ -110,16 +110,6 @@ To be able to run this project locally you will need to install the following de
 * [Dataplicity](https://www.dataplicity.com/)
 * mailutils
 
-Moreover, you will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
-
-* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
-
-And then copy and paste your key into a QR code generator, ensuring you click on "text": 
-
-* [QR Code Generator](https://www.qr-code-generator.com/)
-
-You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
-
 ### Installation of CMake
 
  ```
@@ -224,12 +214,27 @@ cmake .
 make
 ./newmain
 ```
+
+You will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
+
+* [Encryption Key Generator](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
+
+And then copy and paste your key into a QR code generator, ensuring you click on "text": 
+
+* [QR Code Generator](https://www.qr-code-generator.com/)
+
+You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
+
 To set up the streaming, in a separate terminal run the following command from your root, i.e. pi@raspberrypi:
 
 ```
 sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" - o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
 ```
 Dataplicity should already be up and running from installation, double check you can see and access your device [here](https://www.dataplicity.com/devices). 
+
+Note that the program is currently set up to run for a specific user. If you wish to customise the program for your own needs, here are some useful links:
+* [Facial recognition using OpenCV](https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html). A user can use pictures of their own face to train a facial recognition model. This can then be saved in a yml file and replace the 'guardingthepi.yml' file.
+* [Training an object detection model using OpenCV](https://memememememememe.me/post/training-haar-cascades/#:~:text=It's%20basically%20a%20machine%20learning,you%20have%20the%20right%20classifiers.) OpenCV can also be trained to detect objects using Haar Cascades. This has been applied to the pet detection in our case, and a user could train a cascade to recognise their own pet's face. Please note that both the training for this and facial recognition should be carried out on a more powerful device than a Pi, for example a laptop or PC. This requires installation of OpenCV3 rather than 4 on the device - just follow this [link](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/) and make sure to use the 3.4 branch when building.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
