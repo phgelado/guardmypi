@@ -203,21 +203,25 @@ Dataplicity is a simple to use, safe and free tool for you to access and control
 
 Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 (http://localhost:80) through a domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
 
+## Installation of mailutils
+sudo apt install mailutils
 
-## Setting up streaming
+<!-- HOW TO USE -->
+## How to use
 
-In order to start the streaming, run the following command from your root, i.e. pi@raspberrypi
+```
+git clone https://github.com/phgelado/guardmypi
+cd guardmypi
+cmake .
+make
+./newmain
+```
+To set up the streaming, in a separate terminal run the following command from your root, i.e. pi@raspberrypi:
 
 ```
 sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f ./guardmypi/ -n test.jpg" - o "output_http.so -w /home/pi/mjpg-streamer/mjpg-streamer-experimental/www -p 80"
 ```
-
-## Setting up Dataplicity
-
 Dataplicity should already be up and running from installation, double check you can see and access your device [here](https://www.dataplicity.com/devices). 
-
-## Installation of mailutils
-sudo apt install mailutils
 
 <!-- USAGE EXAMPLES -->
 ## Usage
