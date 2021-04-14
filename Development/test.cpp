@@ -20,6 +20,7 @@ BOOST_AUTO_TEST_CASE(FailTest)
 {
     BOOST_CHECK_EQUAL(-1, Cam.opencam(1));
     BOOST_CHECK(boost::filesystem::exists("/home/aidan/repos/guardmypi/test.jpg"));
+    BOOST_CHECK(boost::filesystem::exists("/home/aidan/repos/guardmypi/MyVideo.avi"));
 }
 
 BOOST_AUTO_TEST_CASE(PassTest)
