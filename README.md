@@ -102,6 +102,8 @@ To be able to run this project locally you will need to install the following de
 * [CMake](https://cmake.org/)
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 * [Dataplicity](https://www.dataplicity.com/)
+* Postfix
+* mailutils
 
 Moreover, you will need to create an unlock key, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys here: 
 
