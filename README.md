@@ -243,13 +243,6 @@ Note that the program is currently set up to run for a specific user. If you wis
 ![Image of QR Code](images/qr.png)
 ![Image of Kasper](images/kasper.png)
 
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/phgelado/guardmypi/issues) for a list of proposed features (and known issues).
-
-
-
 <!-- CONTRIBUTING -->
 ## Contributing
 
