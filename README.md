@@ -48,13 +48,18 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#hardware-used">Hardware Used</a></li>
       </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installation-of-cmake">Installation of CMake</a></li>
+        <li><a href="#installation-of-opencv4-on-raspberry-pi">Installation of OpenCV4 on Raspberry Pi</a></li>
+        <li><a href="#installation-of-mjpg-streamer-on-raspberry-pi">Installation of mjpg-streamer on Raspberry Pi</a></li>
+        <li><a href="#installation-of-dataplicity">Installation of Dataplicity</a></li>
+        <li><a href="#installation-of-mailutils">Installation of mailutils</a></li> 
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -116,8 +121,9 @@ You can then download or take a screenshot of this QR Code, maybe print it out i
 
 ### Installation of CMake
 
+ ```
 sudo apt-get install cmake
-
+```
 
 ### Installation of OpenCV4 on Raspberry Pi
 
@@ -203,9 +209,10 @@ Dataplicity is a simple to use, safe and free tool for you to access and control
 
 Similar to a VPN, but easier to install, it also allows you to access your Pi's local port 80 (http://localhost:80) through a domain, which is where the Pi's live camera feed is streamed to. Installing Dataplicity is very simple! Follow the instructions [here](https://www.dataplicity.com/).
 
-## Installation of mailutils
+### Installation of mailutils
+```
 sudo apt install mailutils
-
+```
 <!-- HOW TO USE -->
 ## How to use
 
