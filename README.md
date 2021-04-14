@@ -83,7 +83,7 @@
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive a push notification via email.
+GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive an email notifying them, and will be able to access the camera via remote streaming from our website. Additionally, the Pi will save video evidence of the intruder which can be accessed later.
 
 ### Built With
 
@@ -219,10 +219,6 @@ make
 ./newmain
 ```
 
-
-
-You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock GuardMyPi. 
-
 To set up the streaming, in a separate terminal run the following command from your root, i.e. pi@raspberrypi:
 
 ```
@@ -236,6 +232,7 @@ Note that the program is currently set up to run for a specific user. If you wis
 * [Facial recognition using OpenCV](https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html). A user can use pictures of their own face to train a facial recognition model. This can then be saved in a yml file and replace the 'guardingthepi.yml' file.
 * [Training an object detection model using OpenCV](https://memememememememe.me/post/training-haar-cascades/#:~:text=It's%20basically%20a%20machine%20learning,you%20have%20the%20right%20classifiers.) OpenCV can also be trained to detect objects using Haar Cascades. This has been applied to the pet detection in our case, and a user could train a cascade to recognise their own pet's face. Please note that both the training for this and facial recognition should be carried out on a more powerful device than a Pi, for example a laptop or PC. This requires installation of OpenCV3 rather than 4 on the device - just follow this [link](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/) and make sure to use the 3.4 branch when building.
 * You can create your own unlock and lock keys, that you will be able to convert into a QR Code readable by GuardMyPi. We encourage you to regularly change your unlock key if possible, and to use high encryption (256+ bit) keys. You can create encryption keys at this [link](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx) and then copy and paste your key into a [QR Code Generator](https://www.qr-code-generator.com/), ensuring you click on "text". You can then download or take a screenshot of this QR Code, maybe print it out if you're old school! Keep it in a safe place, it will allow you to unlock and lock GuardMyPi. Note: from installation the QR code keys are "unlock" and "lock".
+* Make sure to change the email address given in the "guardmypi.cpp" file to your own.
 
 
 <!-- USAGE EXAMPLES -->
