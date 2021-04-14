@@ -236,7 +236,7 @@ Note that the program is currently set up to run for a specific user. If you wis
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage Examples
 
 ![Image of Motion Detection](images/motion.png)
 ![Image of Aidan](images/aidan.png)
