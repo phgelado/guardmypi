@@ -211,6 +211,8 @@ sudo apt install mailutils
 <!-- HOW TO USE -->
 ## How to use
 
+### Building the Program
+
 ```
 git clone https://github.com/phgelado/guardmypi
 cd guardmypi
