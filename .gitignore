@@ -10,7 +10,6 @@ motion
 motdetection
 Makefile
 CMakeLists.txt
-dox/
 *.DS_Store
 
 # Prerequisites

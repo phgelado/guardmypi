@@ -126,11 +126,37 @@ The detector acts as an event-base trigger invokes methods such as facial recogn
 
 ![](motiondetected.png)
 
-@see HumanDetector
 
-@section HumanDetector
 
-overview how this class works
+# Unlock #
+In order to let the user unlock the system various methods were added to the Unlock class; Facial Recognition Unlock::face() and QR Detection Unlock::QRUnlock().
+
+## Facial Recognition ##
+Facial recognition is achieved using the LPBH algorithm. By using a pre-trained algorithm with faces including the desired residents. Predicting each face outputs a confidence level and ID number according to the images fed into the trained database. Including a condition with a threshold for a confidence level (currently set to 123) will allow a user to tighten or loosen the strictnes of their recognition process. 
+
+![](facerecognition.png)
+
+After recognising the user within a specified time frame of 10s then the system is disarmed and waits for a QR code to lock and re-arm the system @see Unlock::QRLock()
+
+![](facerecognised.png)
+
+## QR Code Detection ##
+Another method that is implemented to lock and unlock the system are QR codes that can be easily generated and shown on a mobile phone. When a user would like to leave the house showing a QR Code representing "lock" will then freeze the program for 60s to allow the user to leave before the system is then re-armed. 
+
+![](qrlock.png)
+
+@section ObjectDetector
+
+The object detector is a class with methods of recognising different objects such as pets with potential to incldude methods that recognise other objects such as gestures. Currently the pet detection ObjectDector::detect attempts to recognise a grayhound, but training algorithms can be re run with a bigger database of pets. 
+
+##Detect##
+Before running the human detection method, the system looks for domestic pets (if applicable) as to not send a false alarm notification to the resident(s) if their pet was captured in the frame. If a pet is detected then no flags are raised and the system continues as normal. Otherwise the human detection method is called.
+
+![](petdetection.png)
+
+# Intruder Alert #
+If a resident of the house is not recognised either using facial recognition nor QR Code detection, then the intruder flag is set high. This invokes both the web streaming service and email notification method, both used to capture feed of any intruder and also alert the user to notify the relevant authorities. 
+
 @section Acknowledgements
 
 * [README Template](https://github.com/othneildrew/Best-README-Template)
