@@ -1,0 +1,12 @@
+digraph "Camera"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="Camera",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" recognise" ,fontname="Helvetica"];
+  Node2 [label="Unlock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_unlock.html",tooltip="Contains various methods to unlock the system. "];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" petdetector" ,fontname="Helvetica"];
+  Node3 [label="ObjectDetector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_object_detector.html",tooltip="Used to analyse incoming feed from the camera for different objects such as Pets etc... "];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" motiondetector" ,fontname="Helvetica"];
+  Node4 [label="MotionDetector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_detector.html",tooltip="Analyses video feed from PiCamera to detect motion changes. "];
+}
