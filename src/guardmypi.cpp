@@ -227,6 +227,11 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	}
 }
 
+///@brief This method searches for the user to reset the system when it's detected an intruder.
+///By essentially setting the intruder flag to 0 and all unlock method flags to high the system enters it's disarmed state
+///@param frame Input frame from the camera feed
+///@returns 1 to escape function once QR code is detected
+///@returns 0 to escape function if the incorrect/no QR code is detected
 int Unlock::Deactivate(Mat frame) {
 	//QRcode detection 
 	std::string data = qrDecoder.detectAndDecode(frame, bbox, rectifiedImage);
@@ -329,6 +334,7 @@ int Camera::opencam(int camport)  {
 			recognise.QRlockflag = 0;
 			recognise.faceflag = 0;
 			pet_timerflag = 1;
+			emailflag = 1;
 			iterationflag =1;
 			recognise_timerflag = 1;
 			recognise.intruderflag = 0;
