@@ -114,7 +114,7 @@ To be able to run this project locally you will need to install the following de
 * [OpenCV](https://sourceforge.net/projects/opencvlibrary/)
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 * [Dataplicity](https://www.dataplicity.com/)
-* mailutils
+* [mailutils](https://mailutils.org/)
 
 ### Installation of CMake
 
