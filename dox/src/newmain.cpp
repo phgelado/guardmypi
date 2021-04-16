@@ -1,7 +1,7 @@
 /**
 * @file         newmain.cpp
-* @brief        Testing main with new header file
-* @author       Aidan Porteous
+* @brief        Main program runs the video fram capture in Main thread
+* @author       Team 14 
 */
 
 #include <opencv2/core/utility.hpp>

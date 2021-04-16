@@ -1,3 +1,10 @@
+
+/**
+* @file         guardmypi.h
+* @brief        Header file declaring all public and private attributes for the guardmypi library
+* @author       Team 14 
+*/
+
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -32,9 +39,9 @@ class MotionDetector {
 	 Point pt2;	//!<End point/coordinate for the contour rectangle
 	
 	public:
-	Mat avg; // Running average of the camerafeed 
+	Mat avg; //!< Running average of the camerafeed 
 	Mat ProcessContours(Mat camerafeed); // Motion Detector method
-	int flag = 0; // Flag variable to invoke ObjectDetector thread t2
+	int flag = 0; //!< Flag variable to invoke ObjectDetector thread t2
 };
 
 /**
@@ -49,7 +56,7 @@ class ObjectDetector{
 	    Point pt2;	//!< End point/coordinate for the object rectangle
 
 	public:
-		int flag = -1;
+		int flag = -1;  //!< Flag initially set to -1 for detecting a dog
         int loadcascade(String cascadename); // Method for loading particular Haar cascade file
         int detect(Mat ReferenceFrame, double scale_factor, int neighbours,clock_t startTime); // Method for detecting the object in frame
 
@@ -75,18 +82,14 @@ class Unlock {
  
     public:
 		//Flags used to trigger new thread creation
-        int faceflag = 0;    
-		int handflag = 0;
-		int intruderflag = 0;
-		int lockflag = 0;
-		int handdetected = 0;
-		int QRunlockflag = 0;
-		int QRlockflag = 0;
-		int resetflag = 0;
-		Mat avg;
-
-		int ID = -1;					//Initial LBPH ID
-		double secondsPassed = 0.0;		//Number of seconds passed since the current timestamp
+        int faceflag = 0;		//!< Flag set by facial recognition
+		int intruderflag = 0;   //!< Intruder flag set by motion detector & face recognition
+		int lockflag = 0;		//!< Lock flag set by QR Lock method
+		int QRunlockflag = 0;		//!< Flag set by the QR Unlock method
+		//int QRlockflag = 0;			
+		int resetflag = 0;		//!< Reset flag set when intruder flag is high and by QR Unlock method
+		int ID = -1;					//!< Initial LBPH ID
+		double secondsPassed = 0.0;		//!< Number of seconds passed since the current timestamp
 
         int loadcascade();			//Method used to load all necessary cascade files (xml and yml)
 		int face(Mat ReferenceFrame, clock_t startTime);	//Method used to for facial recognition
@@ -104,7 +107,8 @@ class Camera{
         MotionDetector motiondetector; //!< Instance of the Motion Detection
         Unlock recognise;			//!< Instance of the unlock class with uses of facial recognition, QR Detection
 		ObjectDetector petdetector; //!< Instance of the object detector that will be accessing the ped detection method
-	    Mat frame, testframe; //!< Various Mat variables assigned to the video feed and empty testframe used to reset frames
+	    Mat frame;					//!< Frame that will be assigned to the incoming frames from the VideoCapture object
+		Mat testframe; //!< Empty testframe used to reset the running average frame for the Motion Detector
 	    VideoCapture video;		//!< Video input capture object
 		int hour;			//!< Hour time in GMT	
 		int emailflag = 1;  //!< Flag used for email sending
@@ -117,5 +121,4 @@ class Camera{
 		
 		int opencam(int camport);		//Method used to open up the systems camera and runs an infinite loop of frame capturing	
 		int gettime();		//Used to collect the time in GMT 
-		int lock(int motionflag, int faceflag, int intruderflag,int QRunlockflag, int QRlockflag);	//Method called to reset all flag variables and re-arm the system
-};
+		};

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['loadcascade',['loadcascade',['../class_object_detector.html#a7f83c3ff1bb578a73d219c86e2b67bcf',1,'ObjectDetector::loadcascade()'],['../class_unlock.html#a7a42665d864ed4b043de2e395efbc82d',1,'Unlock::loadcascade()']]]
+  ['hand_5fcascade',['hand_cascade',['../class_unlock.html#ab5508d22d19cc1170a8428a3d9b35666',1,'Unlock']]],
+  ['hour',['hour',['../class_camera.html#a2c10ae37f85da85cbad125d80296a677',1,'Camera']]]
 ];

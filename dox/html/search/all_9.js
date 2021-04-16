@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['objectdetector',['ObjectDetector',['../class_object_detector.html',1,'']]],
-  ['opencam',['opencam',['../class_camera.html#a382ccdc198edd8e7bc6d997f3b176e8c',1,'Camera']]]
+  ['motiondetector',['MotionDetector',['../class_motion_detector.html',1,'MotionDetector'],['../class_camera.html#a150a3c48c0f937291e7d33fc6b87fc24',1,'Camera::motiondetector()']]]
 ];

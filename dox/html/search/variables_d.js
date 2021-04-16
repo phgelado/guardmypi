@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['qrdecoder',['qrDecoder',['../class_unlock.html#a7e4dd065640d8e0dd3e15950cb369043',1,'Unlock']]],
-  ['qrlockflag',['QRlockflag',['../class_unlock.html#abf6082efa9f68ea2746bc07185134d9c',1,'Unlock']]],
-  ['qrunlockflag',['QRunlockflag',['../class_unlock.html#a6d23b6364367acea85a66a37ba3d20d6',1,'Unlock']]]
+  ['scaled_5favg',['scaled_avg',['../class_motion_detector.html#a2b4a67e7bee814d3585c10603f0a66f9',1,'MotionDetector']]],
+  ['secondspassed',['secondsPassed',['../class_unlock.html#af95bba74ac10dcab7001a75376b93d87',1,'Unlock']]]
 ];

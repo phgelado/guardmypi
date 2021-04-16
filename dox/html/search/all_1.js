@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['deactivate',['Deactivate',['../class_unlock.html#abda1e9727d4a7a39a3ee555e38da4477',1,'Unlock']]],
-  ['detect',['detect',['../class_object_detector.html#a084dccf3c6304f5422bdb7ce3b23cf86',1,'ObjectDetector']]]
+  ['camera',['Camera',['../class_camera.html',1,'']]],
+  ['cascade',['cascade',['../class_object_detector.html#a34f49bce619bdeb8d0616c750180b3ca',1,'ObjectDetector']]],
+  ['cnts',['cnts',['../class_motion_detector.html#aab031b14eaee0159a6d463c4641a3bf2',1,'MotionDetector']]],
+  ['confidence',['confidence',['../class_unlock.html#ac9d1e6a3485e73b29109e502d412609d',1,'Unlock']]]
 ];

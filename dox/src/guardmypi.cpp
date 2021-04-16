@@ -1,3 +1,9 @@
+/**
+* @file         guardmypi.cpp
+* @brief        library file for running all related methods to detect residents and deter intruders
+* @author       Team 14 
+*/
+
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -325,7 +331,7 @@ int Camera::opencam(int camport)  {
 		//Grab the current frame
 		video.read(frame);
 		
-		if(recognise.QRlockflag == 1) {
+		if(QRlockflag == 1) {
 			//Reset all the required flags to rearm the system	
 			//petdetector.flag = -1;
 			motiondetector.flag == 1;
