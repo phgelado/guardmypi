@@ -121,6 +121,17 @@ You can find our doxygen documentation/Wiki for this project [here](https://phge
 * [Step Up DC-DC converter](https://www.ebay.co.uk/itm/MT3608-DC-DC-Voltage-Step-Up-Adjustable-Boost-Converter-Module-2A-UK/193424475011)
 * [Camera Enclosure](https://thepihut.com/products/raspberry-pi-4-3-camera-case)
 
+
+### Real-time responsiveness
+
+Testing carried out using the high_resolution_clock C++ class with 5 sample runs (excluding and repeating testing if an outlier i.e. more than +/- 50% was identified). 
+
+* Motion Detection Class: 34 (+/- 4) ms
+* QR Code Class: 
+* Facial Recognition Class: 199 (+/- 5) ms
+
+For the mjpg-streamer and email sending latencies are dependant on broadband capacity, user location and method of connection between the RasberryPi and the local router.
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
