@@ -66,6 +66,7 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#hardware-used">Hardware Used</a></li>
+        <li><a href="#realtime-responsiveness">Realtime Responsiveness</a></li>
       </ul>
     </li>
     <li>
