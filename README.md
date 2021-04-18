@@ -124,10 +124,10 @@ You can find our doxygen documentation/Wiki for this project [here](https://phge
 
 ### Real-time responsiveness
 
-Testing carried out using the high_resolution_clock C++ class with 5 sample runs (excluding and repeating testing if an outlier i.e. more than +/- 3σ was identified). 
+Testing carried out using the high_resolution_clock C++ class with 5 sample runs (excluding and repeating testing if an outlier i.e. more than +/- 3σ was identified), on a Raspberry Pi 3, with a 4× ARM Cortex-A53, 1.2GHz CPU. 
 
 * Motion Detection Class: 34 (+/- 4) ms
-* QR Code Class: 
+* QR Code Class: 251 (+/- 2) ms
 * Facial Recognition Class: 199 (+/- 5) ms
 
 For the mjpg-streamer and email sending latencies are dependant on broadband capacity, user location and method of connection between the RasberryPi and the local router.
