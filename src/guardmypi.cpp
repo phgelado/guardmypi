@@ -1,3 +1,9 @@
+/**
+* @file         guardmypi.cpp
+* @brief        library file for running all related methods to detect residents and deter intruders
+* @author       Team 14 
+*/
+
 #include <opencv2/core/utility.hpp>
 #include "opencv2/objdetect/objdetect.hpp"
 #include <opencv2/tracking.hpp>
@@ -19,7 +25,7 @@ using namespace cv::face;
 	///@brief Takes the incoming frame and performs background subtraction using previous frames.
 	///Performs background subtraction to detect changes in the frame i.e. motion. 
 	///Subsequently, alters the flag variable equal to 1 if motion is detected to invoke the object detector in a new thread
-	///@see ObjectDetector::detect Camera:opencam
+	///@see ObjectDetector::detect Camera::opencam
 	///@param camerafeed frame captured from PiCamera or Webcam
 	///@returns camerafeed with or without "Motion Detected" text to signify code functioning
 Mat MotionDetector::ProcessContours(Mat camerafeed) {
@@ -63,14 +69,10 @@ Mat MotionDetector::ProcessContours(Mat camerafeed) {
 	for(int i = 0; i< cnts.size(); i++) {
 		//Check to see if the contour is too small
         if(contourArea(cnts[i]) < 5000) {
-			//cout <<"No Motion\n" << flag;
             continue;
 		}
             flag = 1;
-			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
-		
-			//cout<<"Motion Detected\n" << flag;
-					
+			putText(camerafeed, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);					
 		}
 		
 	return camerafeed;
@@ -101,7 +103,6 @@ int ObjectDetector::detect(Mat ReferenceFrame, double scale_factor, int neighbou
 	cascade.detectMultiScale( GrayFrame, objects, scale_factor, neighbours);    
 	
 	int secondsPassed = (clock() - startTime) /CLOCKS_PER_SEC;
-	//cout << secondsPassed << "\t" << flag << "\n";
 	for( int i = 0; i < 1000; i++ )
 	{
 		if(objects.size() >=1 && secondsPassed< 10){
@@ -157,8 +158,6 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 	
 	//Find the number of seconds passed since the method was initially called
 	secondsPassed = (clock() - startTime) / CLOCKS_PER_SEC;
-	//cout << secondsPassed << "\t" << faceflag << "\t" << intruderflag << "\n";
-	cout << intruderflag << "\n";
     for( int i = 0; i < face.size(); i++ )	{
         Rect r = face[i];
         Scalar color = Scalar(255, 0, 0);
@@ -171,8 +170,7 @@ int Unlock::face(Mat ReferenceFrame, clock_t startTime) {
 			intruderflag = 0;				//Keep intruder flag 0
             name = "Aidan";					//Set the name to the appropriate resident
 			//Put name above the resident's head for confirmation
-            putText(ReferenceFrame,"Aidan",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
-			//cout << "Welcome home";
+            putText(ReferenceFrame,"Resident",Point(round(r.x),round(r.y-5)), FONT_HERSHEY_COMPLEX_SMALL,1,color,2);
 			secondsPassed = 0;				//Reset the secondsPassed method
 			faceflag = 1;					//Set the facial recognition flag to high
 			break;							//Break from the loop
@@ -206,7 +204,6 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 	if(data.length()>0 && secondsPassed < 10) { //data length is > 0 if it has read a QR code
 
 		if(data=="unlock"){			//QR code must equate unlock
-		//	cout << "Valid unlock key detected, decoded data: " << data << endl;
 			//Set QR flag high so system knows that it is in the unlocked state
 			QRunlockflag = 1;		
 			return 1;		//Break from code
@@ -214,14 +211,12 @@ int Unlock::QRUnlock(Mat frame, clock_t startTime) {
 
 		// Condition is added incase the wrong QR Code has been shown
 		else {  
-    	//	cout << "Invalid unlock key detected,decoded data: " << data << endl;
 			return 0;
 		} 
 	}
 	// Condition is met if the timer has expired and the QR code has not been presented
 	else if (secondsPassed >=10 && QRunlockflag != 1) {		
 		//Set the intruder flag high to alert the user and break from the function
-		//cout << "Intruder detected";
 		intruderflag = 1;
 		return 0;
 	}
@@ -239,7 +234,6 @@ int Unlock::Deactivate(Mat frame) {
 	if(data.length()>0) { //data length is > 0 if it has read a QR code
 
 		if(data=="unlock"){			//QR code must equate unlock
-		//	cout << "Valid unlock key detected, decoded data: " << data << endl;
 			//Set QR flag high so system knows that it is in the unlocked state
 			QRunlockflag = 1;	
 			faceflag = 1;
@@ -249,7 +243,6 @@ int Unlock::Deactivate(Mat frame) {
 
 		// Condition is added incase the wrong QR Code has been shown
 		else {  
-    	//	cout << "Invalid unlock key detected,decoded data: " << data << endl;
 			return 0;
 		} 
 	}
@@ -271,8 +264,6 @@ int Unlock::QRLock(Mat frame) {
 
 	//Conditional statement looking for a QR Code called lock
 	if(data == "lock" && QRlockflag == 0){
-
-       // cout << "System will be locked leave premises now" << data << endl;
   		//Set lock flag high to engage the system re-arming state letting the user leave etc...
 		QRlockflag = 1;
 		return 1;  //Break from function
@@ -313,7 +304,7 @@ int Camera::opencam(int camport)  {
     int iterationflag = 1;
 
     //Create and initialize the VideoWriter object 
-   	VideoWriter oVideoWriter("MyVideo.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), frames_per_second, frame_size, true); 
+   	VideoWriter oVideoWriter("GMPFootage.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), frames_per_second, frame_size, true); 
 
 	// Check that video is opened
 	if (!video.isOpened()) return -1;
@@ -327,7 +318,7 @@ int Camera::opencam(int camport)  {
 		
 		if(recognise.QRlockflag == 1) {
 			//Reset all the required flags to rearm the system	
-			//petdetector.flag = -1;
+			//petdetector.flag = -1;   //Remove comment if a pet forms part of your household
 			motiondetector.flag == 1;
 			recognise.intruderflag = 0;
 			recognise.QRunlockflag = 0;
@@ -365,10 +356,7 @@ int Camera::opencam(int camport)  {
 		//Call the motion detector method and supply the input frame
 		if(motiondetector.flag == 0) {
 		motiondetector.ProcessContours(frame);
-		//cout << "Motion Detection:" << motiondetector.flag;
-
 		}
-		//cout << motiondetector.flag;
 /*
 		//If motion is detected start the timer...
 		if(motiondetector.flag == 1 && pet_timerflag ==1) {
@@ -432,8 +420,7 @@ int Camera::opencam(int camport)  {
 
 		//...send an email to the user...
 		if (recognise.intruderflag ==1 && emailflag == 1){
-			cout << "Intruder Detected";
-			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" magnusbc98@gmail.com");
+			system("sudo echo \"A possible intruder has been detected in your home. Please check http://guardmypi.com/ for remote streaming.\" | mail -s \"Possible intruder detected\" youremail@serviceprovider.com");
 			emailflag = 0;
 			iterationflag = 0;
 		}
