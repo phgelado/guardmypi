@@ -157,17 +157,3 @@ Before running the human detection method, the system looks for domestic pets (i
 # Intruder Alert #
 If a resident of the house is not recognised either using facial recognition nor QR Code detection, then the intruder flag is set high. This invokes both the web streaming service and email notification method, both used to capture feed of any intruder and also alert the user to notify the relevant authorities. 
 
-@section Acknowledgements
-
-* [README Template](https://github.com/othneildrew/Best-README-Template)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
