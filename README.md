@@ -35,20 +35,20 @@
     <br />
     <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
     <br />
-   <a href="https://github.com/phgelado/guardmypi/">
+   <a href="https://www.facebook.com/guardmypi/">
     <img src="images/facebook.png" alt="Facebook" width="128" height="128">
   </a>
-  <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/instagram.png" alt="Facebook" width="128" height="128">
+  <a href="https://www.instagram.com/guardmypi/">
+    <img src="images/instagram.png" alt="Instagram" width="128" height="128">
+  </a>
+  <a href="https://www.linkedin.com/company/71500352/">
+    <img src="images/linkeding.webp" alt="LinkedIn" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/linkedin.png" alt="Facebook" width="128" height="128">
+    <img src="images/twitter.png" alt="Twitter" width="128" height="128">
   </a>
-  <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/twitter.png" alt="Facebook" width="128" height="128">
-  </a>
-  <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/hackaday.png" alt="Facebook" width="128" height="128">
+  <a href="https://hackaday.io/project/178027-guardmypi">
+    <img src="images/hackaday.webp" alt="Hackaday" width="128" height="128">
   </a>
   </p>
 </p>
