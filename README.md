@@ -124,7 +124,7 @@ You can find our doxygen documentation/Wiki for this project [here](https://phge
 
 ### Real-time responsiveness
 
-Testing carried out using the high_resolution_clock C++ class with 5 sample runs (excluding and repeating testing if an outlier i.e. more than +/- 50% was identified). 
+Testing carried out using the high_resolution_clock C++ class with 5 sample runs (excluding and repeating testing if an outlier i.e. more than +/- 2$\omega$ was identified). 
 
 * Motion Detection Class: 34 (+/- 4) ms
 * QR Code Class: 
