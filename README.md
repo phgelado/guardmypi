@@ -85,7 +85,7 @@
 
 GuardMyPi is a home security system centred around the Raspberry Pi 3. It utilises the Pi NoIR Camera to monitor a room or entrance point in a house. If the camera detects motion, object detection methods are used to check whether the source of motion is a human or a pet. If a human, facial recognition software is used to determine if it is a household member, or if not recognised, an intruder. If an intruder is detected, the user will receive an email notifying them, and will be able to access the camera via remote streaming from our website. Additionally, the Pi will save video evidence of the intruder which can be accessed later.
 
-You can find our doxygen documentation [here](https://phgelado.com/guardmypi/).
+You can find our doxygen documentation/Wiki for this project [here](https://phgelado.com/guardmypi/).
 
 ### Built With
 
