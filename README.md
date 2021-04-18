@@ -35,6 +35,9 @@
     <br />
     <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
     <br />
+   <a href="https://github.com/phgelado/guardmypi/">
+    <img src="images/facebook.png" alt="Facebook" width="128" height="128">
+  </a>
   </p>
 </p>
 
