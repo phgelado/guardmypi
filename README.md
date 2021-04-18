@@ -38,8 +38,7 @@
   <br />
   <br />
   <br />
-    
-    <br />
+  
    <a href="https://www.facebook.com/guardmypi/">
     <img src="images/facebook.png" alt="Facebook" width="128" height="128">
   </a>
