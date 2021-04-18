@@ -42,13 +42,13 @@
     <img src="images/instagram.png" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/linkedin.png" alt="Facebook" width="128" height="128">
+    <img src="images/linkedin.webp" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
     <img src="images/twitter.png" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/hackaday.png" alt="Facebook" width="128" height="128">
+    <img src="images/hackaday.webp" alt="Facebook" width="128" height="128">
   </a>
   </p>
 </p>
