@@ -44,7 +44,7 @@
   <a href="https://www.linkedin.com/company/71500352/">
     <img src="images/linkeding.webp" alt="LinkedIn" width="64" height="64">
   </a>
-  <a href="https://github.com/phgelado/guardmypi/">
+  <a href="https://twitter.com/guardmypi">
     <img src="images/twitter.png" alt="Twitter" width="64" height="64">
   </a>
   <a href="https://hackaday.io/project/178027-guardmypi">
