@@ -33,29 +33,27 @@
   <p align="center">
     The ultimate security tool to protect your berries from unauthorised tampering. 
   <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
-    <br />
   <br />
   <br />
-  <br />
-  <br />
-  
    <a href="https://www.facebook.com/guardmypi/">
-    <img src="images/facebook.png" alt="Facebook" width="128" height="128">
+    <img src="images/facebook.png" alt="Facebook" width="64" height="64">
   </a>
   <a href="https://www.instagram.com/guardmypi/">
-    <img src="images/instagram.png" alt="Instagram" width="128" height="128">
+    <img src="images/instagram.png" alt="Instagram" width="64" height="64">
   </a>
   <a href="https://www.linkedin.com/company/71500352/">
-    <img src="images/linkeding.webp" alt="LinkedIn" width="128" height="128">
+    <img src="images/linkeding.webp" alt="LinkedIn" width="64" height="64">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/twitter.png" alt="Twitter" width="128" height="128">
+    <img src="images/twitter.png" alt="Twitter" width="64" height="64">
   </a>
   <a href="https://hackaday.io/project/178027-guardmypi">
-    <img src="images/hackaday.webp" alt="Hackaday" width="128" height="128">
+    <img src="images/hackaday.webp" alt="Hackaday" width="64" height="64">
   </a>
   </p>
 </p>
+<br />
+<br />
 
 
 
