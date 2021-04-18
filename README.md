@@ -32,12 +32,13 @@
 
   <p align="center">
     The ultimate security tool to protect your berries from unauthorised tampering. 
+  <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
     <br />
   <br />
   <br />
   <br />
   <br />
-    <a href="https://www.guardmypi.com/"><strong>guardmypi.com »</strong></a>
+    
     <br />
    <a href="https://www.facebook.com/guardmypi/">
     <img src="images/facebook.png" alt="Facebook" width="128" height="128">
