@@ -118,6 +118,7 @@ To be able to run this project locally you will need to install the following de
 * [mjpg-streamer](https://github.com/jacksonliam/mjpg-streamer)
 * [Dataplicity](https://www.dataplicity.com/)
 * [mailutils](https://mailutils.org/)
+* [git-lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
 
 ### Installation of CMake
 
