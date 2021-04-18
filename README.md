@@ -42,13 +42,13 @@
     <img src="images/instagram.png" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/linkedin.webp" alt="Facebook" width="128" height="128">
+    <img src="images/linkedin.png" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
     <img src="images/twitter.png" alt="Facebook" width="128" height="128">
   </a>
   <a href="https://github.com/phgelado/guardmypi/">
-    <img src="images/hackaday.webp" alt="Facebook" width="128" height="128">
+    <img src="images/hackaday.png" alt="Facebook" width="128" height="128">
   </a>
   </p>
 </p>
@@ -75,6 +75,7 @@
         <li><a href="#installation-of-mjpg-streamer-on-raspberry-pi">Installation of mjpg-streamer on Raspberry Pi</a></li>
         <li><a href="#installation-of-dataplicity">Installation of Dataplicity</a></li>
         <li><a href="#installation-of-mailutils">Installation of mailutils</a></li> 
+        <li><a href="#installation-of-git-lfs">Installation of git-lfs</a></li> 
       </ul>
     <li>
       <a href="#how-to-use">How to use</a>
@@ -225,6 +226,16 @@ Similar to a VPN, but easier to install, it also allows you to access your Pi's 
 ### Installation of mailutils
 ```
 sudo apt install mailutils
+```
+
+### Installation of git-lfs
+
+This is necessary due to the large size of the facial recognition .yml file.
+```
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+git lfs install
+
 ```
 <!-- HOW TO USE -->
 ## How to use
