@@ -131,7 +131,7 @@ Testing carried out using the high_resolution_clock C++ class with 5 sample runs
 * QR Code Class: 251 (+/- 2) ms
 * Facial Recognition Class: 199 (+/- 5) ms
 
-For the mjpg-streamer and email sending latencies are dependant on broadband capacity, user location and method of connection between the RasberryPi and the local router.
+For the mjpg-streamer and email sending latencies are dependant on broadband, client-server location and method of connection between the RasberryPi and the local router.
 
 <!-- GETTING STARTED -->
 ## Getting Started
